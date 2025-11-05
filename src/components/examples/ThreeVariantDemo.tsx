@@ -22,7 +22,7 @@ export function ThreeVariantDemo() {
                 <h2 className="text-xl font-semibold">Primary (Custom Gradient)</h2>
                 <div className="space-y-3">
                     <div className="space-y-1">
-                        <Button variant="custom" size="custom">
+                        <Button size="custom">
                             Primary Action
                         </Button>
                         <p className="text-xs text-gray-500">
@@ -30,7 +30,7 @@ export function ThreeVariantDemo() {
                         </p>
                     </div>
                     <div className="space-y-1">
-                        <Button variant="custom" size="custom" icon={<CheckIcon />}>
+                        <Button size="custom" icon={<CheckIcon />}>
                             With Icon
                         </Button>
                         <p className="text-xs text-gray-500">
@@ -90,7 +90,7 @@ export function ThreeVariantDemo() {
             <div className="space-y-4 text-center">
                 <h2 className="text-xl font-semibold">All Three Together</h2>
                 <div className="flex gap-4 items-center justify-center flex-wrap">
-                    <Button variant="custom" size="custom">
+                    <Button size="custom">
                         Primary
                     </Button>
                     <Button variant="outline" size="outline-lg">
@@ -112,9 +112,9 @@ export function ThreeVariantDemo() {
                     <div className="space-y-3">
                         <h3 className="font-medium text-center">Primary States</h3>
                         <div className="space-y-2">
-                            <Button variant="custom" size="custom" className="w-full">Normal</Button>
-                            <Button variant="custom" size="custom" className="w-full" disabled>Disabled</Button>
-                            <Button variant="custom" size="custom" className="w-full" loading>Loading</Button>
+                            <Button size="custom" className="w-full">Normal</Button>
+                            <Button size="custom" className="w-full" disabled>Disabled</Button>
+                            <Button size="custom" className="w-full" loading>Loading</Button>
                         </div>
                     </div>
                     <div className="space-y-3">

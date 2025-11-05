@@ -26,10 +26,10 @@ export function CustomButtonDemo() {
                         Shadow: 0px 2px 6px rgba(8, 140, 193, 0.32)<br />
                         Border-radius: 12px | Width: 400px | Height: 36px
                     </p>
-                    <Button variant="custom" size="custom">
+                    <Button size="custom">
                         Custom Gradient Button
                     </Button>
-                    <Button variant="custom" size="custom" icon={<CheckIcon />}>
+                    <Button size="custom" icon={<CheckIcon />}>
                         With Icon
                     </Button>
                 </div>
@@ -75,7 +75,7 @@ export function CustomButtonDemo() {
             <div className="space-y-4 text-center">
                 <h2 className="text-lg font-semibold text-gray-800">Side by Side Comparison</h2>
                 <div className="flex gap-4 items-center justify-center flex-wrap">
-                    <Button variant="custom" size="custom">
+                    <Button size="custom">
                         Primary Action
                     </Button>
                     <Button variant="outline" size="outline-lg">
@@ -92,9 +92,9 @@ export function CustomButtonDemo() {
                 <div className="text-center space-y-4">
                     <h3 className="font-medium">Custom Gradient States</h3>
                     <div className="space-y-2">
-                        <Button variant="custom" size="custom">Normal</Button>
-                        <Button variant="custom" size="custom" disabled>Disabled</Button>
-                        <Button variant="custom" size="custom" loading>Loading</Button>
+                        <Button size="custom">Normal</Button>
+                        <Button size="custom" disabled>Disabled</Button>
+                        <Button size="custom" loading>Loading</Button>
                     </div>
                 </div>
                 <div className="text-center space-y-4">
