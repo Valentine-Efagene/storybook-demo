@@ -123,7 +123,7 @@ export const DiagnosticTest: Story = {
           Raw CSS Custom Button
         </button>
 
-        <Button size="custom">
+        <Button>
           React Component Custom Button
         </Button>
 
@@ -221,7 +221,7 @@ export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
       <Button variant="default">Default</Button>
-      <Button size="custom">Custom</Button>
+      <Button>Custom</Button>
       <Button variant="destructive">Destructive</Button>
       <Button variant="outline">Outline</Button>
       <Button variant="outline" size="outline-lg">Outline Large</Button>
@@ -247,7 +247,7 @@ export const AllSizes: Story = {
       <Button size="sm">Small</Button>
       <Button size="default">Default</Button>
       <Button size="lg">Large</Button>
-      <Button size="custom">Custom Size</Button>
+      <Button>Custom Size</Button>
     </div>
   ),
   parameters: {
@@ -268,7 +268,7 @@ export const WithIcons: Story = {
       <Button icon={<DownloadIcon />} iconPosition="right" variant="outline">
         Download
       </Button>
-      <Button size="custom" icon={<HeartIcon />}>
+      <Button icon={<HeartIcon />}>
         Custom with Icon
       </Button>
     </div>
@@ -286,7 +286,7 @@ export const LoadingStates: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
       <Button loading>Loading</Button>
-      <Button loading size="custom">Loading Custom</Button>
+      <Button loading>Loading Custom</Button>
       <Button loading variant="outline">Loading Outline</Button>
     </div>
   ),
@@ -326,7 +326,7 @@ export const DisabledStates: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
       <Button disabled>Disabled</Button>
-      <Button disabled size="custom">Disabled Custom</Button>
+      <Button disabled>Disabled Custom</Button>
       <Button disabled variant="outline">Disabled Outline</Button>
     </div>
   ),
@@ -343,7 +343,7 @@ export const FullWidth: Story = {
   render: () => (
     <div className="w-96 space-y-4">
       <Button fullWidth>Full Width Button</Button>
-      <Button fullWidth size="custom">Full Width Custom</Button>
+      <Button fullWidth>Full Width Custom</Button>
       <Button fullWidth variant="outline">Full Width Outline</Button>
     </div>
   ),
@@ -368,7 +368,7 @@ export const CustomVariantsShowcase: Story = {
       <div className="space-y-3">
         <h3 className="text-md font-medium">Primary (Custom Gradient)</h3>
         <div className="flex gap-4 items-center">
-          <Button size="custom">Primary Action</Button>
+          <Button>Primary Action</Button>
           <div className="text-xs text-gray-500">
             400px × 36px | Gradient: #049DC8 → #0082B5
           </div>
@@ -401,7 +401,7 @@ export const CustomVariantsShowcase: Story = {
       <div className="space-y-3">
         <h3 className="text-md font-medium">Button Hierarchy</h3>
         <div className="flex gap-4 items-center">
-          <Button size="custom">Primary</Button>
+          <Button>Primary</Button>
           <Button variant="outline" size="outline-lg">Secondary</Button>
           <Button variant="subtle" size="subtle-lg">Subtle</Button>
         </div>
@@ -420,7 +420,6 @@ export const CustomVariantsShowcase: Story = {
 
 export const Interactive: Story = {
   args: {
-    size: 'custom',
     children: 'Click Me!',
   },
   parameters: {

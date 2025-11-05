@@ -43,10 +43,10 @@ export function ButtonShowcase() {
                     The featured custom gradient button with blue gradient background, custom dimensions, and enhanced styling.
                 </p>
                 <div className="grid gap-4 md:grid-cols-2">
-                    <Button size="custom">
+                    <Button>
                         Custom Gradient Button
                     </Button>
-                    <Button size="custom" icon={<CheckIcon />}>
+                    <Button icon={<CheckIcon />}>
                         With Icon
                     </Button>
                 </div>
@@ -57,7 +57,7 @@ export function ButtonShowcase() {
                 <h2 className="text-xl font-semibold">Button Variants</h2>
                 <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-4">
                     <Button variant="default">Default</Button>
-                    <Button size="custom">Custom</Button>
+                    <Button >Custom</Button>
                     <Button variant="destructive">Destructive</Button>
                     <Button variant="outline">Outline</Button>
                     <Button variant="outline" size="outline-lg">Outline Large</Button>
@@ -75,7 +75,7 @@ export function ButtonShowcase() {
                 <p className="text-sm text-muted-foreground">
                     Outline buttons with custom blue border (#026993), white background, and light blue shadow.
                 </p>
-                <div className="grid gap-4 md:grid-cols-3">
+                <div className="flex gap-4 flex-wrap">
                     <Button variant="outline">Default Outline</Button>
                     <Button variant="outline" size="outline-lg">Large Outline (82px)</Button>
                     <Button variant="outline" icon={<CheckIcon />}>With Icon</Button>
@@ -102,7 +102,7 @@ export function ButtonShowcase() {
                     <Button size="sm">Small</Button>
                     <Button size="default">Default</Button>
                     <Button size="lg">Large</Button>
-                    <Button size="custom">Custom Size</Button>
+                    <Button >Custom Size</Button>
                     <Button variant="outline" size="outline-lg">Outline Large</Button>
                     <Button variant="subtle" size="subtle-lg">Subtle Large</Button>
                 </div>
@@ -118,7 +118,7 @@ export function ButtonShowcase() {
                     <Button icon={<DownloadIcon />} iconPosition="right" variant="outline">
                         Download
                     </Button>
-                    <Button size="custom" icon={<CheckIcon />}>
+                    <Button icon={<CheckIcon />}>
                         Custom with Icon
                     </Button>
                 </div>
@@ -147,7 +147,7 @@ export function ButtonShowcase() {
                     <Button loading={loading} onClick={handleLoadingDemo}>
                         {loading ? 'Loading...' : 'Click to Load'}
                     </Button>
-                    <Button loading size="custom">
+                    <Button loading >
                         Custom Loading
                     </Button>
                     <Button loading variant="outline">
@@ -161,7 +161,7 @@ export function ButtonShowcase() {
                 <h2 className="text-xl font-semibold">Disabled States</h2>
                 <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                     <Button disabled>Disabled Default</Button>
-                    <Button disabled size="custom">
+                    <Button disabled >
                         Disabled Custom
                     </Button>
                     <Button disabled variant="outline">
@@ -175,7 +175,7 @@ export function ButtonShowcase() {
                 <h2 className="text-xl font-semibold">Full Width Buttons</h2>
                 <div className="max-w-md space-y-3">
                     <Button fullWidth>Full Width Default</Button>
-                    <Button fullWidth size="custom">
+                    <Button fullWidth >
                         Full Width Custom
                     </Button>
                     <Button fullWidth variant="outline" icon={<DownloadIcon />}>
@@ -191,7 +191,7 @@ export function ButtonShowcase() {
                     <div className="space-y-2">
                         <Button
 
-                            size="custom"
+
                             onClick={() => alert('Custom button clicked!')}
                             className="w-full"
                         >
@@ -221,7 +221,7 @@ export function ButtonShowcase() {
                     <div className="p-4 border rounded-lg">
                         <h3 className="font-medium mb-3">Form Actions</h3>
                         <div className="flex gap-2">
-                            <Button size="custom">Submit</Button>
+                            <Button >Submit</Button>
                             <Button variant="outline">Cancel</Button>
                             <Button variant="ghost">Reset</Button>
                         </div>

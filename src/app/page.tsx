@@ -30,7 +30,6 @@ export default function Home() {
             {/* Featured Custom Button */}
             <div className="flex flex-col items-center gap-6">
               <Button
-                size="custom"
                 icon={<CheckIcon />}
                 className="mx-auto"
               >
@@ -44,7 +43,7 @@ export default function Home() {
             {/* Featured Buttons */}
             <div className="flex flex-col items-center gap-4">
               <div className="flex gap-4 flex-wrap justify-center">
-                <Button size="custom" icon={<CheckIcon />}>
+                <Button icon={<CheckIcon />}>
                   Primary Action
                 </Button>
                 <Button variant="outline" size="outline-lg">
@@ -75,7 +74,7 @@ export default function Home() {
 
             {/* Navigation */}
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Button size="custom" asChild>
+              <Button asChild>
                 <a href="#showcase">
                   View Full Showcase
                 </a>
