@@ -31,12 +31,12 @@ const meta = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['default', 'custom', 'destructive', 'outline', 'subtle', 'secondary', 'ghost', 'link'],
+      options: ['default', 'destructive', 'outline', 'subtle', 'secondary', 'ghost', 'link'],
       description: 'The visual style variant of the button'
     },
     size: {
       control: { type: 'select' },
-      options: ['default', 'sm', 'lg', 'custom', 'outline-lg', 'subtle-lg', 'icon', 'icon-sm', 'icon-lg'],
+      options: ['default', 'sm', 'lg', 'outline-lg', 'subtle-lg', 'icon', 'icon-sm', 'icon-lg'],
       description: 'The size of the button'
     },
     loading: {
@@ -220,8 +220,7 @@ export const SubtleVariants: Story = {
 export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
-      <Button variant="default">Default</Button>
-      <Button>Custom</Button>
+      <Button>Default</Button>
       <Button variant="destructive">Destructive</Button>
       <Button variant="outline">Outline</Button>
       <Button variant="outline" size="outline-lg">Outline Large</Button>
