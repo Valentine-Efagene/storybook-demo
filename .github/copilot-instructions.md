@@ -1,6 +1,14 @@
 - Save all storybook stories in the src/stories directory.
 - Reserve the src/components/ui folder for the original shadcn component.
 - When modifying an existing shadcn component, ensure that the original file remains in src/components/ui, and apply your changes directly to that file.
+- Use react-hook-form and Zod for form components.
+- Make sure to use the existing design system and styling conventions used in the project.
+- Make sure to use the existing utility functions and hooks from the codebase when applicable.
+- Make sure to use the existing components from the codebase when applicable.
+- Use Tanstack Query for data fetching components, and ensure server-side hydration, because the codebase is server-first.
+- Use server components where possible, but create client components when necessary (e.g., for interactivity).
+- Use server actions when appropriate.
+- Use TypeScript for all components.
 - Typing should be preserved as much as possible.
 - When creating form components, ensure they are compatible with react-hook-form.
 - When creating new components, follow the established patterns in shadcn components for consistency.
