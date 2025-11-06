@@ -105,9 +105,9 @@ export const Interactive: Story = {
         return (
             <div className="space-y-4 p-4">
                 <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <FormLabel className="block text-sm font-medium mb-2">
                         Phone Number
-                    </label>
+                    </FormLabel>
                     <PhoneNumberInput
                         {...args}
                         value={phoneNumber}
@@ -132,9 +132,9 @@ export const ValidationStates: Story = {
 
                 {/* Default State */}
                 <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <FormLabel className="block text-sm font-medium mb-2">
                         Default State
-                    </label>
+                    </FormLabel>
                     <PhoneNumberInput
                         placeholder="Enter phone number"
                         style={{
@@ -148,9 +148,9 @@ export const ValidationStates: Story = {
                     </p>
                 </div>                {/* Valid State */}
                 <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <FormLabel className="block text-sm font-medium mb-2">
                         Valid Phone Number
-                    </label>
+                    </FormLabel>
                     <PhoneNumberInput
                         value={'+2348123456789' as Value}
                         style={{
@@ -166,9 +166,9 @@ export const ValidationStates: Story = {
 
                 {/* Invalid/Error State - Your specified CSS */}
                 <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <FormLabel className="block text-sm font-medium mb-2">
                         Invalid Phone Number (Error State)
-                    </label>
+                    </FormLabel>
                     <div
                         className="w-[285px]"
                         style={{
@@ -190,9 +190,9 @@ export const ValidationStates: Story = {
                     </p>
                 </div>                {/* Disabled State */}
                 <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <FormLabel className="block text-sm font-medium mb-2">
                         Disabled State
-                    </label>
+                    </FormLabel>
                     <PhoneNumberInput
                         value={'+2348123456789' as Value}
                         disabled={true}
@@ -323,30 +323,30 @@ export const CountryShowcase: Story = {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <FormLabel className="block text-sm font-medium mb-2">
                             Nigeria (+234)
-                        </label>
+                        </FormLabel>
                         <PhoneNumberInput value={'+2348123456789' as Value} />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <FormLabel className="block text-sm font-medium mb-2">
                             United States (+1)
-                        </label>
+                        </FormLabel>
                         <PhoneNumberInput value={'+15551234567' as Value} />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <FormLabel className="block text-sm font-medium mb-2">
                             United Kingdom (+44)
-                        </label>
+                        </FormLabel>
                         <PhoneNumberInput value={'+447911123456' as Value} />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <FormLabel className="block text-sm font-medium mb-2">
                             Germany (+49)
-                        </label>
+                        </FormLabel>
                         <PhoneNumberInput value={'+4915112345678' as Value} />
                     </div>
                 </div>
@@ -364,9 +364,9 @@ export const SizeVariants: Story = {
 
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <FormLabel className="block text-sm font-medium mb-2">
                             Small (32px height)
-                        </label>
+                        </FormLabel>
                         <PhoneNumberInput
                             placeholder="Small input"
                             style={{ height: '32px', fontSize: '14px' }}
@@ -375,9 +375,9 @@ export const SizeVariants: Story = {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <FormLabel className="block text-sm font-medium mb-2">
                             Medium (38px height) - Default
-                        </label>
+                        </FormLabel>
                         <PhoneNumberInput
                             placeholder="Medium input"
                             style={{ height: '38px' }}
@@ -385,9 +385,9 @@ export const SizeVariants: Story = {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <FormLabel className="block text-sm font-medium mb-2">
                             Large (44px height)
-                        </label>
+                        </FormLabel>
                         <PhoneNumberInput
                             placeholder="Large input"
                             style={{ height: '44px', fontSize: '16px' }}
