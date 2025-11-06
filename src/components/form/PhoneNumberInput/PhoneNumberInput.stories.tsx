@@ -3,6 +3,7 @@ import { fn } from 'storybook/test';
 import PhoneNumberInput from './PhoneNumberInput';
 import { useState } from 'react';
 import type { Value } from 'react-phone-number-input';
+import { CircleAlert } from 'lucide-react';
 
 const meta = {
     title: 'Form/PhoneNumberInput',
@@ -183,7 +184,7 @@ export const ValidationStates: Story = {
                         />
                     </div>
                     <p className="mt-1 text-sm text-red-600">
-                        ⚠ Phone number is incomplete or invalid
+                        <span className="text-xs mt-0.5"><CircleAlert className="w-4 h-4" /></span> <span>Phone number is incomplete or invalid</span>
                     </p>
                 </div>                {/* Disabled State */}
                 <div>
