@@ -4,6 +4,8 @@ import PhoneNumberInput from './PhoneNumberInput';
 import { useState } from 'react';
 import type { Value } from 'react-phone-number-input';
 import { CircleAlert } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { FormLabel } from '../FormLabel';
 
 const meta = {
     title: 'Form/PhoneNumberInput',
@@ -183,7 +185,7 @@ export const ValidationStates: Story = {
                             }}
                         />
                     </div>
-                    <p className="mt-1 text-sm text-red-600">
+                    <p className="mt-1 text-sm text-red-600 flex gap-1">
                         <span className="text-xs mt-0.5"><CircleAlert className="w-4 h-4" /></span> <span>Phone number is incomplete or invalid</span>
                     </p>
                 </div>                {/* Disabled State */}
@@ -243,9 +245,9 @@ export const FormExample: Story = {
                 <h3 className="text-xl font-semibold mb-6">Contact Form</h3>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <FormLabel className="block text-sm font-medium mb-2">
                             Name
-                        </label>
+                        </FormLabel>
                         <input
                             type="text"
                             value={formData.name}
@@ -256,9 +258,9 @@ export const FormExample: Story = {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <FormLabel className="block text-sm font-medium mb-2">
                             Email
-                        </label>
+                        </FormLabel>
                         <input
                             type="email"
                             value={formData.email}
@@ -269,9 +271,9 @@ export const FormExample: Story = {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <FormLabel className="block text-sm font-medium mb-2">
                             Phone Number
-                        </label>
+                        </FormLabel>
                         <PhoneNumberInput
                             value={formData.phoneNumber}
                             onChange={handlePhoneChange}
@@ -293,12 +295,12 @@ export const FormExample: Story = {
                         )}
                     </div>
 
-                    <button
+                    <Button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        className="w-full"
                     >
                         Submit
-                    </button>
+                    </Button>
                 </form>
 
                 <div className="mt-6 p-4 bg-gray-50 rounded-md">

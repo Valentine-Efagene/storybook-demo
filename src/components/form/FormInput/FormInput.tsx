@@ -1,7 +1,10 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { CircleAlert } from "lucide-react";
+import { Field, FieldContent } from "@/components/ui/field";
+import { FormLabel } from "@/components/form/FormLabel";
+import { ValidationMessage } from "@/components/form/ValidationMessage";
+import { HelperText } from "@/components/form/HelperText";
 
 export interface FormInputProps extends React.ComponentProps<"input"> {
     label?: string;
@@ -25,68 +28,57 @@ const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
         const inputId = id || React.useId();
 
         return (
-            <div className={cn("space-y-2", containerClassName)}>
+            <Field className={cn("space-y-2", containerClassName)} data-invalid={!!error}>
                 {label && (
-                    <label
-                        htmlFor={inputId}
-                        className="block text-sm font-medium text-gray-900"
-                    >
+                    <FormLabel htmlFor={inputId} isRequired={isRequired}>
                         {label}
-                        {isRequired && <span className="text-red-500 ml-1">*</span>}
-                    </label>
+                    </FormLabel>
                 )}
 
-                <Input
-                    id={inputId}
-                    ref={ref}
-                    aria-invalid={!!error}
-                    aria-describedby={
-                        error ? `${inputId}-error` :
-                            helperText ? `${inputId}-helper` : undefined
-                    }
-                    className={cn(
-                        // Base styles matching your specifications
-                        "bg-white border border-[#DAE6E7] shadow-sm",
-                        "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-                        // Error state styles
-                        error && [
-                            "border-2 border-[#C6190D]",
-                            "focus:border-[#C6190D] focus:ring-red-500/20",
-                        ],
-                        className
+                <FieldContent>
+                    <Input
+                        id={inputId}
+                        ref={ref}
+                        aria-invalid={!!error}
+                        aria-describedby={
+                            error ? `${inputId}-error` :
+                                helperText ? `${inputId}-helper` : undefined
+                        }
+                        className={cn(
+                            // Base styles matching your specifications
+                            "bg-white border border-[#DAE6E7] shadow-sm",
+                            "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+                            // Error state styles
+                            error && [
+                                "border-2 border-[#C6190D]",
+                                "focus:border-[#C6190D] focus:ring-red-500/20",
+                            ],
+                            className
+                        )}
+                        style={{
+                            boxShadow: error
+                                ? '0px 2px 4px rgba(0, 0, 0, 0.04)'
+                                : '0px 2px 4px rgba(0, 0, 0, 0.04)',
+                            ...props.style,
+                        }}
+                        {...props}
+                    />
+
+                    {/* Error message */}
+                    {error && (
+                        <ValidationMessage id={`${inputId}-error`} type="error">
+                            {error}
+                        </ValidationMessage>
                     )}
-                    style={{
-                        boxShadow: error
-                            ? '0px 2px 4px rgba(0, 0, 0, 0.04)'
-                            : '0px 2px 4px rgba(0, 0, 0, 0.04)',
-                        ...props.style,
-                    }}
-                    {...props}
-                />
 
-                {/* Error message */}
-                {error && (
-                    <p
-                        id={`${inputId}-error`}
-                        className="text-sm text-[#C6190D] flex items-start gap-1"
-                        role="alert"
-                        aria-live="polite"
-                    >
-                        <span className="text-xs mt-0.5"><CircleAlert className="w-4 h-4" /></span>
-                        {error}
-                    </p>
-                )}
-
-                {/* Helper text (only show if no error) */}
-                {!error && helperText && (
-                    <p
-                        id={`${inputId}-helper`}
-                        className="text-sm text-gray-600"
-                    >
-                        {helperText}
-                    </p>
-                )}
-            </div>
+                    {/* Helper text (only show if no error) */}
+                    {!error && helperText && (
+                        <HelperText id={`${inputId}-helper`}>
+                            {helperText}
+                        </HelperText>
+                    )}
+                </FieldContent>
+            </Field>
         );
     }
 );
