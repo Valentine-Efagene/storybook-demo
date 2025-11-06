@@ -1,0 +1,16 @@
+- Save all storybook stories in the src/stories directory.
+- Reserve the src/components/ui folder for the original shadcn component.
+- When modifying an existing shadcn component, ensure that the original file remains in src/components/ui, and apply your changes directly to that file.
+- Typing should be preserved as much as possible.
+- When creating form components, ensure they are compatible with react-hook-form.
+- When creating new components, follow the established patterns in shadcn components for consistency.
+- When adding new components, include corresponding stories in the src/stories directory to demonstrate their usage.
+- When modifying existing stories, ensure they are updated in the src/stories directory.
+- When adding new components, ensure that any necessary dependencies are included in the package.json file.
+- When modifying existing components, ensure that any new dependencies are added to the package.json file if they are not already present.
+- When creating or modifying components, ensure that all styles are consistent with the existing design system used in the project. You are to use Tailwind CSS or CSS modules for styling.
+- When creating or modifying components, ensure that accessibility best practices are followed.
+- When creating or modifying components, ensure that they are responsive and work well on different screen sizes.
+- When creating or modifying components, ensure that they are tested and work as expected.
+- When creating or modifying components, ensure that they are optimized for performance.
+- Don't bother creating usage examples as new dummy files; instead, focus on adding or updating stories in the src/stories directory.
