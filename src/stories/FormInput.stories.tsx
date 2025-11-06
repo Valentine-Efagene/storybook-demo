@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { fn } from 'storybook/test';
-import { FormInput } from './FormInput';
+import { FormInput } from '../components/form/FormInput/FormInput';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 

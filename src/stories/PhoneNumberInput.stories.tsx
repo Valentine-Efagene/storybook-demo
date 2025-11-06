@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { fn } from 'storybook/test';
-import PhoneNumberInput from './PhoneNumberInput';
+import PhoneNumberInput from '../components/form/PhoneNumberInput/PhoneNumberInput';
 import { useState } from 'react';
 import type { Value } from 'react-phone-number-input';
 import { CircleAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { FormLabel } from '../FormLabel';
+import { FormLabel } from '../components/form/FormLabel';
 
 const meta = {
     title: 'Form/PhoneNumberInput',
