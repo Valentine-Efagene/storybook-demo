@@ -25,6 +25,18 @@ type UseServerMutationOptions<TData extends FieldValues, TVariables = TData> = {
     showSuccessToast?: boolean
 }
 
+// Custom error class for server action errors
+class ServerActionError extends Error {
+    constructor(
+        message: string,
+        public serverResponse: ServerActionResponse,
+        public fieldErrors?: Record<string, string[]>
+    ) {
+        super(message)
+        this.name = 'ServerActionError'
+    }
+}
+
 export function useServerMutation<TData extends FieldValues, TVariables = TData>(
     action: (data: TVariables) => Promise<ServerActionResponse>,
     options: UseServerMutationOptions<TData, TVariables> = {} as UseServerMutationOptions<TData, TVariables>
@@ -42,9 +54,42 @@ export function useServerMutation<TData extends FieldValues, TVariables = TData>
 
     const queryClient = useQueryClient()
 
+    // Wrapper function that converts server errors to thrown errors
+    const wrappedAction = async (data: TVariables): Promise<ServerActionResponse> => {
+        try {
+            const response = await action(data)
+
+            if (response?.error) {
+                // Extract form-level error message
+                const formError = response.error.form?.[0] || 'An error occurred'
+
+                // Extract field-level errors
+                const fieldErrors = Object.entries(response.error).reduce((acc, [key, value]) => {
+                    if (key !== 'form' && Array.isArray(value)) {
+                        acc[key] = value
+                    }
+                    return acc
+                }, {} as Record<string, string[]>)
+
+                // Throw error to trigger React Query's error state
+                const error = new ServerActionError(formError, response, fieldErrors)
+                return Promise.reject(error)
+            }
+
+            return response
+        } catch (error) {
+            // Re-throw any errors from the server action itself
+            if (error instanceof ServerActionError) {
+                return Promise.reject(error)
+            }
+            // Wrap other errors
+            return Promise.reject(new Error(error instanceof Error ? error.message : 'An unexpected error occurred'))
+        }
+    }
+
     const mutation = useMutation({
         mutationKey,
-        mutationFn: action,
+        mutationFn: wrappedAction,
         onMutate: async (variables) => {
             // Optimistic update
             if (optimisticUpdate) {
@@ -60,38 +105,7 @@ export function useServerMutation<TData extends FieldValues, TVariables = TData>
             }
         },
         onSuccess: async (response, variables, context) => {
-            if (response?.error) {
-                // Rollback optimistic update on error
-                if (optimisticUpdate && context?.previousData !== undefined) {
-                    queryClient.setQueryData(optimisticUpdate.queryKey, context.previousData)
-                }
-
-                // Handle form-level errors
-                if ('form' in response.error && response.error.form) {
-                    const errorMessage = response.error.form[0]
-                    onError?.(errorMessage, variables)
-                }
-
-                // Handle field-level errors
-                if (setError) {
-                    Object.entries(response.error).forEach(([key, value]) => {
-                        if (key !== 'form' && key in ({} as TData)) {
-                            setError(key as Path<TData>, {
-                                type: 'server',
-                                message: value?.[0] ?? 'Invalid',
-                            })
-                        } else if (key === 'form') {
-                            setError('root' as Path<TData>, {
-                                type: 'server',
-                                message: value?.[0] ?? 'Invalid',
-                            })
-                        }
-                    })
-                }
-
-                return
-            }
-
+            // Only success responses reach here now
             if (response?.success) {
                 // Invalidate and refetch queries
                 if (invalidateQueries.length > 0) {
@@ -119,16 +133,42 @@ export function useServerMutation<TData extends FieldValues, TVariables = TData>
                 }
             }
         },
-        onError: (error: any, variables) => {
-            console.log("Error")
+        onError: (error: any, variables, context) => {
+            console.log('React Query onError triggered:', error)
+
             // Rollback optimistic update on error
-            if (optimisticUpdate) {
-                queryClient.invalidateQueries({ queryKey: optimisticUpdate.queryKey })
+            if (optimisticUpdate && context?.previousData !== undefined) {
+                queryClient.setQueryData(optimisticUpdate.queryKey, context.previousData)
             }
 
-            const errorMessage = error?.message || 'An unexpected error occurred'
-            onError?.(errorMessage, variables)
-            toast.error(errorMessage)
+            // Handle ServerActionError (from our server responses)
+            if (error instanceof ServerActionError) {
+                console.log('Handling ServerActionError:', error.message, error.fieldErrors)
+
+                // Set field-level errors
+                if (setError && error.fieldErrors) {
+                    Object.entries(error.fieldErrors).forEach(([key, messages]) => {
+                        setError(key as Path<TData>, {
+                            type: 'server',
+                            message: messages[0],
+                        })
+                    })
+                }
+
+                // Call custom error handler with the server error message
+                onError?.(error.message, variables)
+
+                // Show error toast
+                if (showSuccessToast) { // Reuse this flag for error toasts too
+                    toast.error(error.message)
+                }
+            } else {
+                // Handle network errors, etc.
+                console.log('Handling other error:', error)
+                const errorMessage = error?.message || 'An unexpected error occurred'
+                onError?.(errorMessage, variables)
+                toast.error(errorMessage)
+            }
         },
     })
 
@@ -151,10 +191,12 @@ export function useServerActionWithQuery<TData extends FieldValues, TVariables =
 ) {
     const mutation = useServerMutation(action, options)
 
-    // Legacy formError for backward compatibility
-    const formError = mutation.isError && mutation.error
-        ? (mutation.error as any).message || 'An error occurred'
-        : null
+    // Now formError will be properly set when server returns errors
+    const formError = mutation.isError && mutation.error instanceof ServerActionError
+        ? mutation.error.message
+        : mutation.isError && mutation.error
+            ? (mutation.error as any).message || 'An error occurred'
+            : null
 
     return {
         ...mutation,

@@ -54,8 +54,9 @@ export function SignInForm() {
         showSuccessToast: true,
     })
 
-    const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-        await signInMutation.mutateAsync(data)
+    const onSubmit = (data: z.infer<typeof signInSchema>) => {
+        // Use mutate instead of mutateAsync to avoid promise handling
+        signInMutation.mutate(data)
     }
 
     return (
