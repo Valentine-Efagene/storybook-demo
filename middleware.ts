@@ -2,13 +2,7 @@ import { updateSession } from "@/lib/server";
 import { NextRequest, NextResponse } from "next/server";
 
 const PUBLIC_ROUTES = [
-    '/auth/signin',
-    '/auth/signup',
-    '/auth/forgot-password',
-    '/auth/reset-password',
-    '/api/auth',
-    '/events',
-    '/',
+    '/signin',
 ]
 
 function isPublicRoute(pathname: string): boolean {

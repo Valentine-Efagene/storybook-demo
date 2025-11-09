@@ -16,13 +16,14 @@ export async function signIn(formData: unknown) {
     const { email, password } = parsed.data
 
     try {
+        console.log(`${process.env.VITE_API_BASE_URL}/onboarding/login`)
         const res = await fetch(`${process.env.VITE_API_BASE_URL}/onboarding/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                email,
+                identifier: email,
                 password,
             }),
             cache: 'no-store',
@@ -37,8 +38,9 @@ export async function signIn(formData: unknown) {
                 },
             }
         }
-
-        const { accessToken, refreshToken } = data.payload
+        const { token } = data.body
+        const accessToken = token.authToken
+        const refreshToken = token.authToken // Assuming refresh token is also returned here
 
         // Decode access token to get expiry
         const parsed = jose.decodeJwt(accessToken);
