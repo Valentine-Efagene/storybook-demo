@@ -17,6 +17,7 @@ A dropdown menu component for user profile actions, featuring:
 - **Avatar Display**: Uses shadcn Avatar component with image fallback to initials
 - **User Information**: Shows name and email in the dropdown header
 - **Action Items**: Profile, Billing, Settings, Security, and Logout options
+- **Logout Functionality**: Uses ResponsiveDialog for confirmation with proper error handling and loading states
 - **Accessible**: Built with Radix UI primitives for full accessibility
 - **Customizable**: Accepts user props for dynamic content
 

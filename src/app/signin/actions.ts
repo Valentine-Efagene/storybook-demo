@@ -84,3 +84,23 @@ export async function signIn(formData: unknown) {
         }
     }
 }
+
+export async function signOut() {
+    try {
+        const cookieStore = await cookies()
+
+        // Clear all authentication cookies
+        cookieStore.delete('accessToken')
+        cookieStore.delete('refreshToken')
+        cookieStore.delete('sessionMetadata')
+        cookieStore.delete('sessionId')
+
+        return { success: 'Signed out successfully!' }
+    } catch (err: any) {
+        return {
+            error: {
+                form: [err.message || 'Error signing out.'],
+            },
+        }
+    }
+}
