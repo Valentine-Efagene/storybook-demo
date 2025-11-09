@@ -1,7 +1,6 @@
-import { SidebarHeader, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/SideBar";
 import { Header } from "@/components/Header";
-// import { Breadcrumbs } from "@/components/BreadCrumbs";
 
 export default function RootLayout({
   children,
