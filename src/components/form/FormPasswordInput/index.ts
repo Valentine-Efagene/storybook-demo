@@ -1,0 +1,1 @@
+export { FormPasswordInput } from './FormPasswordInput';
