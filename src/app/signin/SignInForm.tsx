@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -23,42 +23,56 @@ import {
 import { Input } from "@/components/ui/input"
 import { FormPasswordInput } from "@/components/form/FormPasswordInput"
 import { FormLabel } from "@/components/form/FormLabel"
-
-const formSchema = z.object({
-    email: z
-        .string()
-        .min(5, "Email must be at least 5 characters.")
-        .max(32, "Email must be at most 32 characters."),
-    password: z
-        .string()
-        .min(8, "Password must be at least 8 characters.")
-        .max(100, "Password must be at most 100 characters."),
-})
+import { signInSchema } from "@/lib/validation/user-schema"
+import { signIn } from "./actions"
 
 export function SignInForm() {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof signInSchema>>({
+        resolver: zodResolver(signInSchema),
         defaultValues: {
             email: "",
             password: "",
         },
     })
 
-    function onSubmit(data: z.infer<typeof formSchema>) {
-        toast("You submitted the following values:", {
-            description: (
-                <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-                    <code>{JSON.stringify(data, null, 2)}</code>
-                </pre>
-            ),
-            position: "bottom-right",
-            classNames: {
-                content: "flex flex-col gap-2",
-            },
-            style: {
-                "--border-radius": "calc(var(--radius)  + 4px)",
-            } as React.CSSProperties,
-        })
+    const {
+        handleSubmit,
+        control,
+        formState: { errors, isSubmitting },
+        setError,
+    } = form
+
+    const [formError, setFormError] = useState<string | null>(null)
+
+    const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+        const res = await signIn(data);
+
+        if (res?.error) {
+            if ("form" in res.error && res.error.form) {
+                setFormError(res.error.form[0]);
+            }
+
+            Object.entries(res.error).forEach(([key, value]) => {
+                if (key !== "form") {
+                    setError(key as keyof z.infer<typeof signInSchema>, {
+                        type: "server",
+                        message: value?.[0] ?? "Invalid",
+                    });
+                }
+            });
+
+            return;
+        }
+
+        if (res?.success) {
+            setFormError(null);
+            toast(res.success);
+
+            // if (window) {
+            //     const redirectTo = searchParams.get("redirectTo") || "/events"
+            //     window.location.href = redirectTo
+            // }
+        }
     }
 
     return (
