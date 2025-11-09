@@ -25,6 +25,7 @@ import { FormPasswordInput } from "@/components/form/FormPasswordInput"
 import { FormLabel } from "@/components/form/FormLabel"
 import { signInSchema } from "@/lib/validation/user-schema"
 import { signIn } from "./actions"
+import FormError from "@/components/form/FormError"
 
 export function SignInForm() {
     const form = useForm<z.infer<typeof signInSchema>>({
@@ -36,9 +37,6 @@ export function SignInForm() {
     })
 
     const {
-        handleSubmit,
-        control,
-        formState: { errors, isSubmitting },
         setError,
     } = form
 
@@ -126,6 +124,7 @@ export function SignInForm() {
                             )}
                         />
                     </FieldGroup>
+                    <FormError formError={formError} />
                 </form>
             </CardContent>
             <CardFooter>
