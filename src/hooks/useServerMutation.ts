@@ -80,6 +80,11 @@ export function useServerMutation<TData extends FieldValues, TVariables = TData>
                                 type: 'server',
                                 message: value?.[0] ?? 'Invalid',
                             })
+                        } else if (key === 'form') {
+                            setError('root' as Path<TData>, {
+                                type: 'server',
+                                message: value?.[0] ?? 'Invalid',
+                            })
                         }
                     })
                 }

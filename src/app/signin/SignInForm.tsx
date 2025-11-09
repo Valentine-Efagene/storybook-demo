@@ -114,9 +114,6 @@ export function SignInForm() {
                     {signInMutation.isError && (
                         <FormError formError={signInMutation.error?.message} />
                     )}
-                    {form.formState.errors && (
-                        <div>{JSON.stringify(form.formState.errors)}</div>
-                    )}
                 </form>
             </CardContent>
             <CardFooter>
