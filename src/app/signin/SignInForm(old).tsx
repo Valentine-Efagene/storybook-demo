@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import * as z from "zod"
-import { useQueryClient } from '@tanstack/react-query'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -25,11 +24,9 @@ import { FormLabel } from "@/components/form/FormLabel"
 import { signInSchema } from "@/lib/validation/user-schema"
 import { signIn } from "./actions"
 import FormError from "@/components/form/FormError"
-import { useServerMutation } from "@/hooks/useServerMutation"
+import { useServerAction } from "@/hooks/useServerAction"
 
 export function SignInForm() {
-    const queryClient = useQueryClient()
-
     const form = useForm<z.infer<typeof signInSchema>>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
@@ -38,24 +35,18 @@ export function SignInForm() {
         },
     })
 
-    const signInMutation = useServerMutation(signIn, {
+    const { formError, isLoading, executeAction } = useServerAction({
         setError: form.setError,
-        mutationKey: ['signin'],
-        invalidateQueries: [
-            ['user'], // Invalidate user data
-            ['auth'], // Invalidate auth state
-        ],
-        onSuccess: (data) => {
-            // Update user data in cache immediately
-            queryClient.setQueryData(['user'], data)
-            form.reset()
+        onSuccess: (message) => {
+            // Optional: Add custom success logic here
+            // Example: redirect logic can be added
         },
-        redirectTo: "/dashboard",
-        showSuccessToast: true,
+        // Optional: Add redirect URL if needed
+        // redirectTo: "/dashboard"
     })
 
     const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-        await signInMutation.mutateAsync(data)
+        await executeAction(signIn, data)
     }
 
     return (
@@ -87,7 +78,6 @@ export function SignInForm() {
                                         id="email"
                                         placeholder="Email"
                                         autoComplete="email"
-                                        disabled={signInMutation.isLoading}
                                     />
                                     {fieldState.invalid && (
                                         <FieldError errors={[fieldState.error]} />
@@ -106,25 +96,17 @@ export function SignInForm() {
                                     placeholder="Password"
                                     autoComplete="password"
                                     error={fieldState.invalid ? fieldState.error?.message : undefined}
-                                    disabled={signInMutation.isLoading}
                                 />
                             )}
                         />
                     </FieldGroup>
-                    {signInMutation.isError && (
-                        <FormError formError={signInMutation.error?.message} />
-                    )}
+                    <FormError formError={formError} />
                 </form>
             </CardContent>
             <CardFooter>
                 <Field orientation="horizontal">
-                    <Button
-                        type="submit"
-                        form="signin"
-                        fullWidth
-                        disabled={signInMutation.isLoading}
-                    >
-                        {signInMutation.isLoading ? "Signing In..." : "Log In"}
+                    <Button type="submit" form="signin" fullWidth disabled={isLoading}>
+                        {isLoading ? "Signing In..." : "Log In"}
                     </Button>
                 </Field>
             </CardFooter>
