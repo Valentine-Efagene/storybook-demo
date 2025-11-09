@@ -123,7 +123,7 @@ export async function updateSession(req: NextRequest) {
         if (parsed.exp && now >= parsed.exp) {
             if (!refreshToken) return clearSession(req, 'Expired with no refresh token');
 
-            newTokens = await refreshTokens(refreshToken);
+            newTokens = await tokens(refreshToken);
             if (!newTokens) return clearSession(req, 'Token refresh failed');
 
             // Parse new token (no caching for fresh tokens)
@@ -182,7 +182,7 @@ export async function updateSession(req: NextRequest) {
     return res;
 }
 
-async function refreshTokens(refreshToken: string) {
+async function tokens(refreshToken: string) {
     try {
         const apiUrl = `${process.env.API_BASE_URL}/auth/refresh`;
         const resp = await fetch(apiUrl, {
@@ -195,8 +195,8 @@ async function refreshTokens(refreshToken: string) {
 
         const data: ApiResponse<IAuthData> = await resp.json();
         return {
-            accessToken: data.payload.accessToken,
-            refreshToken: data.payload.refreshToken ?? refreshToken,
+            accessToken: data.payload.token.authToken,
+            refreshToken: data.payload.token.authToken,
         };
     } catch (err) {
         console.error("Error refreshing tokens:", err);
@@ -220,7 +220,7 @@ export async function clearSession(req: NextRequest, reason?: string) {
         }
     }
 
-    const res = NextResponse.redirect(new URL("/auth/signin", req.url));
+    const res = NextResponse.redirect(new URL("/signin", req.url));
 
     // Clear all session-related cookies
     const cookiesToClear = ["accessToken", "refreshToken", "sessionMetadata"];
