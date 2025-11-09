@@ -22,3 +22,4 @@
 - When creating or modifying components, ensure that they are tested and work as expected.
 - When creating or modifying components, ensure that they are optimized for performance.
 - Don't bother creating usage examples as new dummy files; instead, focus on adding or updating stories in the src/stories directory.
+- The project uses pnpm as the package manager.
