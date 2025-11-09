@@ -24,7 +24,7 @@ export async function authenticatedFetch<T>(
         throw new Error('No authentication token available')
     }
 
-    const response = await fetch(`${process.env.API_BASE_URL}${endpoint}`, {
+    const response = await fetch(`${process.env.VITE_API_BASE_URL}${endpoint}`, {
         ...options,
         headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -51,7 +51,7 @@ export async function authenticatedUpload(
         throw new Error('No authentication token available')
     }
 
-    const response = await fetch(`${process.env.API_BASE_URL}${endpoint}`, {
+    const response = await fetch(`${process.env.VITE_API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${accessToken}`,

@@ -42,15 +42,15 @@ export function SignInForm() {
         setError: form.setError,
         mutationKey: ['signin'],
         invalidateQueries: [
-            ['user'], // Invalidate user data
-            ['auth'], // Invalidate auth state
+            ['user'],
+            ['auth'],
         ],
         onSuccess: (data) => {
             // Update user data in cache immediately
             queryClient.setQueryData(['user'], data)
             form.reset()
         },
-        redirectTo: "/dashboard",
+        redirectTo: "/",
         showSuccessToast: true,
     })
 
@@ -114,6 +114,9 @@ export function SignInForm() {
                     {signInMutation.isError && (
                         <FormError formError={signInMutation.error?.message} />
                     )}
+                    {form.formState.errors && (
+                        <div>{JSON.stringify(form.formState.errors)}</div>
+                    )}
                 </form>
             </CardContent>
             <CardFooter>
@@ -123,6 +126,7 @@ export function SignInForm() {
                         form="signin"
                         fullWidth
                         disabled={signInMutation.isLoading}
+                        loading={signInMutation.isLoading}
                     >
                         {signInMutation.isLoading ? "Signing In..." : "Log In"}
                     </Button>

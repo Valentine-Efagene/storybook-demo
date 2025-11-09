@@ -16,7 +16,7 @@ export async function signIn(formData: unknown) {
     const { email, password } = parsed.data
 
     try {
-        const res = await fetch(`${process.env.API_BASE_URL}/auth/sign-in`, {
+        const res = await fetch(`${process.env.VITE_API_BASE_URL}/onboarding/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

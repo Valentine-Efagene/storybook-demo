@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { SignInForm } from './SignInForm(old)';
+import { SignInForm } from './SignInForm';
 import { Toaster } from 'sonner';
 
 const meta = {

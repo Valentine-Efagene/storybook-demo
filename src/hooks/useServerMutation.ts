@@ -115,6 +115,7 @@ export function useServerMutation<TData extends FieldValues, TVariables = TData>
             }
         },
         onError: (error: any, variables) => {
+            console.log("Error")
             // Rollback optimistic update on error
             if (optimisticUpdate) {
                 queryClient.invalidateQueries({ queryKey: optimisticUpdate.queryKey })
