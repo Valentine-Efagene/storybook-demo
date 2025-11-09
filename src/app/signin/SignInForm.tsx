@@ -1,9 +1,7 @@
 "use client"
 
-import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
-import { toast } from "sonner"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -26,6 +24,7 @@ import { FormLabel } from "@/components/form/FormLabel"
 import { signInSchema } from "@/lib/validation/user-schema"
 import { signIn } from "./actions"
 import FormError from "@/components/form/FormError"
+import { useServerAction } from "@/hooks/useServerAction"
 
 export function SignInForm() {
     const form = useForm<z.infer<typeof signInSchema>>({
@@ -36,41 +35,18 @@ export function SignInForm() {
         },
     })
 
-    const {
-        setError,
-    } = form
-
-    const [formError, setFormError] = useState<string | null>(null)
+    const { formError, isLoading, executeAction } = useServerAction({
+        setError: form.setError,
+        onSuccess: (message) => {
+            // Optional: Add custom success logic here
+            // Example: redirect logic can be added
+        },
+        // Optional: Add redirect URL if needed
+        // redirectTo: "/dashboard"
+    })
 
     const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-        const res = await signIn(data);
-
-        if (res?.error) {
-            if ("form" in res.error && res.error.form) {
-                setFormError(res.error.form[0]);
-            }
-
-            Object.entries(res.error).forEach(([key, value]) => {
-                if (key !== "form") {
-                    setError(key as keyof z.infer<typeof signInSchema>, {
-                        type: "server",
-                        message: value?.[0] ?? "Invalid",
-                    });
-                }
-            });
-
-            return;
-        }
-
-        if (res?.success) {
-            setFormError(null);
-            toast(res.success);
-
-            // if (window) {
-            //     const redirectTo = searchParams.get("redirectTo") || "/events"
-            //     window.location.href = redirectTo
-            // }
-        }
+        await executeAction(signIn, data)
     }
 
     return (
@@ -129,8 +105,8 @@ export function SignInForm() {
             </CardContent>
             <CardFooter>
                 <Field orientation="horizontal">
-                    <Button type="submit" form="signin" fullWidth>
-                        Log In
+                    <Button type="submit" form="signin" fullWidth disabled={isLoading}>
+                        {isLoading ? "Signing In..." : "Log In"}
                     </Button>
                 </Field>
             </CardFooter>
