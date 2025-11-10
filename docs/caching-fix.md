@@ -1,10 +1,18 @@
-# Next.js React Query Caching Fix
+# Next.js React Query Caching & Hydration Fix
 
-## Problem
+## Problems
+
+### 1. Caching Issue
 
 When navigating away from the users page and returning, the page would reload from scratch instead of using cached data, providing a poor user experience.
 
-## Root Cause
+### 2. Hydration Error
+
+"A tree hydrated but some attributes of the server rendered HTML didn't match the client properties" due to server/client mismatches.
+
+## Root Causes
+
+### 1. Nested QueryProviders
 
 The issue was caused by **nested QueryProviders**:
 
@@ -13,9 +21,15 @@ The issue was caused by **nested QueryProviders**:
 
 This created separate cache instances, preventing proper cache persistence across navigation.
 
-## Solution
+### 2. Hydration Mismatches
 
-### 1. Remove Nested QueryProvider
+- **useSearchParams()** returns different values on server vs client during SSR
+- **new Date()** calls create different timestamps on server vs client
+- Components using these need proper Suspense boundaries
+
+## Solutions
+
+### 1. Remove Nested QueryProvider & Add Suspense
 
 **Before:**
 
@@ -34,12 +48,27 @@ return (
 // In users/page.tsx
 return (
   <HydrationBoundary state={dehydratedState}>
-    <UserTable initialQparams={initialQparams} />
+    <Suspense fallback={<CenteredLoader size="lg" />}>
+      <UserTable initialQparams={initialQparams} />
+    </Suspense>
   </HydrationBoundary>
 );
 ```
 
-### 2. Improved Cache Settings
+### 2. Fix Date Consistency for Hydration
+
+**Before:**
+
+```tsx
+<DatePicker maxDate={new Date()} /> // Different on server vs client!
+```
+
+**After:**
+
+````tsx
+const today = useMemo(() => new Date(), [])  // Consistent across renders
+<DatePicker maxDate={today} />
+```### 2. Improved Cache Settings
 
 Enhanced the cache configuration in `useUsers` hook:
 
@@ -47,7 +76,7 @@ Enhanced the cache configuration in `useUsers` hook:
 // Increased staleTime and gcTime for better navigation experience
 staleTime: 5 * 60 * 1000, // 5 minutes (was 2 minutes)
 gcTime: 10 * 60 * 1000,   // 10 minutes (was 5 minutes)
-```
+````
 
 ### 3. Architecture Overview
 

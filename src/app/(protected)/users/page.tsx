@@ -3,11 +3,13 @@ import {
     dehydrate,
     HydrationBoundary,
 } from "@tanstack/react-query";
+import { Suspense } from "react";
 import { UserTable } from "./UserTable";
 import { UserQueryParams } from "@/types/user";
 import { fetchUsers } from "@/lib/api";
 import EnvironmentHelper from "@/lib/helpers/EnvironmentHelper";
 import { getUsersQueryKey } from "@/lib/query-keys";
+import CenteredLoader from "@/components/CenteredLoader";
 
 export default async function Users() {
     const queryClient = new QueryClient();
@@ -32,7 +34,9 @@ export default async function Users() {
 
     return (
         <HydrationBoundary state={dehydratedState}>
-            <UserTable initialQparams={initialQparams} />
+            <Suspense fallback={<CenteredLoader size="lg" />}>
+                <UserTable initialQparams={initialQparams} />
+            </Suspense>
         </HydrationBoundary>
     );
 }
