@@ -36,10 +36,11 @@ export async function authenticatedFetch<T>(
     }
 
     const url = QueryHelper.buildQueryUrl(endpoint, {
-        ...params,
         user_id: parsed.user_id?.toString() ?? '',
+        ...params,
     })
 
+    console.log({ url })
     const response = await fetch(`${EnvironmentHelper.API_BASE_URL}${url}`, {
         ...options,
         headers: {

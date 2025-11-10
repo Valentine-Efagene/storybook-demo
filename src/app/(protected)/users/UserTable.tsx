@@ -86,12 +86,13 @@ export function UserTable({ data, initialQparams }: Props) {
     )
 
     const { data: paginatedData, isFetching: isLoading, isError, error } = useQuery<ApiResponse<PaginatedUserResponseBody>>({
-        queryKey: [QUERY_KEYS.USERS, 'admin', offset, search, from, to],
+        queryKey: [QUERY_KEYS.USERS, 'admin', offset, search, from, limit],
         queryFn: () => fetchUsers({
             offset,
             search,
             from,
-            to
+            to,
+            limit,
         }),
         staleTime: 2 * 60 * 1000, // 2 minutes for user data
         gcTime: 5 * 60 * 1000,   // 5 minutes garbage collection
@@ -165,7 +166,7 @@ export function UserTable({ data, initialQparams }: Props) {
                 {display}
             </div>
             <Pagination
-                currentPage={(paginatedData?.body.offset ?? 0) + 1}
+                currentPage={Math.floor((paginatedData?.body.offset ?? 0) / Number(limit)) + 1}
                 totalItems={paginatedData?.body.total_count ?? 0}
                 itemsPerPage={Number(limit)}
                 onPageChange={(page) => onOffsetChange((page - 1) * Number(limit))}
