@@ -164,7 +164,7 @@ export const InteractiveSearch: Story = {
           label="Product Search"
           placeholder="Search products..."
           value={searchValue}
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={handleSearch}
           onClear={handleClear}
           helperText={`${results.length} results found`}
         />
@@ -287,7 +287,7 @@ export const LayoutVariations: Story = {
           label="Standard Layout (Icon Left)"
           placeholder="Search products..."
           value={search1}
-          onChange={(e) => setSearch1(e.target.value)}
+          onChange={setSearch1}
           onClear={() => setSearch1('')}
           helperText="Icon on left, clear button when typing"
         />
@@ -297,7 +297,7 @@ export const LayoutVariations: Story = {
           placeholder="Filter results..."
           searchIconPosition="right"
           value={search2}
-          onChange={(e) => setSearch2(e.target.value)}
+          onChange={setSearch2}
           onClear={() => setSearch2('')}
           helperText="Icon on right, clear button takes priority"
         />
@@ -307,7 +307,7 @@ export const LayoutVariations: Story = {
           placeholder="Simple search..."
           showClearButton={false}
           value={search3}
-          onChange={(e) => setSearch3(e.target.value)}
+          onChange={setSearch3}
           helperText="No clear button, just the search icon"
         />
 
@@ -359,8 +359,8 @@ export const ReactHookFormExample: Story = {
           <FormSearchInput
             label="Global Search"
             placeholder="Search across all content..."
-            {...register('globalSearch')}
             value={formData.globalSearch}
+            onChange={(value) => setValue('globalSearch', value)}
             onClear={() => setValue('globalSearch', '')}
             helperText="Search products, users, and orders"
           />
@@ -368,35 +368,30 @@ export const ReactHookFormExample: Story = {
           <FormSearchInput
             label="Product Search"
             placeholder="Find products by name or SKU..."
-            {...register('productSearch', {
-              minLength: {
-                value: 2,
-                message: 'Product search must be at least 2 characters'
-              }
-            })}
             value={formData.productSearch}
+            onChange={(value) => setValue('productSearch', value)}
             onClear={() => setValue('productSearch', '')}
             error={errors.productSearch?.message}
-            isRequired={true}
+            isRequired
           />
 
           <FormSearchInput
             label="User Search"
             placeholder="Search by name or email..."
             searchIconPosition="right"
-            {...register('userSearch')}
             value={formData.userSearch}
+            onChange={(value) => setValue('userSearch', value)}
             onClear={() => setValue('userSearch', '')}
             helperText="Find customers and team members"
           />
 
-          <FormSearchInput
+                    <FormSearchInput
             label="Category Filter"
             placeholder="Filter by category..."
             showClearButton={false}
-            {...register('categoryFilter')}
             value={formData.categoryFilter}
-            helperText="Browse product categories"
+            onChange={(value) => setValue('categoryFilter', value)}
+            helperText="Type to filter content by category"
           />
 
           <div className="flex gap-3">
@@ -472,7 +467,7 @@ export const SearchDashboard: Story = {
             label="Global Search"
             placeholder="Search everything..."
             value={searches.main}
-            onChange={(e) => updateSearch('main', e.target.value)}
+            onChange={(value) => updateSearch('main', value)}
             onClear={() => clearSearch('main')}
             helperText="Search across all modules and data"
           />
@@ -483,7 +478,7 @@ export const SearchDashboard: Story = {
               label="Products"
               placeholder="Find products..."
               value={searches.products}
-              onChange={(e) => updateSearch('products', e.target.value)}
+              onChange={(value) => updateSearch('products', value)}
               onClear={() => clearSearch('products')}
               helperText={searches.products ? `Searching: "${searches.products}"` : 'Browse inventory'}
             />
@@ -493,7 +488,7 @@ export const SearchDashboard: Story = {
               placeholder="Find users..."
               searchIconPosition="right"
               value={searches.users}
-              onChange={(e) => updateSearch('users', e.target.value)}
+              onChange={(value) => updateSearch('users', value)}
               onClear={() => clearSearch('users')}
               helperText={searches.users ? `Searching: "${searches.users}"` : 'Find customers & staff'}
             />
@@ -502,7 +497,7 @@ export const SearchDashboard: Story = {
               label="Orders"
               placeholder="Find orders..."
               value={searches.orders}
-              onChange={(e) => updateSearch('orders', e.target.value)}
+              onChange={(value) => updateSearch('orders', value)}
               onClear={() => clearSearch('orders')}
               helperText={searches.orders ? `Searching: "${searches.orders}"` : 'Track order history'}
             />

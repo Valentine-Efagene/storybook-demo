@@ -1,111 +1,234 @@
 "use client"
 
 import * as React from "react"
-import { Check, ChevronsUpDown, X } from "lucide-react"
+import { X, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
-import {
-    Button,
-} from "@/components/ui/button"
-import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-} from "@/components/ui/command"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { Badge } from "@/components/ui/badge"
 import { Separator } from "../ui/separator"
 
-interface Props {
-    options: { label: string; value: string }[]
-    selected: string[]
-    setSelected: React.Dispatch<React.SetStateAction<string[]>>
-    isSearchable?: boolean
-    showSelected?: boolean
+export interface MultiSelectOption {
+    label: string
+    value: string
+    disabled?: boolean
 }
 
-export function MultiSelectCombobox({ options, selected, setSelected, isSearchable = false, showSelected = false }: Props) {
-    const [open, setOpen] = React.useState(false)
+export interface MultiSelectProps {
+    /** Array of options to display */
+    options: MultiSelectOption[]
+    /** Array of selected values */
+    selected: string[]
+    /** Callback when selection changes */
+    onSelectionChange: (selected: string[]) => void
+    /** Placeholder text when nothing is selected */
+    placeholder?: string
+    /** Enable search functionality */
+    searchable?: boolean
+    /** Search placeholder text */
+    searchPlaceholder?: string
+    /** Maximum number of items to display before showing count */
+    maxDisplay?: number
+    /** Whether to show selected items as badges below */
+    showSelectedBadges?: boolean
+    /** Whether the select is disabled */
+    disabled?: boolean
+    /** Custom className for the trigger */
+    className?: string
+    /** Maximum height for the dropdown content */
+    maxHeight?: string
+    /** Custom empty state message */
+    emptyMessage?: string
+    showSummary?: boolean
+}
 
-    const toggleOption = (value: string) => {
-        setSelected((prev) =>
-            prev.includes(value)
-                ? prev.filter((v) => v !== value)
-                : [...prev, value]
+export function MultiSelect({
+    options,
+    selected,
+    showSummary = false,
+    onSelectionChange,
+    placeholder = "Select items...",
+    searchable = false,
+    searchPlaceholder = "Search options...",
+    maxDisplay = 3,
+    showSelectedBadges = false,
+    disabled = false,
+    className,
+    maxHeight = "300px",
+    emptyMessage = "No options found"
+}: MultiSelectProps) {
+    const [open, setOpen] = React.useState(false)
+    const [searchQuery, setSearchQuery] = React.useState("")
+
+    // Filter options based on search query
+    const filteredOptions = React.useMemo(() => {
+        if (!searchable || !searchQuery) return options
+        return options.filter(option =>
+            option.label.toLowerCase().includes(searchQuery.toLowerCase())
         )
+    }, [options, searchQuery, searchable])
+
+    // Get selected options for display
+    const selectedOptions = React.useMemo(() => {
+        return options.filter(option => selected.includes(option.value))
+    }, [options, selected])
+
+    // Toggle selection of an option
+    const toggleOption = React.useCallback((value: string) => {
+        const newSelected = selected.includes(value)
+            ? selected.filter(v => v !== value)
+            : [...selected, value]
+        onSelectionChange(newSelected)
+    }, [selected, onSelectionChange])
+
+    // Remove a specific option
+    const removeOption = React.useCallback((value: string) => {
+        const newSelected = selected.filter(v => v !== value)
+        onSelectionChange(newSelected)
+    }, [selected, onSelectionChange])
+
+    // Clear all selections
+    const clearAll = React.useCallback(() => {
+        onSelectionChange([])
+    }, [onSelectionChange])
+
+    // Generate display text for the trigger
+    const getDisplayText = () => {
+        if (selected.length === 0) return placeholder
+
+        if (selected.length <= maxDisplay) {
+            return selectedOptions.map(opt => opt.label).join(", ")
+        }
+
+        return `${selected.length} items selected`
     }
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="w-full space-y-2">
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button
                         variant="subtle"
                         role="combobox"
                         aria-expanded={open}
-                        className="justify-between"
+                        aria-label={`Select multiple items. ${selected.length} items currently selected.`}
+                        className={cn(
+                            "w-full justify-between font-normal",
+                            !selected.length && "text-muted-foreground",
+                            className
+                        )}
+                        disabled={disabled}
                     >
-                        {selected.length > 0
-                            ? `${selected.length} selected`
-                            : "Select..."}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <span className="truncate">{getDisplayText()}</span>
+                        <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="p-0">
-                    <Command>
-                        {isSearchable ? <CommandInput placeholder="Search..." /> : null}
-                        <CommandList>
-                            <CommandEmpty>No results found.</CommandEmpty>
-                            <CommandGroup>
-                                {options.map((item, index) => (
-                                    <>
-                                        <CommandItem
-                                            className="py-2"
-                                            key={item.value}
-                                            onSelect={() => toggleOption(item.value)}
-                                        >
+                <PopoverContent className="w-full p-0" align="start">
+                    <div className="flex flex-col">
+                        {/* Search Input */}
+                        {searchable && (
+                            <div className="p-3 border-b">
+                                <Input
+                                    placeholder={searchPlaceholder}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="h-9"
+                                    autoFocus
+                                />
+                            </div>
+                        )}
+
+                        {/* Header with select all / clear all */}
+                        {filteredOptions.length > 0 && showSummary && (
+                            <div className="flex items-center justify-between p-3 border-b bg-muted/50">
+                                <span className="text-sm text-muted-foreground">
+                                    {selected.length} of {options.length} selected
+                                </span>
+                                <div className="flex gap-2">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => onSelectionChange(options.map(opt => opt.value))}
+                                        disabled={selected.length === options.length}
+                                        className="h-6 px-2 text-xs"
+                                    >
+                                        Select All
+                                    </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={clearAll}
+                                        disabled={selected.length === 0}
+                                        className="h-6 px-2 text-xs"
+                                    >
+                                        Clear
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Options List */}
+                        <ScrollArea className="max-h-[300px]">
+                            <div className="p-1 w-full">
+                                {filteredOptions.length === 0 ? (
+                                    <div className="py-6 text-center text-sm text-muted-foreground">
+                                        {emptyMessage}
+                                    </div>
+                                ) : (
+                                    filteredOptions.map((option, index) => (
+                                        <>
                                             <div
+                                                key={option.value}
                                                 className={cn(
-                                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                                                    selected.includes(item.value)
-                                                        ? "bg-primary text-primary-foreground"
-                                                        : "opacity-50"
+                                                    "flex items-center space-x-3 rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer",
+                                                    option.disabled && "opacity-50 cursor-not-allowed"
                                                 )}
+                                                onClick={() => !option.disabled && toggleOption(option.value)}
                                             >
-                                                {selected.includes(item.value) && <Check className="h-3 w-3" />}
+                                                <Checkbox
+                                                    checked={selected.includes(option.value)}
+                                                    disabled={option.disabled}
+                                                    aria-label={`Select ${option.label}`}
+                                                    className="pointer-events-none"
+                                                />
+                                                <span className="flex-1 truncate">{option.label}</span>
                                             </div>
-                                            {item.label}
-                                        </CommandItem>
-                                        {index < options.length - 1 && <Separator />}
-                                    </>
-                                ))}
-                            </CommandGroup>
-                        </CommandList>
-                    </Command>
+                                            {index < filteredOptions.length - 1 && <Separator />}
+                                        </>
+                                    ))
+                                )}
+                            </div>
+                        </ScrollArea>
+                    </div>
                 </PopoverContent>
             </Popover>
 
-            {/* Show selected items as removable badges */}
-            {selected.length > 0 && showSelected && <div className="flex flex-wrap gap-1">
-                {selected.map((value) => {
-                    const label = options.find((f) => f.value === value)?.label
-                    return (
-                        <Badge key={value} variant="secondary">
-                            {label}
-                            <X
-                                className="ml-1 h-3 w-3 cursor-pointer"
-                                onClick={() => toggleOption(value)}
-                            />
+            {/* Selected Items as Badges */}
+            {showSelectedBadges && selectedOptions.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                    {selectedOptions.map((option) => (
+                        <Badge key={option.value} variant="secondary" className="gap-1">
+                            <span>{option.label}</span>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-4 w-4 p-0 hover:bg-transparent"
+                                onClick={() => removeOption(option.value)}
+                                aria-label={`Remove ${option.label}`}
+                            >
+                                <X className="h-3 w-3" />
+                            </Button>
                         </Badge>
-                    )
-                })}
-            </div>}
+                    ))}
+                </div>
+            )}
         </div>
     )
 }

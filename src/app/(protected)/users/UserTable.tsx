@@ -32,7 +32,7 @@ import { DatePicker } from "@/components/form/DatePicker"
 import FormError from "@/components/form/FormError"
 import { format } from "date-fns"
 import { FormGroup } from "@/components/form/FormGroup"
-import { MultiSelectCombobox } from "@/components/form/MultiSelect"
+import { MultiSelect } from "@/components/form/MultiSelect"
 
 interface Props {
     data?: ApiResponse<PaginatedUserResponseBody>,
@@ -244,10 +244,11 @@ export function UserTable({ data, initialQparams }: Props) {
                             </div>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <MultiSelectCombobox
+                    <MultiSelect
                         options={CONTRIBUTION_STATUS_OPTIONS}
                         selected={contributionStatus}
-                        setSelected={setContributionStatus}
+                        onSelectionChange={setContributionStatus}
+                        placeholder="Filter by status..."
                     />
                 </div>
             </div>
