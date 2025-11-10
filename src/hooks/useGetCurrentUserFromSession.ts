@@ -1,7 +1,7 @@
 "use client"
 
 import { useQuery } from '@tanstack/react-query'
-import { QUERY_KEYS, User } from '@/types/user'
+import { QUERY_KEYS, TokenMetadata, User } from '@/types/user'
 import { getCurrentUserFromSession } from '@/actions/user-session'
 
 // Client-side function to get user data from local storage or other client-side storage
@@ -10,6 +10,8 @@ function getClientUserData(): {
     email?: string
     avatar?: string
     initials?: string
+    firstName?: string
+    lastName?: string
 } | null {
     if (typeof window === 'undefined') return null
 
@@ -84,6 +86,8 @@ export function useGetCurrentUserFromSession<T extends 'display' | 'full' = 'dis
         email?: string
         avatar?: string
         initials?: string
+        firstName?: string
+        lastName?: string
     } | null
 
     return useQuery<ReturnType>({

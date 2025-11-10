@@ -5,6 +5,12 @@ import { IAuthData } from "@/types/user";
 import * as jose from "jose";
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_CONFIG, SessionMetadata, isSessionExpired, updateLastActivity, createSessionMetadata } from "./session-config";
+import { cookies } from "next/headers";
+
+export async function getServerToken(): Promise<string | null> {
+    const cookieStore = await cookies()
+    return cookieStore.get('accessToken')?.value ?? null
+}
 
 // Cache for JWT parsing to avoid repeated parsing
 const jwtCache = new Map<string, { parsed: any; expiry: number }>();

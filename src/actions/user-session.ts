@@ -45,13 +45,12 @@ export async function getCurrentUserFromSession(): Promise<{
         // Fetch user by ID using the existing API function
         const response = await fetchUserById(userIdNumber)
 
-        if (response.statusCode !== 200 || !response.body) {
+        if (response.status !== 200 || !response.body) {
             console.error('Failed to fetch user by ID:', response.statusCode)
             return { displayUser: null, fullUser: null }
         }
 
-        const { user } = response.body as { user: User }
-
+        const { user } = response.body
         // Transform User type to component-compatible format for ProfileDropdown
         const name = user.first_name && user.last_name ?
             `${user.first_name} ${user.last_name}`.trim() :

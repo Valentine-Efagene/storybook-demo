@@ -84,7 +84,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
                                 {user?.name || "User"}
                             </p>
                             <p className="text-xs leading-none text-muted-foreground">
-                                {user?.email || "user@example.com"}
+                                {user?.email || ""}
                             </p>
                         </div>
                     </DropdownMenuLabel>

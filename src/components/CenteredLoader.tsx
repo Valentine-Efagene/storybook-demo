@@ -11,6 +11,6 @@ interface IProps
 
 export default function CenteredLoader({ size, className, ...rest }: IProps) {
     return (
-        <div {...rest} className={`flex h-full flex-1 justify-center items-center ${className}`}><Spinner size="md" /></div>
+        <div {...rest} className={`flex h-full flex-1 justify-center items-center ${className}`}><Spinner size={size} /></div>
     )
 }

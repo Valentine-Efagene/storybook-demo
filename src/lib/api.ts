@@ -52,11 +52,10 @@ export async function authenticatedFetch<T>(
     })
 
     if (!response.ok) {
-        console.log({ response, accessToken, endpoint })
         throw new Error(`API Error: ${response.status}`)
     }
 
-    const data = await response.json()
+    const data: ApiResponse<T> = await response.json()
     return data
 }
 

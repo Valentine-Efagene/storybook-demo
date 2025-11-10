@@ -36,7 +36,7 @@ export interface ApiPaginationMeta {
 
 export interface ApiResponse<T> {
     message: string | null
-    statusCode: number
+    status: number
     body: T
     error?: string
 }
