@@ -1,11 +1,11 @@
 import {
     QueryClient,
     dehydrate,
+    HydrationBoundary,
 } from "@tanstack/react-query";
 import { UserTable } from "./UserTable";
 import { UserQueryParams } from "@/types/user";
 import { fetchUsers } from "@/lib/api";
-import { QueryProvider } from "@/providers/query-provider";
 import EnvironmentHelper from "@/lib/helpers/EnvironmentHelper";
 import { getUsersQueryKey } from "@/lib/query-keys";
 
@@ -26,11 +26,13 @@ export default async function Users() {
     await queryClient.prefetchQuery({
         queryKey: getUsersQueryKey(initialQparams),
         queryFn: () => fetchUsers(initialQparams),
-    }); const dehydratedState = dehydrate(queryClient);
+    });
+
+    const dehydratedState = dehydrate(queryClient);
 
     return (
-        <QueryProvider dehydratedState={dehydratedState}>
+        <HydrationBoundary state={dehydratedState}>
             <UserTable initialQparams={initialQparams} />
-        </QueryProvider>
+        </HydrationBoundary>
     );
 }

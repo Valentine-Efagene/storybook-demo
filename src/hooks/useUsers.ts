@@ -35,7 +35,7 @@ export function useUsers(initialParams: UserQueryParams) {
             limit,
             contributionStatus,
         }),
-        staleTime: 2 * 60 * 1000, // 2 minutes for user data
-        gcTime: 5 * 60 * 1000,   // 5 minutes garbage collection
+        staleTime: 5 * 60 * 1000, // 5 minutes - longer staleTime for better navigation experience
+        gcTime: 10 * 60 * 1000,  // 10 minutes garbage collection - keep data longer in memory
     })
 }
