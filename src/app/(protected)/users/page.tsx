@@ -7,11 +7,12 @@ import { UserQueryParams } from "@/types/user";
 import { fetchUsers } from "@/lib/api";
 import { QueryProvider } from "@/providers/query-provider";
 import EnvironmentHelper from "@/lib/helpers/EnvironmentHelper";
+import { getUsersQueryKey } from "@/lib/query-keys";
 
 export default async function Users() {
     const queryClient = new QueryClient();
 
-    // Initial values for keys
+    // Initial values for keys - should match UserTable exactly
     const initialQparams: UserQueryParams = {
         offset: "0",
         search: null,
@@ -20,13 +21,11 @@ export default async function Users() {
         to: null
     }
 
-    // preload into query cache
+    // Prefetch with the EXACT same query key as UserTable uses
     await queryClient.prefetchQuery({
-        queryKey: ['users', initialQparams.page, initialQparams.search],
+        queryKey: getUsersQueryKey(initialQparams),
         queryFn: () => fetchUsers(initialQparams),
-    });
-
-    const dehydratedState = dehydrate(queryClient);
+    }); const dehydratedState = dehydrate(queryClient);
 
     return (
         <QueryProvider dehydratedState={dehydratedState}>

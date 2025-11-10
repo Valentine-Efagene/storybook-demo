@@ -1,0 +1,39 @@
+import { QUERY_KEYS, UserQueryParams } from "@/types/user"
+
+/**
+ * Pure utility functions for generating query keys
+ * These can be used in both server and client components
+ */
+
+/**
+ * Generate query key for users list
+ * Used for both server-side prefetching and client-side queries
+ */
+export function getUsersQueryKey(params: UserQueryParams) {
+    return [
+        QUERY_KEYS.USERS,
+        params.offset,
+        params.search,
+        params.from,
+        params.limit
+    ]
+}
+
+/**
+ * Generate query key with current URL parameters
+ * Used when you have individual parameter values
+ */
+export function createUsersQueryKey(
+    offset: string | null,
+    search: string | null,
+    from: string | null,
+    limit: string | null
+) {
+    return [
+        QUERY_KEYS.USERS,
+        offset,
+        search,
+        from,
+        limit
+    ]
+}

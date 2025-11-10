@@ -9,12 +9,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { PaginatedUserResponseBody, QUERY_KEYS, UserQueryParams } from "@/types/user"
+import { PaginatedUserResponseBody, UserQueryParams } from "@/types/user"
 import UserRow from "./UserRow"
 import { ApiResponse } from "@/types/common"
 import useToastRawError from "@/hooks/useToastRawError"
-import { fetchUsers } from "@/lib/api"
-import { useQuery } from "@tanstack/react-query"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useMemo, useState, useCallback } from "react"
 import { DateRange } from "react-day-picker"
@@ -26,6 +24,7 @@ import TableWrapper from "@/components/TableWrapper"
 import CenteredLoader from "@/components/CenteredLoader"
 import { FormSearchInput } from "@/components/form/FormSearchInput"
 import { Pagination } from "@/components/ui/pagination"
+import { useUsers } from "@/hooks/useUsers"
 
 interface Props {
     data?: ApiResponse<PaginatedUserResponseBody>,
@@ -85,18 +84,7 @@ export function UserTable({ data, initialQparams }: Props) {
         [updateParams]
     )
 
-    const { data: paginatedData, isFetching: isLoading, isError, error } = useQuery<ApiResponse<PaginatedUserResponseBody>>({
-        queryKey: [QUERY_KEYS.USERS, 'admin', offset, search, from, limit],
-        queryFn: () => fetchUsers({
-            offset,
-            search,
-            from,
-            to,
-            limit,
-        }),
-        staleTime: 2 * 60 * 1000, // 2 minutes for user data
-        gcTime: 5 * 60 * 1000,   // 5 minutes garbage collection
-    })
+    const { data: paginatedData, isFetching: isLoading, isError, error } = useUsers(initialQparams)
 
     useToastRawError({ isError, error })
 
