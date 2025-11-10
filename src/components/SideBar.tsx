@@ -1,3 +1,5 @@
+"use client"
+
 import {
     Sidebar,
     SidebarContent,
@@ -11,6 +13,8 @@ import {
 } from "@/components/ui/sidebar"
 import { Banknote, Building2, CircleHelp, HandCoins, Heart, Home, Settings, User, Wallet } from "lucide-react"
 import Logo from "./icons/Logo"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 const items = [
     {
@@ -71,6 +75,16 @@ const items = [
 ];
 
 export function AppSidebar() {
+    const pathname = usePathname()
+
+    // Function to determine if a navigation item is active
+    const isActive = (url: string) => {
+        if (url === "/") {
+            return pathname === "/"
+        }
+        return pathname.startsWith(url)
+    }
+
     return (
         <Sidebar className="p-5 bg-[var(--sidebar)]">
             <SidebarHeader>
@@ -86,11 +100,16 @@ export function AppSidebar() {
                                 <div key={section.title}>
                                     {section.items.map((item) => (
                                         <SidebarMenuItem key={item.title}>
-                                            <SidebarMenuButton asChild size="lg" className="hover:bg-[[var(--sidebar)]/10] hover:text-[var(--sidebar-foreground)] data-[active=true]:bg-[#0165F1] data-[active=true]:text-white">
-                                                <a href={item.url}>
+                                            <SidebarMenuButton
+                                                asChild
+                                                size="lg"
+                                                isActive={isActive(item.url)}
+                                                className="hover:bg-[var(--sidebar)]/10 hover:text-[var(--sidebar-foreground)] data-[active=true]:bg-[var(--tertiary-bg)] data-[active=true]:text-[var(--sidebar-foreground)]"
+                                            >
+                                                <Link href={item.url}>
                                                     <item.icon className="!w-6 !h-6" />
                                                     <span className="text-[14px] font-medium">{item.title}</span>
-                                                </a>
+                                                </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>
                                     ))}

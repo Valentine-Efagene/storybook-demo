@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 0px;
+  justify-content: flex-start;
+  align-self: stretch;
+  transition: 300ms;
+}
+
+.container:hover a {
+  text-decoration: underline;
+}
+
+
+
+.horizontal {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.underline {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--dark-blue-100, #edf3fc);
+}
+
+.bottom {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+  align-self: stretch;
+}
+
+.label {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+}
+
+.value {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%;
+  /* 19.6px */
+}
