@@ -12,8 +12,6 @@
   text-decoration: underline;
 }
 
-
-
 .horizontal {
   flex-direction: row;
   justify-content: space-between;
@@ -33,7 +31,7 @@
 }
 
 .label {
-  color: var(--text-secondary);
+  color: var(--secondary-text);
   font-size: 13px;
   font-style: normal;
   font-weight: 400;
@@ -41,7 +39,7 @@
 }
 
 .value {
-  color: var(--text-primary);
+  color: var(--primary-text);
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
