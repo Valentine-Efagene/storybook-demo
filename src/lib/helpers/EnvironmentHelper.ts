@@ -1,6 +1,6 @@
 export default class EnvironmentHelper {
     public static API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
-    public static PAGINATION_LIMIT = 10 // Number(process.env.NEXT_PUBLIC_PAGINATION_LIMIT) ?? 10
+    public static PAGINATION_LIMIT = 10
     public static PRESIGNER_TTL = Number(process.env.NEXT_PUBLIC_PRESIGNER_TTL)
     public static GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
     public static PROJECT_OWNER = process.env.NEXT_PUBLIC_PROJECT_OWNER

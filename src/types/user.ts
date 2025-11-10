@@ -126,6 +126,13 @@ export const QUERY_KEYS = {
     ROLES: 'roles',
 }
 
+export interface TokenMetadata {
+    iat: number
+    exp: number
+    user_id: number
+    roles: Role[]
+}
+
 
 export type Ability =
     'review_developers'

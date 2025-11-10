@@ -3,7 +3,6 @@
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableFooter,
     TableHead,
@@ -17,13 +16,15 @@ import useToastRawError from "@/hooks/useToastRawError"
 import { fetchUsers } from "@/lib/api"
 import { useQuery } from "@tanstack/react-query"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { DateRange } from "react-day-picker"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ChevronDown, FilterIcon } from "lucide-react"
+import { FilterIcon } from "lucide-react"
 import { DateRangePicker } from "@/components/form/DateRangePicker"
+import TableWrapper from "@/components/TableWrapper"
+import CenteredLoader from "@/components/CenteredLoader"
+import { FormSearchInput } from "@/components/form/FormSearchInput"
 
 interface Props {
     data?: ApiResponse<PaginatedUserResponseBody>,
@@ -32,10 +33,11 @@ interface Props {
 
 export function UserTable({ data, initialQparams }: Props) {
     const searchParams = useSearchParams()
-    const page = searchParams.get("page") ?? initialQparams.page
+    const offset = searchParams.get("offset") ?? initialQparams.offset ?? "0"
     const search = searchParams.get("search") ?? initialQparams.search
     const from = searchParams.get("from") ?? initialQparams.from
     const to = searchParams.get("to") ?? initialQparams.to
+    const limit = searchParams.get("limit") ?? initialQparams.limit
 
     const router = useRouter();
 
@@ -60,6 +62,7 @@ export function UserTable({ data, initialQparams }: Props) {
 
     const updateParams = (newParams: Record<string, string>) => {
         const params = new URLSearchParams(searchParams.toString())
+        params.set('limit', limit ?? '')
         Object.entries(newParams).forEach(([key, value]) => {
             if (!value || value.length < 1) {
                 params.delete(key)
@@ -71,13 +74,13 @@ export function UserTable({ data, initialQparams }: Props) {
         router.push(`?${params.toString()}`)
     }
 
-    const onSearchChange = (value: string) => updateParams({ page: '1', search: value })
-    const onPageChange = (page: number) => updateParams({ page: `${page}` })
+    const onSearchChange = (value: string) => updateParams({ offset: '0', search: value })
+    const onOffsetChange = (offset: number) => updateParams({ offset: `${offset}` })
 
     const { data: paginatedData, isLoading, isError, error } = useQuery<ApiResponse<PaginatedUserResponseBody>>({
-        queryKey: [QUERY_KEYS.USERS, 'admin', page, search, from, to],
+        queryKey: [QUERY_KEYS.USERS, 'admin', offset, search, from, to],
         queryFn: () => fetchUsers({
-            page,
+            offset,
             search,
             from,
             to
@@ -88,23 +91,50 @@ export function UserTable({ data, initialQparams }: Props) {
 
     useToastRawError({ isError, error })
 
-    return (
-        <div>
-            <div className="flex items-center py-4 justify-between flex-wrap gap-4">
-                <Input
-                    placeholder="Filter emails..."
-                    defaultValue={search ? search : undefined}
-                    onKeyUp={(e) => {
-                        if (e.key === "Enter") {
-                            if (e.currentTarget.value.trim() === search) {
-                                return
-                            }
+    const display = useMemo(() => {
+        if (isLoading) {
+            return <CenteredLoader size="md" />
+        }
 
-                            onSearchChange(e.currentTarget.value);
-                        }
-                    }}
-                    className="max-w-xs"
-                />
+        if (!paginatedData || paginatedData.body.users.length === 0) {
+            return <div className="text-center p-8">No users found.</div>
+        }
+
+        return (
+            <TableWrapper className="rounded-lg border">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead><span className="pl-4">Name</span></TableHead>
+                            <TableHead>Contribution Status</TableHead>
+                            <TableHead>Date Joined</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedData?.body.users.map((user) => (
+                            <UserRow key={user.id} user={user} />
+                        ))}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={3}>Total</TableCell>
+                            <TableCell className="text-right">$2,500.00</TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </TableWrapper>
+        )
+    }, [paginatedData, isLoading])
+
+    return (
+        <div className="flex flex-1 flex-col gap-4 py-12 px-12">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+                <div className="w-lg">
+                    <FormSearchInput
+                        placeholder="Filter emails..."
+                        defaultValue={search ? search : undefined}
+                        onChange={(e) => onSearchChange(e.target.value)}
+                    /></div>
                 <div className="flex gap-4 items-center">
                     {/* Filter dropdown */}
                     <DropdownMenu>
@@ -129,28 +159,7 @@ export function UserTable({ data, initialQparams }: Props) {
                     </DropdownMenu>
                 </div>
             </div>
-            <Table>
-                <TableCaption>A list of your recent invoices.</TableCaption>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[100px]">Invoice</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {paginatedData?.body.users.map((user) => (
-                        <UserRow key={user.id} user={user} />
-                    ))}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TableCell colSpan={3}>Total</TableCell>
-                        <TableCell className="text-right">$2,500.00</TableCell>
-                    </TableRow>
-                </TableFooter>
-            </Table>
+            {display}
         </div>
     )
 }

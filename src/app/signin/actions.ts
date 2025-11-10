@@ -5,6 +5,7 @@ import * as jose from 'jose'
 import { randomBytes } from 'crypto'
 import { AuthResponse } from '@/types/user'
 import { createSessionMetadata, SESSION_CONFIG } from '@/lib/session-config'
+import EnvironmentHelper from '@/lib/helpers/EnvironmentHelper'
 
 export async function signIn(formData: unknown) {
     const parsed = signInSchema.safeParse(formData)
@@ -16,8 +17,8 @@ export async function signIn(formData: unknown) {
     const { email, password } = parsed.data
 
     try {
-        console.log(`${process.env.VITE_API_BASE_URL}/onboarding/login`)
-        const res = await fetch(`${process.env.VITE_API_BASE_URL}/onboarding/login`, {
+        console.log(`${EnvironmentHelper.API_BASE_URL}/onboarding/login`)
+        const res = await fetch(`${EnvironmentHelper.API_BASE_URL}/onboarding/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

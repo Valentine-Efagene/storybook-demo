@@ -8,7 +8,9 @@
 import { ApiResponse } from "@/types/common"
 import { cookies } from "next/headers"
 import { QueryHelper } from "./helpers/QueryHelper"
-import { PaginatedUserResponseBody, User } from "@/types/user"
+import { PaginatedUserResponseBody, TokenMetadata, User } from "@/types/user"
+import EnvironmentHelper from "./helpers/EnvironmentHelper"
+import * as jose from "jose";
 
 async function getServerToken(): Promise<string | null> {
     const cookieStore = await cookies()
@@ -18,6 +20,7 @@ async function getServerToken(): Promise<string | null> {
 // Server action for making authenticated API calls
 export async function authenticatedFetch<T>(
     endpoint: string,
+    params: Record<string, string> = {},
     options: RequestInit = {}
 ): Promise<ApiResponse<T>> {
     const accessToken = await getServerToken()
@@ -26,22 +29,33 @@ export async function authenticatedFetch<T>(
         throw new Error('No authentication token available')
     }
 
-    const response = await fetch(`${process.env.VITE_API_BASE_URL}${endpoint}`, {
+    const parsed: TokenMetadata = jose.decodeJwt(accessToken);
+
+    if (!accessToken) {
+        throw new Error('No authentication token available')
+    }
+
+    const url = QueryHelper.buildQueryUrl(endpoint, {
+        ...params,
+        user_id: parsed.user_id?.toString() ?? '',
+    })
+
+    const response = await fetch(`${EnvironmentHelper.API_BASE_URL}${url}`, {
         ...options,
         headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
             ...options.headers,
+            'user_id': parsed.user_id?.toString() ?? '',
         },
     })
 
     if (!response.ok) {
-        console.log({ response, accessToken })
+        console.log({ response, accessToken, endpoint })
         throw new Error(`API Error: ${response.status}`)
     }
 
     const data = await response.json()
-    console.log({ data, act: "After" })
     return data
 }
 
@@ -56,7 +70,7 @@ export async function authenticatedUpload(
         throw new Error('No authentication token available')
     }
 
-    const response = await fetch(`${process.env.VITE_API_BASE_URL}${endpoint}`, {
+    const response = await fetch(`${EnvironmentHelper.API_BASE_URL}/${endpoint}`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -97,62 +111,11 @@ export async function fetchUserOrders(params: any = {}) {
 // Admin Dashboard Server Actions
 export async function fetchUsers(params: any = {}) {
     const baseUrl = '/onboarding/filter-users'
-    const url = QueryHelper.buildQueryUrl(baseUrl, {
-        ...params
-    })
-    const data = await authenticatedFetch<PaginatedUserResponseBody>(url)
-    console.log({ data })
+    const data = await authenticatedFetch<PaginatedUserResponseBody>(baseUrl, params)
     return data
 }
 
 export async function fetchUserById(userId: number) {
     const baseUrl = '/onboarding/get-user'
-    const url = QueryHelper.buildQueryUrl(baseUrl, {
-        userId: userId.toString()
-    })
-    return authenticatedFetch<{ user: User }>(url)
-}
-
-export async function fetchRoles() {
-    return authenticatedFetch<any>('/roles')
-}
-
-// Staff Dashboard Server Actions  
-export async function fetchTicketCategories(params: any = {}) {
-    const queryString = new URLSearchParams(params).toString()
-    return authenticatedFetch<any>(`/ticket-categories${queryString ? `?${queryString}` : ''}`)
-}
-
-export async function deleteTicketCategory(id: number) {
-    return authenticatedFetch<any>(`/ticket-categories/${id}`, { method: 'DELETE' })
-}
-
-export async function deleteEventMedia(id: number) {
-    return authenticatedFetch<any>(`/events/media/${id}`, { method: 'DELETE' })
-}
-
-export async function setEventDisplayImage(eventId: number, mediaId: number) {
-    return authenticatedFetch<any>(`/events/${eventId}/display-image`, {
-        method: 'POST',
-        body: JSON.stringify({ mediaId }),
-    })
-}
-
-export async function updateEventStatus(eventId: number, status: string) {
-    return authenticatedFetch<any>(`/events/${eventId}/status`, {
-        method: 'PATCH',
-        body: JSON.stringify({ status }),
-    })
-}
-
-export async function fetchOwnTickets(params: any = {}) {
-    const queryString = new URLSearchParams(params).toString()
-    return authenticatedFetch<any>(`/tickets${queryString ? `?${queryString}` : ''}`)
-}
-
-export async function reassignTicket(ticketId: number, data: any) {
-    return authenticatedFetch<any>(`/tickets/${ticketId}/reassign`, {
-        method: 'POST',
-        body: JSON.stringify(data),
-    })
+    return authenticatedFetch<{ user: User }>(baseUrl, { id: userId.toString() })
 }

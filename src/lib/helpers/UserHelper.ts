@@ -41,6 +41,22 @@ export default class UserHelper {
     return `${user.first_name} ${user.last_name}`;
   }
 
+  public static getInitials(user: Partial<Pick<User, 'first_name' | 'last_name'>> | Partial<Pick<User, 'first_name' | 'last_name'>>) {
+    const fullName = UserHelper.getFullName(user);
+    if (!fullName) {
+      return '';
+    }
+
+    const names = fullName.split(' ');
+    let initials = names[0].charAt(0).toUpperCase();
+
+    if (names.length > 1) {
+      initials += names[names.length - 1].charAt(0).toUpperCase();
+    }
+
+    return initials;
+  }
+
   public static rolesWithStatus: Role[] = ['developer']
 
   public static getLink(user: User) {

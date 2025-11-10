@@ -9,7 +9,7 @@ export function Header() {
     const { data: user, isLoading, error } = useGetCurrentUserFromSession()
 
     return (
-        <header className="flex items-center justify-between px-4 py-2 border-b">
+        <header className="flex items-center justify-between px-4 py-4 border-b">
             <div className="flex items-center gap-4">
                 <SidebarTrigger />
                 <Breadcrumbs />

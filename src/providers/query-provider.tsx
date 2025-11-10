@@ -21,7 +21,7 @@ export function QueryProvider({ children, dehydratedState }: { children: ReactNo
                     if (error?.status >= 400 && error?.status < 500) {
                         return false
                     }
-                    return failureCount < 3
+                    return failureCount < 2
                 },
             },
             mutations: {

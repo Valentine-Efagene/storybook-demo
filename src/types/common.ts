@@ -67,6 +67,8 @@ export interface ApiPaginationLinks {
 
 export interface QueryParams {
     page?: string | null
+    limit?: string | null
+    offset?: string | null
     search?: string | null
     from?: string | null
     to?: string | null
