@@ -15,7 +15,8 @@ export function getUsersQueryKey(params: UserQueryParams) {
         params.offset,
         params.search,
         params.from,
-        params.limit
+        params.limit,
+        params.contributionStatus
     ]
 }
 
@@ -27,13 +28,15 @@ export function createUsersQueryKey(
     offset: string | null,
     search: string | null,
     from: string | null,
-    limit: string | null
+    limit: string | null,
+    contributionStatus: string | null
 ) {
     return [
         QUERY_KEYS.USERS,
         offset,
         search,
         from,
-        limit
+        limit,
+        contributionStatus
     ]
 }

@@ -94,7 +94,7 @@ export type Session = {
 } | null
 
 export interface UserQueryParams extends QueryParams {
-
+    contributionStatus?: string | null
 }
 
 export interface PaginatedUserResponseBody {

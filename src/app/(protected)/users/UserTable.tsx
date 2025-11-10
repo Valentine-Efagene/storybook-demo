@@ -52,7 +52,12 @@ export function UserTable({ data, initialQparams }: Props) {
     const from = searchParams.get("from") ?? initialQparams.from
     const to = searchParams.get("to") ?? initialQparams.to
     const limit = searchParams.get("limit") ?? initialQparams.limit
-    const [contributionStatus, setContributionStatus] = useState<string[]>([])
+
+    // Get contribution status from URL params (comma-separated values)
+    const contributionStatusParam = searchParams.get("contributionStatus") ?? ""
+    const contributionStatus = contributionStatusParam
+        ? contributionStatusParam.split(",").filter(Boolean)
+        : []
 
     const router = useRouter();
 
@@ -94,12 +99,29 @@ export function UserTable({ data, initialQparams }: Props) {
         [updateParams]
     )
 
+    const onContributionStatusChange = useCallback((selected: string[]) => {
+        updateParams({
+            offset: '0',
+            contributionStatus: selected.length > 0 ? selected.join(",") : ""
+        })
+    }, [updateParams])
+
     const onOffsetChange = useCallback((offset: number) =>
         updateParams({ offset: `${offset}` }),
         [updateParams]
     )
 
-    const { data: paginatedData, isFetching: isLoading, isError, error } = useUsers(initialQparams)
+    // Create current query params for useUsers hook
+    const currentParams = {
+        offset,
+        search,
+        from,
+        to,
+        limit,
+        contributionStatus: contributionStatus.length > 0 ? contributionStatus.join(",") : null
+    }
+
+    const { data: paginatedData, isFetching: isLoading, isError, error } = useUsers(currentParams)
 
     useToastRawError({ isError, error })
 
@@ -247,7 +269,7 @@ export function UserTable({ data, initialQparams }: Props) {
                     <MultiSelect
                         options={CONTRIBUTION_STATUS_OPTIONS}
                         selected={contributionStatus}
-                        onSelectionChange={setContributionStatus}
+                        onSelectionChange={onContributionStatusChange}
                         placeholder="Filter by status..."
                     />
                 </div>

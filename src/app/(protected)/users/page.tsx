@@ -18,7 +18,8 @@ export default async function Users() {
         search: null,
         limit: EnvironmentHelper.PAGINATION_LIMIT.toString(),
         from: null,
-        to: null
+        to: null,
+        contributionStatus: null
     }
 
     // Prefetch with the EXACT same query key as UserTable uses

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { X, ChevronDown } from "lucide-react"
+import { X, ChevronDown, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -28,6 +28,8 @@ export interface MultiSelectProps {
     selected: string[]
     /** Callback when selection changes */
     onSelectionChange: (selected: string[]) => void
+    /** Whether to allow multiple selection (default: true) */
+    multiple?: boolean
     /** Placeholder text when nothing is selected */
     placeholder?: string
     /** Enable search functionality */
@@ -54,6 +56,7 @@ export function MultiSelect({
     selected,
     showSummary = false,
     onSelectionChange,
+    multiple = true,
     placeholder = "Select items...",
     searchable = false,
     searchPlaceholder = "Search options...",
@@ -82,11 +85,20 @@ export function MultiSelect({
 
     // Toggle selection of an option
     const toggleOption = React.useCallback((value: string) => {
-        const newSelected = selected.includes(value)
-            ? selected.filter(v => v !== value)
-            : [...selected, value]
-        onSelectionChange(newSelected)
-    }, [selected, onSelectionChange])
+        if (multiple) {
+            // Multiple selection mode
+            const newSelected = selected.includes(value)
+                ? selected.filter(v => v !== value)
+                : [...selected, value]
+            onSelectionChange(newSelected)
+        } else {
+            // Single selection mode
+            const newSelected = selected.includes(value) ? [] : [value]
+            onSelectionChange(newSelected)
+            // Close dropdown after selection in single mode
+            setOpen(false)
+        }
+    }, [selected, onSelectionChange, multiple])
 
     // Remove a specific option
     const removeOption = React.useCallback((value: string) => {
@@ -103,6 +115,11 @@ export function MultiSelect({
     const getDisplayText = () => {
         if (selected.length === 0) return placeholder
 
+        if (!multiple && selected.length === 1) {
+            // Single selection mode - show the selected item
+            return selectedOptions[0]?.label || placeholder
+        }
+
         if (selected.length <= maxDisplay) {
             return selectedOptions.map(opt => opt.label).join(", ")
         }
@@ -118,7 +135,11 @@ export function MultiSelect({
                         variant="subtle"
                         role="combobox"
                         aria-expanded={open}
-                        aria-label={`Select multiple items. ${selected.length} items currently selected.`}
+                        aria-label={
+                            multiple
+                                ? `Select multiple items. ${selected.length} items currently selected.`
+                                : `Select an item. ${selected.length > 0 ? '1 item' : 'No items'} currently selected.`
+                        }
                         className={cn(
                             "w-full justify-between font-normal",
                             !selected.length && "text-muted-foreground",
@@ -132,11 +153,12 @@ export function MultiSelect({
                 </PopoverTrigger>
                 <PopoverContent
                     className="p-0"
-                    align="start"
+                    align="end"
                     sideOffset={4}
                     style={{
                         width: 'var(--radix-popover-trigger-width)',
                         maxHeight: 'var(--radix-popover-content-available-height)',
+                        minWidth: '200px',
                     }}
                 >
                     <div className="flex flex-col">
@@ -154,7 +176,7 @@ export function MultiSelect({
                         )}
 
                         {/* Header with select all / clear all */}
-                        {filteredOptions.length > 0 && showSummary && (
+                        {filteredOptions.length > 0 && showSummary && multiple && (
                             <div className="flex items-center justify-between p-3 border-b bg-muted/50">
                                 <span className="text-sm text-muted-foreground">
                                     {selected.length} of {options.length} selected
@@ -184,32 +206,40 @@ export function MultiSelect({
 
                         {/* Options List */}
                         <ScrollArea className="max-h-[300px]">
-                            <div className="p-1 w-full">
+                            <div className="w-full">
                                 {filteredOptions.length === 0 ? (
                                     <div className="py-6 text-center text-sm text-muted-foreground">
                                         {emptyMessage}
                                     </div>
                                 ) : (
                                     filteredOptions.map((option, index) => (
-                                        <>
+                                        <div key={option.value}>
                                             <div
                                                 key={option.value}
                                                 className={cn(
-                                                    "flex items-center space-x-3 rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer",
+                                                    "flex items-center space-x-3 px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer",
                                                     option.disabled && "opacity-50 cursor-not-allowed"
                                                 )}
                                                 onClick={() => !option.disabled && toggleOption(option.value)}
                                             >
-                                                <Checkbox
-                                                    checked={selected.includes(option.value)}
-                                                    disabled={option.disabled}
-                                                    aria-label={`Select ${option.label}`}
-                                                    className="pointer-events-none"
-                                                />
+                                                {multiple ? (
+                                                    <Checkbox
+                                                        checked={selected.includes(option.value)}
+                                                        disabled={option.disabled}
+                                                        aria-label={`Select ${option.label}`}
+                                                        className="pointer-events-none"
+                                                    />
+                                                ) : (
+                                                    <div className="flex items-center justify-center w-4 h-4">
+                                                        {selected.includes(option.value) && (
+                                                            <Check className="h-4 w-4" />
+                                                        )}
+                                                    </div>
+                                                )}
                                                 <span className="flex-1 truncate">{option.label}</span>
                                             </div>
                                             {index < filteredOptions.length - 1 && <Separator />}
-                                        </>
+                                        </div>
                                     ))
                                 )}
                             </div>
@@ -219,7 +249,7 @@ export function MultiSelect({
             </Popover>
 
             {/* Selected Items as Badges */}
-            {showSelectedBadges && selectedOptions.length > 0 && (
+            {showSelectedBadges && multiple && selectedOptions.length > 0 && (
                 <div className="flex flex-wrap gap-1">
                     {selectedOptions.map((option) => (
                         <Badge key={option.value} variant="secondary" className="gap-1">
