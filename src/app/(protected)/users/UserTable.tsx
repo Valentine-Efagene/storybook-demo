@@ -18,18 +18,32 @@ import { useMemo, useState, useCallback } from "react"
 import { DateRange } from "react-day-picker"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { FilterIcon } from "lucide-react"
+import { Calendar, ChevronDown, FilterIcon } from "lucide-react"
 import { DateRangePicker } from "@/components/form/DateRangePicker"
 import TableWrapper from "@/components/TableWrapper"
 import CenteredLoader from "@/components/CenteredLoader"
 import { FormSearchInput } from "@/components/form/FormSearchInput"
 import { Pagination } from "@/components/ui/pagination"
 import { useUsers } from "@/hooks/useUsers"
+import { Controller, SubmitHandler, useForm, useWatch } from "react-hook-form"
+import { FieldGroup } from "@/components/ui/field"
+import { FormLabel } from "@/components/form/FormLabel"
+import { DatePicker } from "@/components/form/DatePicker"
+import FormError from "@/components/form/FormError"
+import { format } from "date-fns"
+import { FormGroup } from "@/components/form/FormGroup"
+import { MultiSelectCombobox } from "@/components/form/MultiSelect"
 
 interface Props {
     data?: ApiResponse<PaginatedUserResponseBody>,
     initialQparams: UserQueryParams
 }
+
+const CONTRIBUTION_STATUS_OPTIONS = [
+    { label: "ongoing", value: "ongoing" },
+    { label: "not-started", value: "not-started" },
+    { label: "completed", value: "completed" },
+]
 
 export function UserTable({ data, initialQparams }: Props) {
     const searchParams = useSearchParams()
@@ -38,6 +52,7 @@ export function UserTable({ data, initialQparams }: Props) {
     const from = searchParams.get("from") ?? initialQparams.from
     const to = searchParams.get("to") ?? initialQparams.to
     const limit = searchParams.get("limit") ?? initialQparams.limit
+    const [contributionStatus, setContributionStatus] = useState<string[]>([])
 
     const router = useRouter();
 
@@ -88,6 +103,49 @@ export function UserTable({ data, initialQparams }: Props) {
 
     useToastRawError({ isError, error })
 
+
+    const {
+        control,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<{
+        date_from: string;
+        date_to: string;
+    }>({
+        defaultValues: {
+            date_from: from ?? "",
+            date_to: to ?? "",
+        }
+    });
+
+    const dateFrom = useWatch({ control, name: "date_from" })
+
+    const onSubmit: SubmitHandler<{
+        date_from: string;
+        date_to: string;
+    }> = (data) => {
+        if (data.date_from && data.date_to) {
+            const fromDate = new Date(data.date_from);
+            const toDate = new Date(data.date_to);
+
+            if (fromDate > toDate) {
+                setError("date_to", {
+                    type: "manual",
+                    message: "From date cannot be after to date",
+                });
+
+                return
+            }
+        }
+
+        updateParams({
+            offset: "0",
+            from: data.date_from ?? "",
+            to: data.date_to ?? "",
+        });
+    }
+
     const display = useMemo(() => {
         if (isLoading) {
             return <CenteredLoader size="md" />
@@ -131,23 +189,66 @@ export function UserTable({ data, initialQparams }: Props) {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="subtle">
-                                <FilterIcon className="mr-2 h-4 w-4" />
-                                Filters
+                                <Calendar className="h-4 w-4" />
+                                <span>Date</span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="p-4 space-y-4 w-[300px]" align="end">
-                            <div className="space-y-2">
+                            <div className="flex flex-col gap-2">
                                 <p className="text-sm font-medium">Date Range</p>
-                                <DateRangePicker
-                                    date={tempDateRange}
-                                    onChange={setTempDateRange}
-                                />
+                                <form
+                                    onSubmit={handleSubmit(onSubmit)}
+                                    className="flex flex-col gap-4"
+                                >
+                                    <div className="grid gap-4 sm:gap-2 sm:grid-cols-2">
+                                        {/* Date From */}
+                                        <FormGroup>
+                                            <FormLabel>Start Date</FormLabel>
+                                            <Controller
+                                                name="date_from"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <DatePicker
+                                                        maxDate={new Date()}
+                                                        date={field.value ? new Date(field.value) : undefined}
+                                                        onChange={(date) =>
+                                                            field.onChange(date ? format(date, "yyyy-MM-dd") : "")
+                                                        }
+                                                    />
+                                                )}
+                                            />
+                                        </FormGroup>
+
+                                        {/* Date To */}
+                                        <FormGroup>
+                                            <FormLabel>End Date</FormLabel>
+                                            <Controller
+                                                name="date_to"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <DatePicker
+                                                        minDate={dateFrom ? new Date(dateFrom) : undefined}
+                                                        date={field.value ? new Date(field.value) : undefined}
+                                                        onChange={(date) =>
+                                                            field.onChange(date ? format(date, "yyyy-MM-dd") : "")
+                                                        }
+                                                    />
+                                                )}
+                                            />
+                                        </FormGroup>
+                                    </div>
+                                    <Button className="w-full" onClick={handleApplyFilters}>
+                                        Apply
+                                    </Button>
+                                </form>
                             </div>
-                            <Button className="w-full" onClick={handleApplyFilters}>
-                                Apply Filters
-                            </Button>
                         </DropdownMenuContent>
                     </DropdownMenu>
+                    <MultiSelectCombobox
+                        options={CONTRIBUTION_STATUS_OPTIONS}
+                        selected={contributionStatus}
+                        setSelected={setContributionStatus}
+                    />
                 </div>
             </div>
             <div>
