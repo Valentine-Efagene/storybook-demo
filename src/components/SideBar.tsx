@@ -9,7 +9,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Banknote, Building2, CircleHelp, HandCoins, Heart, Home, Settings, Wallet } from "lucide-react"
+import { Banknote, Building2, CircleHelp, HandCoins, Heart, Home, Settings, User, Wallet } from "lucide-react"
 import Logo from "./icons/Logo"
 
 const items = [
@@ -20,6 +20,11 @@ const items = [
                 title: "Home",
                 url: "/",
                 icon: Home,
+            },
+            {
+                title: "Users",
+                url: "/users",
+                icon: User,
             },
             {
                 title: "Properties",

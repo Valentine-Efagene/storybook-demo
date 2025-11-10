@@ -10,11 +10,11 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { PaginatedUserResponseBody, UserQueryParams } from "@/types/user"
+import { PaginatedUserResponseBody, QUERY_KEYS, UserQueryParams } from "@/types/user"
 import UserRow from "./UserRow"
 import { ApiResponse } from "@/types/common"
 import useToastRawError from "@/hooks/useToastRawError"
-import { fetchUsers, QUERY_KEYS } from "@/lib/api"
+import { fetchUsers } from "@/lib/api"
 import { useQuery } from "@tanstack/react-query"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
@@ -106,13 +106,6 @@ export function UserTable({ data, initialQparams }: Props) {
                     className="max-w-xs"
                 />
                 <div className="flex gap-4 items-center">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="ml-auto">
-                                Columns <ChevronDown />
-                            </Button>
-                        </DropdownMenuTrigger>
-                    </DropdownMenu>
                     {/* Filter dropdown */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -147,7 +140,7 @@ export function UserTable({ data, initialQparams }: Props) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data?.body.users.map((user) => (
+                    {paginatedData?.body.users.map((user) => (
                         <UserRow key={user.id} user={user} />
                     ))}
                 </TableBody>

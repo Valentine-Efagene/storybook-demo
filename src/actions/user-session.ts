@@ -20,6 +20,7 @@ export async function getCurrentUserFromSession(): Promise<{
         const cookieStore = await cookies()
         const accessToken = cookieStore.get('accessToken')?.value
 
+
         if (!accessToken) {
             return { displayUser: null, fullUser: null }
         }

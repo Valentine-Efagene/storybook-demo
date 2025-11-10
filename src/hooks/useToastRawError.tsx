@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import useIsAuthorized from './useIsAuthorized';
-import AuthorizationHelper from '@/helpers/AuthorizationHelper';
 import { toast } from 'sonner';
+import useIsAuthorized from './useIsAuthorized';
+import AuthorizationHelper from '@/lib/helpers/AuthorizationHelper';
 
 interface IProps {
     isError?: boolean;

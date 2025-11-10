@@ -5,25 +5,10 @@
  * All API calls go through server actions, tokens never touch client
  */
 
-import { ApiPaginationResponse, ApiResponse } from "@/types/common"
+import { ApiResponse } from "@/types/common"
 import { cookies } from "next/headers"
 import { QueryHelper } from "./helpers/QueryHelper"
 import { PaginatedUserResponseBody, User } from "@/types/user"
-
-export const QUERY_KEYS = {
-    USERS: 'users',
-    USER: 'user',
-    PROFILE: 'profile',
-    EVENTS: 'events',
-    EVENT_MEDIA: 'event-media',
-    TICKET_CATEGORIES: 'ticket-categories',
-    EVENT_TICKET_TYPES: 'event-ticket-types',
-    ORDERS: 'orders',
-    ORDER_ITEMS: 'order-items',
-    TICKETS: 'tickets',
-    TICKET: 'ticket',
-    ROLES: 'roles',
-}
 
 async function getServerToken(): Promise<string | null> {
     const cookieStore = await cookies()
@@ -51,10 +36,13 @@ export async function authenticatedFetch<T>(
     })
 
     if (!response.ok) {
+        console.log({ response, accessToken })
         throw new Error(`API Error: ${response.status}`)
     }
 
-    return response.json()
+    const data = await response.json()
+    console.log({ data, act: "After" })
+    return data
 }
 
 // Server action for file uploads
@@ -112,7 +100,9 @@ export async function fetchUsers(params: any = {}) {
     const url = QueryHelper.buildQueryUrl(baseUrl, {
         ...params
     })
-    return authenticatedFetch<PaginatedUserResponseBody>(url)
+    const data = await authenticatedFetch<PaginatedUserResponseBody>(url)
+    console.log({ data })
+    return data
 }
 
 export async function fetchUserById(userId: number) {

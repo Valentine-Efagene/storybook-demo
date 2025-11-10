@@ -1,8 +1,7 @@
 "use client"
 
 import { useQuery } from '@tanstack/react-query'
-import { User } from '@/types/user'
-import { QUERY_KEYS } from '@/lib/api'
+import { QUERY_KEYS, User } from '@/types/user'
 import { getCurrentUserFromSession } from '@/actions/user-session'
 
 // Client-side function to get user data from local storage or other client-side storage

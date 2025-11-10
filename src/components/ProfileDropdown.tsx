@@ -21,6 +21,7 @@ import { ResponsiveDialog } from "./ResponsiveDialog"
 import { User, Settings, LogOut, Shield, CreditCard, ChevronDown } from "lucide-react"
 import { signOut } from "@/app/signin/actions"
 import { toast } from "sonner"
+import ImageHelper from "@/lib/helpers/ImageHelper"
 
 interface ProfileDropdownProps {
     user?: {
@@ -67,7 +68,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative flex items-center justify-center gap-2">
                         <Avatar className="h-8 w-8">
-                            <AvatarImage src={user?.avatar} alt={user?.name || "User"} />
+                            <AvatarImage src={ImageHelper.getCdnLink(user?.avatar, 'avatar') ?? ''} alt={user?.name || "User"} />
                             <AvatarFallback className="bg-primary text-primary-foreground">
                                 {initials}
                             </AvatarFallback>
