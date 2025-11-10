@@ -25,6 +25,7 @@ import { DateRangePicker } from "@/components/form/DateRangePicker"
 import TableWrapper from "@/components/TableWrapper"
 import CenteredLoader from "@/components/CenteredLoader"
 import { FormSearchInput } from "@/components/form/FormSearchInput"
+import { Pagination } from "@/components/ui/pagination"
 
 interface Props {
     data?: ApiResponse<PaginatedUserResponseBody>,
@@ -122,12 +123,6 @@ export function UserTable({ data, initialQparams }: Props) {
                             <UserRow key={user.id} user={user} />
                         ))}
                     </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TableCell colSpan={3}>Total</TableCell>
-                            <TableCell className="text-right">$2,500.00</TableCell>
-                        </TableRow>
-                    </TableFooter>
                 </Table>
             </TableWrapper>
         )
@@ -146,7 +141,7 @@ export function UserTable({ data, initialQparams }: Props) {
                     {/* Filter dropdown */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline">
+                            <Button variant="subtle">
                                 <FilterIcon className="mr-2 h-4 w-4" />
                                 Filters
                             </Button>
@@ -166,7 +161,19 @@ export function UserTable({ data, initialQparams }: Props) {
                     </DropdownMenu>
                 </div>
             </div>
-            {display}
+            <div>
+                {display}
+            </div>
+            <Pagination
+                currentPage={(paginatedData?.body.offset ?? 0) + 1}
+                totalItems={paginatedData?.body.total_count ?? 0}
+                itemsPerPage={Number(limit)}
+                onPageChange={(page) => onOffsetChange((page - 1) * Number(limit))}
+                onPageSizeChange={(pageSize) => {
+                    onOffsetChange(0)
+                    updateParams({ limit: pageSize.toString() })
+                }}
+            />
         </div>
     )
 }
