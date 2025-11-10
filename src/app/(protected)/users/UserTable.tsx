@@ -16,7 +16,7 @@ import useToastRawError from "@/hooks/useToastRawError"
 import { fetchUsers } from "@/lib/api"
 import { useQuery } from "@tanstack/react-query"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useMemo, useState } from "react"
+import { useMemo, useState, useCallback } from "react"
 import { DateRange } from "react-day-picker"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -52,15 +52,7 @@ export function UserTable({ data, initialQparams }: Props) {
         return { from: fromDate, to: toDate }
     })
 
-    const handleApplyFilters = () => {
-        updateParams({
-            page: "1",
-            from: tempDateRange?.from?.toISOString() ?? "",
-            to: tempDateRange?.to?.toISOString() ?? "",
-        })
-    }
-
-    const updateParams = (newParams: Record<string, string>) => {
+    const updateParams = useCallback((newParams: Record<string, string>) => {
         const params = new URLSearchParams(searchParams.toString())
         params.set('limit', limit ?? '')
         Object.entries(newParams).forEach(([key, value]) => {
@@ -72,12 +64,27 @@ export function UserTable({ data, initialQparams }: Props) {
         })
 
         router.push(`?${params.toString()}`)
-    }
+    }, [searchParams, limit, router])
 
-    const onSearchChange = (value: string) => updateParams({ offset: '0', search: value })
-    const onOffsetChange = (offset: number) => updateParams({ offset: `${offset}` })
+    const handleApplyFilters = useCallback(() => {
+        updateParams({
+            page: "1",
+            from: tempDateRange?.from?.toISOString() ?? "",
+            to: tempDateRange?.to?.toISOString() ?? "",
+        })
+    }, [updateParams, tempDateRange])
 
-    const { data: paginatedData, isLoading, isError, error } = useQuery<ApiResponse<PaginatedUserResponseBody>>({
+    const onSearchChange = useCallback((value: string) =>
+        updateParams({ offset: '0', search: value }),
+        [updateParams]
+    )
+
+    const onOffsetChange = useCallback((offset: number) =>
+        updateParams({ offset: `${offset}` }),
+        [updateParams]
+    )
+
+    const { data: paginatedData, isFetching: isLoading, isError, error } = useQuery<ApiResponse<PaginatedUserResponseBody>>({
         queryKey: [QUERY_KEYS.USERS, 'admin', offset, search, from, to],
         queryFn: () => fetchUsers({
             offset,
@@ -133,7 +140,7 @@ export function UserTable({ data, initialQparams }: Props) {
                     <FormSearchInput
                         placeholder="Filter emails..."
                         defaultValue={search ? search : undefined}
-                        onChange={(e) => onSearchChange(e.target.value)}
+                        onDebouncedChange={onSearchChange}
                     /></div>
                 <div className="flex gap-4 items-center">
                     {/* Filter dropdown */}

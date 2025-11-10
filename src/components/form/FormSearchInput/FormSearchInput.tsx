@@ -11,9 +11,10 @@ import { Field, FieldContent } from "@/components/ui/field";
 import { FormLabel } from "@/components/form/FormLabel";
 import { ValidationMessage } from "@/components/form/ValidationMessage";
 import { HelperText } from "@/components/form/HelperText";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export interface FormSearchInputProps
-  extends Omit<React.ComponentProps<typeof InputGroupInput>, 'type'> {
+  extends Omit<React.ComponentProps<typeof InputGroupInput>, 'type' | 'onChange' | 'defaultValue'> {
   label?: string;
   error?: string;
   helperText?: string;
@@ -23,6 +24,10 @@ export interface FormSearchInputProps
   showClearButton?: boolean;
   searchIconPosition?: "left" | "right";
   placeholder?: string;
+  onChange?: (value: string) => void;
+  onDebouncedChange?: (value: string) => void;
+  debounceMs?: number;
+  defaultValue?: string;
 }
 
 const FormSearchInput = React.forwardRef<
@@ -40,12 +45,76 @@ const FormSearchInput = React.forwardRef<
   searchIconPosition = "left",
   placeholder = "Search...",
   value,
+  defaultValue,
+  onChange,
+  onDebouncedChange,
+  debounceMs = 300,
   ...props
 }, ref) => {
   const searchId = props.id || React.useId();
-  const hasValue = value && String(value).length > 0;
+
+  // Internal state for immediate UI updates
+  const [internalValue, setInternalValue] = React.useState<string>(() => {
+    // Initialize with value prop, defaultValue prop, or empty string
+    if (value !== undefined) {
+      return typeof value === 'string' ? value : String(value || '')
+    }
+    if (defaultValue !== undefined) {
+      return typeof defaultValue === 'string' ? defaultValue : String(defaultValue || '')
+    }
+    return ''
+  });
+
+  const hasValue = internalValue && String(internalValue).length > 0;
+
+  // Debounced value for API calls
+  const debouncedValue = useDebounce(internalValue, debounceMs);
+
+  // Only update internal value when external value changes if this is a controlled component
+  React.useEffect(() => {
+    if (value !== undefined) {
+      const stringValue = typeof value === 'string' ? value : String(value || '');
+      setInternalValue(stringValue);
+    }
+  }, [value]);
+
+  // Call onDebouncedChange when debounced value changes
+  const prevDebouncedValueRef = React.useRef(debouncedValue);
+  const isInitialRender = React.useRef(true);
+
+  React.useEffect(() => {
+    // Skip the initial render to avoid calling onDebouncedChange with the initial value
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      prevDebouncedValueRef.current = debouncedValue;
+      return;
+    }
+
+    // Only call onDebouncedChange if the value actually changed
+    if (onDebouncedChange && debouncedValue !== prevDebouncedValueRef.current) {
+      prevDebouncedValueRef.current = debouncedValue;
+      onDebouncedChange(debouncedValue);
+    }
+  }, [debouncedValue, onDebouncedChange]);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setInternalValue(newValue);
+
+    // Call immediate onChange if provided
+    if (onChange) {
+      onChange(newValue);
+    }
+  };
 
   const handleClear = () => {
+    setInternalValue('');
+    if (onChange) {
+      onChange('');
+    }
+    if (onDebouncedChange) {
+      onDebouncedChange('');
+    }
     if (onClear) {
       onClear();
     }
@@ -82,7 +151,8 @@ const FormSearchInput = React.forwardRef<
           ref={ref}
           type="search"
           placeholder={placeholder}
-          value={value}
+          value={internalValue}
+          onChange={handleInputChange}
           aria-invalid={!!error}
           aria-describedby={
             error ? `${searchId}-error` :
