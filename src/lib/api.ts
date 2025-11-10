@@ -5,8 +5,25 @@
  * All API calls go through server actions, tokens never touch client
  */
 
-import { ApiResponse } from "@/types/common"
+import { ApiPaginationResponse, ApiResponse } from "@/types/common"
 import { cookies } from "next/headers"
+import { QueryHelper } from "./helpers/QueryHelper"
+import { PaginatedUserResponseBody, User } from "@/types/user"
+
+export const QUERY_KEYS = {
+    USERS: 'users',
+    USER: 'user',
+    PROFILE: 'profile',
+    EVENTS: 'events',
+    EVENT_MEDIA: 'event-media',
+    TICKET_CATEGORIES: 'ticket-categories',
+    EVENT_TICKET_TYPES: 'event-ticket-types',
+    ORDERS: 'orders',
+    ORDER_ITEMS: 'order-items',
+    TICKETS: 'tickets',
+    TICKET: 'ticket',
+    ROLES: 'roles',
+}
 
 async function getServerToken(): Promise<string | null> {
     const cookieStore = await cookies()
@@ -68,7 +85,7 @@ export async function authenticatedUpload(
 
 // Example server actions for common operations
 export async function fetchUserProfile() {
-    return authenticatedFetch<any>('/auth/profile')
+    return authenticatedFetch<any>('/profile')
 }
 
 export async function updateUserProfile(data: FormData) {
@@ -91,12 +108,19 @@ export async function fetchUserOrders(params: any = {}) {
 
 // Admin Dashboard Server Actions
 export async function fetchUsers(params: any = {}) {
-    const queryString = new URLSearchParams(params).toString()
-    return authenticatedFetch<any>(`/users${queryString ? `?${queryString}` : ''}`)
+    const baseUrl = '/onboarding/filter-users'
+    const url = QueryHelper.buildQueryUrl(baseUrl, {
+        ...params
+    })
+    return authenticatedFetch<PaginatedUserResponseBody>(url)
 }
 
 export async function fetchUserById(userId: number) {
-    return authenticatedFetch<any>(`/users/${userId}`)
+    const baseUrl = '/onboarding/get-user'
+    const url = QueryHelper.buildQueryUrl(baseUrl, {
+        userId: userId.toString()
+    })
+    return authenticatedFetch<{ user: User }>(url)
 }
 
 export async function fetchRoles() {

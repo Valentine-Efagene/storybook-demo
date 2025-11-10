@@ -1,5 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ProfileDropdown } from '@/components/ProfileDropdown'
+import { useGetCurrentUserFromSession } from '@/hooks/useGetCurrentUserFromSession'
+
+// Create a mock query client for stories
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: { retry: false, staleTime: Infinity },
+        mutations: { retry: false },
+    },
+})
 
 const meta = {
     title: 'Components/ProfileDropdown',
@@ -18,10 +28,11 @@ A dropdown menu component for user profile actions, featuring:
 - **User Information**: Shows name and email in the dropdown header
 - **Action Items**: Profile, Billing, Settings, Security, and Logout options
 - **Logout Functionality**: Uses ResponsiveDialog for confirmation with proper error handling and loading states
+- **Session Integration**: Can be paired with useGetCurrentUserFromSession hook for real session data
 - **Accessible**: Built with Radix UI primitives for full accessibility
 - **Customizable**: Accepts user props for dynamic content
 
-### Usage
+### Usage with Static Data
 \`\`\`tsx
 <ProfileDropdown 
   user={{
@@ -31,6 +42,19 @@ A dropdown menu component for user profile actions, featuring:
     initials: "JD"
   }}
 />
+\`\`\`
+
+### Usage with Session Hook
+\`\`\`tsx
+import { useGetCurrentUserFromSession } from '@/hooks/useGetCurrentUserFromSession'
+
+function MyHeader() {
+  const { data: user, isLoading, error } = useGetCurrentUserFromSession()
+  
+  if (isLoading) return <div>Loading...</div>
+  
+  return <ProfileDropdown user={user} />
+}
 \`\`\`
 
 ### Props
@@ -194,6 +218,87 @@ export const InHeader: Story = {
         docs: {
             description: {
                 story: 'Profile dropdown shown in a header context, demonstrating real-world usage.',
+            },
+        },
+    },
+}
+
+// Example showing integration with useGetCurrentUserFromSession hook
+export const WithSessionHook: Story = {
+    render: () => {
+        function ProfileDropdownWithSession() {
+            const { data: user, isLoading, error } = useGetCurrentUserFromSession({
+                // Disable actual fetching for story purposes
+                enabled: false
+            })
+
+            // Mock loading state
+            if (isLoading) {
+                return (
+                    <div className="flex items-center gap-2">
+                        <div className="h-8 w-8 animate-pulse bg-muted rounded-full" />
+                        <div className="h-4 w-16 animate-pulse bg-muted rounded" />
+                    </div>
+                )
+            }
+
+            // Mock error state - fallback user
+            if (error) {
+                return <ProfileDropdown user={{
+                    name: "User",
+                    email: "user@example.com",
+                    initials: "U"
+                }} />
+            }
+
+            // Mock successful data
+            return <ProfileDropdown user={{
+                name: 'Session User',
+                email: 'session@example.com',
+                avatar: 'https://github.com/shadcn.png',
+                initials: 'SU',
+            }} />
+        }
+
+        return (
+            <QueryClientProvider client={queryClient}>
+                <div className="flex items-center justify-between p-4 border-b bg-background w-full max-w-4xl">
+                    <div className="flex items-center gap-4">
+                        <div className="text-sm font-medium">Dashboard with Session Hook</div>
+                    </div>
+                    <ProfileDropdownWithSession />
+                </div>
+            </QueryClientProvider>
+        )
+    },
+    parameters: {
+        layout: 'fullscreen',
+        docs: {
+            description: {
+                story: `
+Profile dropdown integrated with the useGetCurrentUserFromSession hook, demonstrating:
+
+**Hook Integration:**
+- Automatic user session loading
+- Loading state with skeleton animation  
+- Error state with fallback user
+- Successful state with real user data
+
+**Implementation:**
+\`\`\`tsx
+import { useGetCurrentUserFromSession } from '@/hooks/useGetCurrentUserFromSession'
+
+function MyComponent() {
+  const { data: user, isLoading, error } = useGetCurrentUserFromSession()
+  
+  if (isLoading) return <LoadingSkeleton />
+  
+  return <ProfileDropdown user={user} />
+}
+\`\`\`
+
+This approach provides a seamless user experience with proper loading states and error handling.
+                `,
             },
         },
     },

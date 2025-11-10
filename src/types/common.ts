@@ -65,7 +65,7 @@ export interface ApiPaginationLinks {
     current: string
 }
 
-export interface IQueryParams {
+export interface QueryParams {
     page?: string | null
     search?: string | null
     from?: string | null

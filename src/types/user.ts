@@ -1,5 +1,5 @@
 import { JWTPayload } from "jose"
-import { ApiResponse } from "./common"
+import { ApiResponse, QueryParams } from "./common"
 
 export type Role =
     | "user"
@@ -90,3 +90,21 @@ export type Session = {
     user: JWTPayload
     profile: User
 } | null
+
+export interface UserQueryParams extends QueryParams {
+
+}
+
+export interface PaginatedUserResponseBody {
+    offset: number
+    limit: number
+    total_count: number
+    total_pages: number
+    users: User[]
+    overview: {
+        admin_count: number
+        user_count: number
+        developer_count: 3
+        employee_count: 3
+    }
+}

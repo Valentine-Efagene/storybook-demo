@@ -3,15 +3,10 @@
 import { Breadcrumbs } from "./Breadcrumbs"
 import { ProfileDropdown } from "./ProfileDropdown"
 import { SidebarTrigger } from "./ui/sidebar"
+import { useGetCurrentUserFromSession } from "@/hooks/useGetCurrentUserFromSession"
 
 export function Header() {
-    // Mock user data - replace with actual user data from your auth system
-    const user = {
-        name: "John Doe",
-        email: "john.doe@example.com",
-        avatar: "https://github.com/shadcn.png", // Optional: remove for initials fallback
-        initials: "JD"
-    }
+    const { data: user, isLoading, error } = useGetCurrentUserFromSession()
 
     return (
         <header className="flex items-center justify-between px-4 py-2 border-b">
@@ -19,7 +14,19 @@ export function Header() {
                 <SidebarTrigger />
                 <Breadcrumbs />
             </div>
-            <ProfileDropdown user={user} />
+
+            {/* Show ProfileDropdown with loading and error states */}
+            {isLoading ? (
+                <div className="h-8 w-8 animate-pulse bg-muted rounded-full" />
+            ) : error ? (
+                <ProfileDropdown user={{
+                    name: "User",
+                    email: "user@example.com",
+                    initials: "U"
+                }} />
+            ) : (
+                <ProfileDropdown user={user || undefined} />
+            )}
         </header>
     )
 }
