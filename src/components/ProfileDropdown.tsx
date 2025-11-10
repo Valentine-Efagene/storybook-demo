@@ -37,7 +37,14 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
     const [isLoggingOut, setIsLoggingOut] = useState(false)
     const router = useRouter()
 
-    const initials = user?.initials || user?.name?.split(' ').map(n => n[0]).join('') || 'U'
+    // Ensure consistent initials calculation
+    const initials = user?.initials ||
+        (user?.name ? user.name.split(' ').map(n => n[0]).join('') : null) ||
+        'U'
+
+    // Ensure consistent display name
+    const displayName = user?.name || "User"
+    const displayEmail = user?.email || ""
 
     const handleLogout = async () => {
         setIsLoggingOut(true)
@@ -68,12 +75,12 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative flex items-center justify-center gap-2">
                         <Avatar className="h-8 w-8">
-                            <AvatarImage src={ImageHelper.getCdnLink(user?.avatar, 'avatar') ?? ''} alt={user?.name || "User"} />
+                            <AvatarImage src={ImageHelper.getCdnLink(user?.avatar, 'avatar') ?? ''} alt={displayName} />
                             <AvatarFallback className="bg-primary text-primary-foreground">
                                 {initials}
                             </AvatarFallback>
                         </Avatar>
-                        <span>{user?.name || "User"}</span>
+                        <span>{displayName}</span>
                         <ChevronDown />
                     </Button>
                 </DropdownMenuTrigger>
@@ -81,10 +88,10 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
                     <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
                             <p className="text-sm font-medium leading-none">
-                                {user?.name || "User"}
+                                {displayName}
                             </p>
                             <p className="text-xs leading-none text-muted-foreground">
-                                {user?.email || ""}
+                                {displayEmail}
                             </p>
                         </div>
                     </DropdownMenuLabel>

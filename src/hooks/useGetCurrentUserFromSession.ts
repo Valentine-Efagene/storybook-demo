@@ -93,9 +93,6 @@ export function useGetCurrentUserFromSession<T extends 'display' | 'full' = 'dis
     return useQuery<ReturnType>({
         queryKey: [QUERY_KEYS.USER, 'session', format],
         queryFn: async (): Promise<ReturnType> => {
-            // Try client-side data first for immediate UI response
-            const clientData = getClientUserData()
-
             try {
                 // Fetch user data from session/API
                 const { displayUser, fullUser } = await getCurrentUserFromSession()
@@ -107,12 +104,23 @@ export function useGetCurrentUserFromSession<T extends 'display' | 'full' = 'dis
 
                 // Return based on requested format
                 const sessionUser = format === 'full' ? fullUser : displayUser
-                return (sessionUser || (format === 'display' ? clientData : null)) as ReturnType
+                return sessionUser as ReturnType
             } catch (error) {
                 console.error('Error fetching user from session:', error)
-                // Fallback to client data if server call fails
-                return (format === 'display' ? clientData : null) as ReturnType
+                // Fallback to client data if server call fails and format is display
+                if (format === 'display') {
+                    const clientData = getClientUserData()
+                    return clientData as ReturnType
+                }
+                throw error
             }
+        },
+        // Provide initial data from localStorage for immediate rendering
+        initialData: () => {
+            if (format === 'display' && typeof window !== 'undefined') {
+                return getClientUserData() as ReturnType
+            }
+            return undefined
         },
         enabled,
         staleTime: refetchInterval / 2, // Consider data fresh for half the refetch interval
