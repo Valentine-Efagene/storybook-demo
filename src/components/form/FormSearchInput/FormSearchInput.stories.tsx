@@ -385,7 +385,7 @@ export const ReactHookFormExample: Story = {
             helperText="Find customers and team members"
           />
 
-                    <FormSearchInput
+          <FormSearchInput
             label="Category Filter"
             placeholder="Filter by category..."
             showClearButton={false}
