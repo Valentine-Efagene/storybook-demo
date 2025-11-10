@@ -7,6 +7,8 @@ export default function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <SidebarProvider>
       <AppSidebar />

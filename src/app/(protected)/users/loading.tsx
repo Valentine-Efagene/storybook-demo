@@ -1,7 +1,7 @@
-import CenteredLoader from "@/components/CenteredLoader";
+import { UsersPageSkeleton } from "@/components/skeletons/UsersPageSkeleton";
 
 export default function loading() {
     return (
-        <CenteredLoader size="lg" />
+        <UsersPageSkeleton />
     )
 }

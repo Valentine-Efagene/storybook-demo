@@ -1,14 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton"
-import { Button } from "@/components/ui/button"
-import { Calendar, ChevronDown } from "lucide-react"
-import { FormSearchInput } from "@/components/form/FormSearchInput"
-import { MultiSelect } from "@/components/form/MultiSelect"
-
-const CONTRIBUTION_STATUS_OPTIONS = [
-    { label: "ongoing", value: "ongoing" },
-    { label: "not-started", value: "not-started" },
-    { label: "completed", value: "completed" },
-]
+import { Calendar } from "lucide-react"
 
 export function UsersTableSkeleton() {
     return (
@@ -60,30 +51,21 @@ export function UsersTableSkeleton() {
 export function UsersPageSkeleton() {
     return (
         <div className="flex flex-1 flex-col gap-4 py-12 px-12">
-            {/* Header with Search and Filters - Load instantly */}
+            {/* Header with Search and Filters - Skeleton placeholders */}
             <div className="flex items-center justify-between flex-wrap gap-4">
                 <div className="w-lg">
-                    <FormSearchInput
-                        placeholder="Filter emails..."
-                        disabled
-                        defaultValue=""
-                    />
+                    {/* Search Input Skeleton */}
+                    <Skeleton className="h-10 w-full rounded-md" />
                 </div>
                 <div className="flex gap-4 items-center">
-                    {/* Date Filter Button */}
-                    <Button variant="subtle" disabled>
-                        <Calendar className="h-4 w-4" />
-                        <span>Date</span>
-                    </Button>
+                    {/* Date Filter Button Skeleton */}
+                    <div className="flex items-center gap-2 px-3 py-2 border rounded-md">
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <Skeleton className="h-4 w-8" />
+                    </div>
 
-                    {/* Status Filter */}
-                    <MultiSelect
-                        options={CONTRIBUTION_STATUS_OPTIONS}
-                        selected={[]}
-                        onSelectionChange={() => { }}
-                        placeholder="Filter by status..."
-                        disabled
-                    />
+                    {/* Status Filter Skeleton */}
+                    <Skeleton className="h-10 w-48 rounded-md" />
                 </div>
             </div>
 

@@ -244,20 +244,11 @@ export const WithSessionHook: Story = {
 
             // Mock error state - fallback user
             if (error) {
-                return <ProfileDropdown user={{
-                    name: "User",
-                    email: "user@example.com",
-                    initials: "U"
-                }} />
+                return <ProfileDropdown />
             }
 
             // Mock successful data
-            return <ProfileDropdown user={{
-                name: 'Session User',
-                email: 'session@example.com',
-                avatar: 'https://github.com/shadcn.png',
-                initials: 'SU',
-            }} />
+            return <ProfileDropdown />
         }
 
         return (

@@ -1,37 +1,27 @@
-"use client"
-
+import {
+    QueryClient,
+    dehydrate,
+    HydrationBoundary,
+} from "@tanstack/react-query";
 import { Breadcrumbs } from "./Breadcrumbs"
 import { ProfileDropdown } from "./ProfileDropdown"
 import { SidebarTrigger } from "./ui/sidebar"
-import { useGetCurrentUserFromSession } from "@/hooks/useGetCurrentUserFromSession"
-import { useMemo } from "react"
+import { getCurrentUserFromSession } from "@/actions/user-session"
+import { QUERY_KEYS } from "@/types/user"
 
-export function Header() {
-    const { data: user, isLoading, error } = useGetCurrentUserFromSession()
+export async function Header() {
+    const queryClient = new QueryClient()
 
-    // Memoize the profile dropdown component to ensure consistent rendering
-    // and avoid hydration mismatches
-    const profileComponent = useMemo(() => {
-        if (isLoading) {
-            return <div className="h-8 w-8 animate-pulse bg-muted rounded-full" />
-        }
+    // Prefetch the current user data on the server
+    await queryClient.prefetchQuery({
+        queryKey: [QUERY_KEYS.USER, 'session', 'display'],
+        queryFn: async () => {
+            const { displayUser } = await getCurrentUserFromSession()
+            return displayUser
+        },
+    })
 
-        if (error) {
-            // Fallback user data for error state
-            return (
-                <ProfileDropdown
-                    user={{
-                        name: "User",
-                        email: "user@example.com",
-                        initials: "U"
-                    }}
-                />
-            )
-        }
-
-        // Normal state with actual user data
-        return <ProfileDropdown user={user || undefined} />
-    }, [user, isLoading, error])
+    const dehydratedState = dehydrate(queryClient)
 
     return (
         <header className="flex items-center justify-between px-4 py-4 border-b">
@@ -39,7 +29,9 @@ export function Header() {
                 <SidebarTrigger />
                 <Breadcrumbs />
             </div>
-            {profileComponent}
+            <HydrationBoundary state={dehydratedState}>
+                <ProfileDropdown />
+            </HydrationBoundary>
         </header>
     )
 }

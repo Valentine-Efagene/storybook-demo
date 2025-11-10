@@ -2,18 +2,16 @@
 
 import { useRouter, useSearchParams } from "next/navigation"
 import { useCallback, Suspense } from "react"
-import { UserQueryParams, PaginatedUserResponseBody } from "@/types/user"
-import { ApiResponse } from "@/types/common"
+import { UserQueryParams } from "@/types/user"
 import { UsersFilters } from "./UsersFilters"
 import { UsersTableWithData } from "./UsersTableWithData"
 import { UsersPageSkeleton } from "@/components/skeletons/UsersPageSkeleton"
 
 interface Props {
-    data?: ApiResponse<PaginatedUserResponseBody>,
     initialQparams: UserQueryParams
 }
 
-export function UserTable({ data, initialQparams }: Props) {
+export function UserTable({ initialQparams }: Props) {
     const searchParams = useSearchParams()
     const router = useRouter()
 
