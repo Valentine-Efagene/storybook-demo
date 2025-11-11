@@ -88,7 +88,7 @@ your search."
         }
 
         return (
-            <TableWrapper className="rounded-lg border min-h-[calc(100vh-20rem)]">
+            <div className="rounded-lg border min-h-[calc(100vh-20rem)] max-w-[calc(100vw-2rem)] sm:max-w-[calc(100vw-16rem-3rem-2rem)] overflow-x-auto">
                 <Table>
                     <TableHeader className="bg-tertiary-bg">
                         <TableRow>
@@ -103,7 +103,7 @@ your search."
                         ))}
                     </TableBody>
                 </Table>
-            </TableWrapper>
+            </div>
         )
     }, [paginatedData, isLoading])
 
