@@ -1,17 +1,14 @@
 "use client"
 
+import { ConfirmationDialog } from "@/components/ConfirmationDialog"
 import DetailCard from "@/components/DetailCard"
-import { ResponsiveDialog } from "@/components/ResponsiveDialog"
 import StatusTag from "@/components/StatusTag"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import {
     Sheet,
-    SheetClose,
     SheetContent,
-    SheetDescription,
-    SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet"
 import ImageHelper from "@/lib/helpers/ImageHelper"
@@ -52,31 +49,31 @@ export function UserSheet({ open, setOpen, user }: Props) {
                     </Button>
                 </SheetTitle>
                 <div className="flex flex-col gap-8 px-6">
-                    <ResponsiveDialog
+                    <ConfirmationDialog
                         open={openSuspensionDialog}
                         setOpen={setOpenSuspensionDialog}
                         title="Confirm Suspension"
-                        description="Are you sure you want to suspend this user?"
+                        rightButton={
+                            <Button
+                                onClick={handleSuspendUser}
+                                disabled={isSuspending}
+                                loading={isSuspending}
+                            >
+                                {isSuspending ? 'Suspending...' : 'Suspend User'}
+                            </Button>
+                        }
+                        leftButton={
+                            <Button
+                                variant="subtle"
+                                onClick={() => setOpenSuspensionDialog(false)}
+                                disabled={isSuspending}
+                            >
+                                Cancel
+                            </Button>
+                        }
                     >
-                        <div className="flex flex-col gap-4">
-                            <div className="flex justify-end gap-3">
-                                <Button
-                                    variant="outline"
-                                    onClick={() => setOpenSuspensionDialog(false)}
-                                    disabled={isSuspending}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    variant="destructive"
-                                    onClick={handleSuspendUser}
-                                    disabled={isSuspending}
-                                >
-                                    {isSuspending ? "Suspending..." : "Suspend User"}
-                                </Button>
-                            </div>
-                        </div>
-                    </ResponsiveDialog>
+                        Are you sure you want to suspend this user?
+                    </ConfirmationDialog>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center gap-4">
                             <Avatar className="h-[50px] w-[50px]">

@@ -23,6 +23,7 @@ import { signOut } from "@/app/signin/actions"
 import { toast } from "sonner"
 import { useGetCurrentUserFromSession } from "@/hooks/useGetCurrentUserFromSession"
 import ImageHelper from "@/lib/helpers/ImageHelper"
+import { ConfirmationDialog } from "./ConfirmationDialog"
 
 export function ProfileDropdown() {
     const { data: user, isLoading, error } = useGetCurrentUserFromSession()
@@ -124,31 +125,32 @@ export function ProfileDropdown() {
                     </DropdownMenuContent>
                 </DropdownMenu>
 
-                <ResponsiveDialog
+                <ConfirmationDialog
                     open={logoutDialogOpen}
                     setOpen={setLogoutDialogOpen}
                     title="Confirm Logout"
-                    description="Are you sure you want to log out of your account?"
+                    rightButton={
+                        <Button
+                            variant="destructive"
+                            onClick={handleLogout}
+                            disabled={isLoggingOut}
+                            loading={isLoggingOut}
+                        >
+                            {isLoggingOut ? 'Logging Out...' : 'Log Out'}
+                        </Button>
+                    }
+                    leftButton={
+                        <Button
+                            variant="subtle"
+                            onClick={() => setLogoutDialogOpen(false)}
+                            disabled={isLoggingOut}
+                        >
+                            Cancel
+                        </Button>
+                    }
                 >
-                    <div className="flex flex-col gap-4">
-                        <div className="flex justify-end gap-3">
-                            <Button
-                                variant="outline"
-                                onClick={() => setLogoutDialogOpen(false)}
-                                disabled={isLoggingOut}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                variant="destructive"
-                                onClick={handleLogout}
-                                disabled={isLoggingOut}
-                            >
-                                {isLoggingOut ? "Logging out..." : "Log Out"}
-                            </Button>
-                        </div>
-                    </div>
-                </ResponsiveDialog>
+                    Are you sure you want to log out of your account?
+                </ConfirmationDialog>
             </>
         )
     }, [user, isLoading, error, logoutDialogOpen, isLoggingOut, router])

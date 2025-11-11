@@ -10,6 +10,7 @@
   --color-primary-text: var(--primary-text);
   --color-secondary-text: var(--secondary-text);
   --color-tertiary-bg: var(--tertiary-bg);
+  --color-accent-red-light-bg: var(--accent-red-light-bg);
   --color-secondary-bg: var(--secondary-bg);
   --color-primary-border: var(--primary-border);
 
@@ -63,6 +64,7 @@
   --primary-text: #033950;
   --secondary-text: #799EAC;
   --tertiary-bg: #EDF3F3;
+  --accent-red-light-bg: #EDF3F3;
   --secondary-bg: #F8FAFA;
   --primary-border: #DAE6E7;
 
