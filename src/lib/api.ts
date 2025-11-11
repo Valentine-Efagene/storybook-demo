@@ -11,6 +11,7 @@ import { QueryHelper } from "./helpers/QueryHelper"
 import { PaginatedUserResponseBody, TokenMetadata, User } from "@/types/user"
 import EnvironmentHelper from "./helpers/EnvironmentHelper"
 import * as jose from "jose";
+import { PaginatedPropertyResponseBody } from "@/types/property"
 
 async function getServerToken(): Promise<string | null> {
     const cookieStore = await cookies()
@@ -112,6 +113,12 @@ export async function fetchUserOrders(params: any = {}) {
 export async function fetchUsers(params: any = {}) {
     const baseUrl = '/onboarding/filter-users'
     const data = await authenticatedFetch<PaginatedUserResponseBody>(baseUrl, params)
+    return data
+}
+
+export async function fetchProperties(params: any = {}) {
+    const baseUrl = '/propy/filter-properties'
+    const data = await authenticatedFetch<PaginatedPropertyResponseBody>(baseUrl, params)
     return data
 }
 

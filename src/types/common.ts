@@ -7,6 +7,13 @@ export interface ApiPaginationMeta {
     sortBy: string[][]
 }
 
+export interface ImagePlaceholder {
+    src: string;
+    blurDataURL: string;
+    width: number;
+    height: number;
+}
+
 export interface ApiResponse<T> {
     message: string | null
     statusCode: number
