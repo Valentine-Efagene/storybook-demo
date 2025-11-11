@@ -22,7 +22,8 @@ async function getServerToken(): Promise<string | null> {
 export async function authenticatedFetch<T>(
     endpoint: string,
     params: Record<string, string> = {},
-    options: RequestInit = {}
+    options: RequestInit = {},
+    cacheOptions?: { revalidate?: number }
 ): Promise<ApiResponse<T>> {
     const accessToken = await getServerToken()
 
@@ -50,6 +51,9 @@ export async function authenticatedFetch<T>(
             ...options.headers,
             'user_id': parsed.user_id?.toString() ?? '',
         },
+        next: {
+            revalidate: cacheOptions?.revalidate ?? 60 // Default 60 seconds cache
+        }
     })
 
     if (!response.ok) {
@@ -118,7 +122,14 @@ export async function fetchUsers(params: any = {}) {
 
 export async function fetchProperties(params: any = {}) {
     const baseUrl = '/propy/filter-properties'
-    const data = await authenticatedFetch<PaginatedPropertyResponseBody>(baseUrl, params)
+    const data = await authenticatedFetch<PaginatedPropertyResponseBody>(
+        baseUrl,
+        params,
+        {},
+        {
+            revalidate: 300 // Cache for 5 minutes since properties change less frequently
+        }
+    )
     return data
 }
 
