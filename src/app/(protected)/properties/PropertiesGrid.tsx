@@ -45,14 +45,14 @@ export function PropertiesGrid({ initialQparams }: Props) {
         [updateParams]
     )
 
-    // Create current query params for useUsers hook
-    const currentParams = {
+    // Create current query params for useProperties hook - must match PropertyQueryParams structure exactly
+    const currentParams: PropertyQueryParams = {
         offset,
         search,
         from,
-        to,
         limit,
-        status: (status as PropertyStatus) ?? null
+        to,
+        status: status as PropertyStatus | null
     }
 
     const { data: paginatedData, isFetching: isLoading, isError, error } = useProperties(currentParams)
