@@ -5,9 +5,9 @@ import {
 } from "@tanstack/react-query";
 import { Properties } from "./Properties";
 import { UserQueryParams } from "@/types/user";
-import { fetchUsers } from "@/lib/api";
+import { fetchProperties, fetchUsers } from "@/lib/api";
 import EnvironmentHelper from "@/lib/helpers/EnvironmentHelper";
-import { getUsersQueryKey } from "@/lib/query-keys";
+import { getPropertiesQueryKey, getUsersQueryKey } from "@/lib/query-keys";
 
 export default async function Users() {
     const queryClient = new QueryClient();
@@ -24,8 +24,8 @@ export default async function Users() {
 
     // Prefetch with the EXACT same query key as UserTable uses
     await queryClient.prefetchQuery({
-        queryKey: getUsersQueryKey(initialQparams),
-        queryFn: () => fetchUsers(initialQparams),
+        queryKey: getPropertiesQueryKey(initialQparams),
+        queryFn: () => fetchProperties(initialQparams),
     });
 
     const dehydratedState = dehydrate(queryClient);

@@ -4,7 +4,7 @@ import { PropertyQueryParams } from "@/types/property"
 import { Suspense, useCallback } from "react"
 import { PropertiesFilters } from "./PropertiesFilters"
 import { UsersPageSkeleton } from "@/components/skeletons/UsersPageSkeleton"
-import { PropertiesTable } from "./PropertiesTable"
+import { PropertiesGrid } from "./PropertiesGrid"
 import { useSearchParams, useRouter } from "next/navigation"
 
 interface Props {
@@ -41,7 +41,7 @@ export function Properties({ initialQparams }: Props) {
 
             {/* Only the table and pagination are wrapped in Suspense */}
             <Suspense fallback={<UsersPageSkeleton />}>
-                <PropertiesTable initialQparams={initialQparams} />
+                <PropertiesGrid initialQparams={initialQparams} />
             </Suspense>
         </div>
     )

@@ -1,3 +1,4 @@
+import { PropertyQueryParams, PropertyStatus } from "@/types/property"
 import { QUERY_KEYS, UserQueryParams } from "@/types/user"
 
 /**
@@ -44,33 +45,40 @@ export function createUsersQueryKey(
     ]
 }
 
-export function getPropertiesQueryKey(params: UserQueryParams) {
+export function getPropertiesQueryKey(params: PropertyQueryParams) {
     return [
-        QUERY_KEYS.USERS,
+        QUERY_KEYS.PROPERTIES,
         params.offset,
         params.search,
         params.from,
         params.limit,
-        params.contributionStatus,
-        params.to
+        params.to,
+        params.status
     ]
 }
 
-export function createPropertiesQueryKey(
+export function createPropertiesQueryKey({
+    offset,
+    search,
+    from,
+    limit,
+    to,
+    status
+}: {
     offset: string | null,
     search: string | null,
     from: string | null,
     limit: string | null,
-    contributionStatus: string | null,
-    to: string | null
-) {
+    to: string | null,
+    status: PropertyStatus | null
+}) {
     return [
         QUERY_KEYS.PROPERTIES,
         offset,
         search,
         from,
         limit,
-        contributionStatus,
-        to
+        to,
+        status,
     ]
 }

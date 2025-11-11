@@ -1,19 +1,9 @@
 "use client"
 
-import {
-    Table,
-    TableBody,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import { UserQueryParams } from "@/types/user"
 import useToastRawError from "@/hooks/useToastRawError"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useMemo, useCallback } from "react"
-import TableWrapper from "@/components/TableWrapper"
 import { Pagination } from "@/components/ui/pagination"
-import { useUsers } from "@/hooks/useUsers"
 import { UsersTableSkeleton } from "@/components/skeletons/UsersPageSkeleton"
 import { EmptyProperty } from "./EmptyProperty"
 import { SearchXIcon } from "lucide-react"
@@ -25,7 +15,7 @@ interface Props {
     initialQparams: PropertyQueryParams
 }
 
-export function PropertiesTable({ initialQparams }: Props) {
+export function PropertiesGrid({ initialQparams }: Props) {
     const searchParams = useSearchParams()
     const router = useRouter()
 

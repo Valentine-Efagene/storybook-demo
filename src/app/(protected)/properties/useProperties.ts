@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation"
 import { ApiResponse } from "@/types/common"
 import { fetchProperties } from "@/lib/api"
 import { createPropertiesQueryKey } from "@/lib/query-keys"
-import { PaginatedPropertyResponseBody, PropertyQueryParams } from "@/types/property"
+import { PaginatedPropertyResponseBody, PropertyQueryParams, PropertyStatus } from "@/types/property"
 
 /**
  * Custom hook for fetching users with pagination and filtering
@@ -23,7 +23,7 @@ export function useProperties(initialParams: PropertyQueryParams) {
     const status = searchParams.get("status") ?? initialParams.status ?? null
 
     // Consistent query key that matches server-side prefetch
-    const queryKey = createPropertiesQueryKey(offset, search, from, limit, status, to)
+    const queryKey = createPropertiesQueryKey({ offset, search, from, limit, to, status: status as PropertyStatus | null })
 
     return useQuery<ApiResponse<PaginatedPropertyResponseBody>>({
         queryKey,
