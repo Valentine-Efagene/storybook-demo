@@ -19,19 +19,21 @@ interface Props extends DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, 
 
 export function EmptyUser({ message, description, icon: Icon, children }: Props) {
     return (
-        <Empty>
-            <EmptyHeader>
-                <EmptyMedia variant="icon" className="p-[3rem] bg-secondary-bg">
-                    {Icon ? <Icon className="!size-12" /> : <SearchSlash className="!size-12" />}
-                </EmptyMedia>
-                <EmptyTitle className="max-w-[15ch] font-semibold text-sm">{message}</EmptyTitle>
-                <EmptyDescription className="max-w-[37ch] text-sm text-secondary-text">
-                    {description}
-                </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-                {children}
-            </EmptyContent>
-        </Empty>
+        <div className="h-full w-full flex-1 border rounded-lg flex items-center justify-center sm:min-h-[calc(100vh-20rem)]">
+            <Empty>
+                <EmptyHeader>
+                    <EmptyMedia variant="icon" className="p-[3rem] bg-secondary-bg">
+                        {Icon ? <Icon className="!size-12" /> : <SearchSlash className="!size-12" />}
+                    </EmptyMedia>
+                    <EmptyTitle className="max-w-[15ch] font-semibold text-sm">{message}</EmptyTitle>
+                    <EmptyDescription className="max-w-[37ch] text-sm text-secondary-text">
+                        {description}
+                    </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                    {children}
+                </EmptyContent>
+            </Empty>
+        </div>
     )
 }

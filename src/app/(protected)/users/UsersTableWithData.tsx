@@ -90,7 +90,7 @@ your search."
         return (
             <TableWrapper className="rounded-lg border">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-tertiary-bg">
                         <TableRow>
                             <TableHead><span className="pl-4">Name</span></TableHead>
                             <TableHead>Contribution Status</TableHead>
