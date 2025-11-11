@@ -16,6 +16,9 @@ import TableWrapper from "@/components/TableWrapper"
 import CenteredLoader from "@/components/CenteredLoader"
 import { Pagination } from "@/components/ui/pagination"
 import { useUsers } from "@/hooks/useUsers"
+import { UsersTableSkeleton } from "@/components/skeletons/UsersPageSkeleton"
+import { EmptyUser } from "./EmptyUser"
+import { SearchXIcon } from "lucide-react"
 
 interface Props {
     initialQparams: UserQueryParams
@@ -72,11 +75,16 @@ export function UsersTableWithData({ initialQparams }: Props) {
 
     const tableDisplay = useMemo(() => {
         if (isLoading) {
-            return <CenteredLoader size="md" />
+            return <UsersTableSkeleton />
         }
 
         if (!paginatedData || paginatedData.body.users.length === 0) {
-            return <div className="text-center p-8">No users found.</div>
+            return <EmptyUser
+                message="No user found"
+                description="Couldn&apos;t find any user(s) matching
+your search."
+                icon={SearchXIcon}
+            />
         }
 
         return (

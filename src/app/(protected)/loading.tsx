@@ -1,7 +1,7 @@
-import CenteredLoader from "@/components/CenteredLoader";
+import { DashboardSkeleton } from "@/components/skeletons/DashboardSkeleton";
 
 export default function loading() {
     return (
-        <CenteredLoader size="lg" />
+        <DashboardSkeleton />
     )
 }

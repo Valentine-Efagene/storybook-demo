@@ -1,6 +1,7 @@
 "use client"
 
 import DetailCard from "@/components/DetailCard"
+import { ResponsiveDialog } from "@/components/ResponsiveDialog"
 import StatusTag from "@/components/StatusTag"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -17,7 +18,7 @@ import ImageHelper from "@/lib/helpers/ImageHelper"
 import UserHelper from "@/lib/helpers/UserHelper"
 import { User } from "@/types/user"
 import { Edit2, Play, X } from "lucide-react"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 
 interface Props {
     open: boolean
@@ -26,8 +27,14 @@ interface Props {
 }
 
 export function UserSheet({ open, setOpen, user }: Props) {
+    const [openSuspensionDialog, setOpenSuspensionDialog] = useState(false)
+    const isSuspending = false // Replace with actual suspension state
     const initials = useMemo(() => UserHelper.getInitials(user), [user])
     const fullName = useMemo(() => UserHelper.getFullName(user) || "User", [user])
+
+    const handleSuspendUser = () => {
+        // Implement user suspension logic here
+    }
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
@@ -45,6 +52,31 @@ export function UserSheet({ open, setOpen, user }: Props) {
                     </Button>
                 </SheetTitle>
                 <div className="flex flex-col gap-8 px-6">
+                    <ResponsiveDialog
+                        open={openSuspensionDialog}
+                        setOpen={setOpenSuspensionDialog}
+                        title="Confirm Suspension"
+                        description="Are you sure you want to suspend this user?"
+                    >
+                        <div className="flex flex-col gap-4">
+                            <div className="flex justify-end gap-3">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setOpenSuspensionDialog(false)}
+                                    disabled={isSuspending}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    variant="destructive"
+                                    onClick={handleSuspendUser}
+                                    disabled={isSuspending}
+                                >
+                                    {isSuspending ? "Suspending..." : "Suspend User"}
+                                </Button>
+                            </div>
+                        </div>
+                    </ResponsiveDialog>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center gap-4">
                             <Avatar className="h-[50px] w-[50px]">
@@ -62,7 +94,7 @@ export function UserSheet({ open, setOpen, user }: Props) {
                     </div>
                     <div className="flex justify-start gap-4">
                         <Button icon={<Edit2 />} iconPosition="left" variant='subtle'>Edit Details</Button>
-                        <Button variant='subtle' className="text-destructive" icon={<Play />} iconPosition="left">
+                        <Button variant='subtle' onClick={() => setOpenSuspensionDialog(true)} className="text-destructive" icon={<Play />} iconPosition="left">
                             Suspend User
                         </Button>
                     </div>
