@@ -115,13 +115,6 @@ export function useGetCurrentUserFromSession<T extends 'display' | 'full' = 'dis
                 throw error
             }
         },
-        // Provide initial data from localStorage for immediate rendering
-        initialData: () => {
-            if (format === 'display' && typeof window !== 'undefined') {
-                return getClientUserData() as ReturnType
-            }
-            return undefined
-        },
         enabled,
         staleTime: refetchInterval / 2, // Consider data fresh for half the refetch interval
         gcTime: refetchInterval * 2, // Keep in cache for twice the refetch interval
