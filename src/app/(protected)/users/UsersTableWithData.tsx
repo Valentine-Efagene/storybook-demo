@@ -88,7 +88,7 @@ your search."
         }
 
         return (
-            <TableWrapper className="rounded-lg border">
+            <TableWrapper className="rounded-lg border min-h-[calc(100vh-20rem)]">
                 <Table>
                     <TableHeader className="bg-tertiary-bg">
                         <TableRow>
