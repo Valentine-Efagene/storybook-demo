@@ -44,33 +44,29 @@ export function UserSheet({ open, setOpen, user }: Props) {
                         Close
                     </Button>
                 </SheetTitle>
-                <SheetHeader>
-                    <SheetDescription>
-                        <div className="flex flex-col gap-8 px-2">
-                            <div className="flex justify-between items-center">
-                                <div className="flex items-center gap-4">
-                                    <Avatar className="h-[50px] w-[50px]">
-                                        <AvatarImage src={ImageHelper.getCdnLink(user?.avatar, 'avatar') ?? ''} alt={initials} />
-                                        <AvatarFallback className="bg-primary text-primary-foreground">
-                                            {initials}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex flex-col gap-0">
-                                        <div className="text-lg font-medium text-[var(--primary-text)]">{fullName}</div>
-                                        <div className="text-sm font-normal text-[var(--secondary-text)]">{user.email}</div>
-                                    </div>
-                                </div>
-                                <StatusTag />
-                            </div>
-                            <div className="flex justify-start gap-4">
-                                <Button icon={<Edit2 />} iconPosition="left" variant='subtle'>Edit Details</Button>
-                                <Button variant='subtle' icon={<Play />} iconPosition="left">
-                                    Suspend User
-                                </Button>
+                <div className="flex flex-col gap-8 px-6">
+                    <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-4">
+                            <Avatar className="h-[50px] w-[50px]">
+                                <AvatarImage src={ImageHelper.getCdnLink(user?.avatar, 'avatar') ?? ''} alt={initials} />
+                                <AvatarFallback className="bg-primary text-primary-foreground">
+                                    {initials}
+                                </AvatarFallback>
+                            </Avatar>
+                            <div className="flex flex-col gap-0">
+                                <div className="text-lg font-medium text-[var(--primary-text)]">{fullName}</div>
+                                <div className="text-sm font-normal text-[var(--secondary-text)]">{user.email}</div>
                             </div>
                         </div>
-                    </SheetDescription>
-                </SheetHeader>
+                        <StatusTag />
+                    </div>
+                    <div className="flex justify-start gap-4">
+                        <Button icon={<Edit2 />} iconPosition="left" variant='subtle'>Edit Details</Button>
+                        <Button variant='subtle' className="text-destructive" icon={<Play />} iconPosition="left">
+                            Suspend User
+                        </Button>
+                    </div>
+                </div>
                 <Separator />
                 <div className="flex flex-col gap-[3rem]">
                     <div className="flex flex-col gap-4 px-6">
