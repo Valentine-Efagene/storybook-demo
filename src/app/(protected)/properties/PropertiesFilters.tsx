@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Calendar } from "lucide-react"
 import { FormSearchInput } from "@/components/form/FormSearchInput"
-import { MultiSelect } from "@/components/form/MultiSelect"
 import { Controller, SubmitHandler, useForm, useWatch } from "react-hook-form"
 import { FormLabel } from "@/components/form/FormLabel"
 import { DatePicker } from "@/components/form/DatePicker"
 import { format } from "date-fns"
 import { FormGroup } from "@/components/form/FormGroup"
 import { PropertyQueryParams, PropertyStatus } from "@/types/property"
+import Tab from "@/components/Tab"
 
 interface Props {
     initialQparams: PropertyQueryParams
@@ -85,74 +85,89 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
     }
 
     return (
-        <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="w-lg">
-                <FormSearchInput
-                    placeholder="Filter emails..."
-                    defaultValue={search ? search : undefined}
-                    onDebouncedChange={onSearchChange}
+        <div className="flex flex-col gap-4">
+            <div className="border-b">
+                <Tab
+                    className="mb-[-2px]"
+                    items={[
+                        { value: "", label: "All Properties" },
+                        { value: "allocated", label: "Allocated" },
+                        { value: "unallocated", label: "Unallocated" },
+                    ]}
+                    value={status || ""}
+                    onValueChange={(value) => onStatusChange(value as PropertyStatus)}
                 />
             </div>
-            <div className="flex gap-4 items-center">
-                {/* Filter dropdown */}
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="subtle">
-                            <Calendar className="h-4 w-4" />
-                            <span>Date</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="p-4 space-y-4 w-[300px]" align="end">
-                        <div className="flex flex-col gap-2">
-                            <p className="text-sm font-medium">Date Range</p>
-                            <form
-                                onSubmit={handleSubmit(onSubmit)}
-                                className="flex flex-col gap-4"
-                            >
-                                <div className="grid gap-4 sm:gap-2 sm:grid-cols-2">
-                                    {/* Date From */}
-                                    <FormGroup>
-                                        <FormLabel>Start Date</FormLabel>
-                                        <Controller
-                                            name="date_from"
-                                            control={control}
-                                            render={({ field }) => (
-                                                <DatePicker
-                                                    maxDate={today}
-                                                    date={field.value ? new Date(field.value) : undefined}
-                                                    onChange={(date) =>
-                                                        field.onChange(date ? format(date, "yyyy-MM-dd") : "")
-                                                    }
-                                                />
-                                            )}
-                                        />
-                                    </FormGroup>
 
-                                    {/* Date To */}
-                                    <FormGroup>
-                                        <FormLabel>End Date</FormLabel>
-                                        <Controller
-                                            name="date_to"
-                                            control={control}
-                                            render={({ field }) => (
-                                                <DatePicker
-                                                    minDate={dateFrom ? new Date(dateFrom) : undefined}
-                                                    date={field.value ? new Date(field.value) : undefined}
-                                                    onChange={(date) =>
-                                                        field.onChange(date ? format(date, "yyyy-MM-dd") : "")
-                                                    }
-                                                />
-                                            )}
-                                        />
-                                    </FormGroup>
-                                </div>
-                                <Button className="w-full" type="submit">
-                                    Apply
-                                </Button>
-                            </form>
-                        </div>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+            <div className="flex items-center justify-between flex-wrap gap-4">
+                <div className="w-lg">
+                    <FormSearchInput
+                        placeholder="Filter emails..."
+                        defaultValue={search ? search : undefined}
+                        onDebouncedChange={onSearchChange}
+                    />
+                </div>
+                <div className="flex gap-4 items-center">
+                    {/* Filter dropdown */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="subtle">
+                                <Calendar className="h-4 w-4" />
+                                <span>Date</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="p-4 space-y-4 w-[300px]" align="end">
+                            <div className="flex flex-col gap-2">
+                                <p className="text-sm font-medium">Date Range</p>
+                                <form
+                                    onSubmit={handleSubmit(onSubmit)}
+                                    className="flex flex-col gap-4"
+                                >
+                                    <div className="grid gap-4 sm:gap-2 sm:grid-cols-2">
+                                        {/* Date From */}
+                                        <FormGroup>
+                                            <FormLabel>Start Date</FormLabel>
+                                            <Controller
+                                                name="date_from"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <DatePicker
+                                                        maxDate={today}
+                                                        date={field.value ? new Date(field.value) : undefined}
+                                                        onChange={(date) =>
+                                                            field.onChange(date ? format(date, "yyyy-MM-dd") : "")
+                                                        }
+                                                    />
+                                                )}
+                                            />
+                                        </FormGroup>
+
+                                        {/* Date To */}
+                                        <FormGroup>
+                                            <FormLabel>End Date</FormLabel>
+                                            <Controller
+                                                name="date_to"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <DatePicker
+                                                        minDate={dateFrom ? new Date(dateFrom) : undefined}
+                                                        date={field.value ? new Date(field.value) : undefined}
+                                                        onChange={(date) =>
+                                                            field.onChange(date ? format(date, "yyyy-MM-dd") : "")
+                                                        }
+                                                    />
+                                                )}
+                                            />
+                                        </FormGroup>
+                                    </div>
+                                    <Button className="w-full" type="submit">
+                                        Apply
+                                    </Button>
+                                </form>
+                            </div>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
         </div>
     )
