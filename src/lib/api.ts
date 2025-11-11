@@ -92,7 +92,9 @@ export async function authenticatedUpload(
 
 // Example server actions for common operations
 export async function fetchUserProfile() {
-    return authenticatedFetch<any>('/profile')
+    return authenticatedFetch<any>('/profile', {}, {}, {
+        revalidate: 300 // Cache user profile for 5 minutes
+    })
 }
 
 export async function updateUserProfile(data: FormData) {
@@ -100,23 +102,36 @@ export async function updateUserProfile(data: FormData) {
 }
 
 export async function fetchUserTickets(page: number = 1) {
-    return authenticatedFetch<any>(`/tickets?page=${page}`)
+    return authenticatedFetch<any>(`/tickets?page=${page}`, {}, {}, {
+        revalidate: 120 // Cache user tickets for 2 minutes
+    })
 }
 
 export async function fetchEvents(params: any = {}) {
     const queryString = new URLSearchParams(params).toString()
-    return authenticatedFetch<any>(`/events${queryString ? `?${queryString}` : ''}`)
+    return authenticatedFetch<any>(`/events${queryString ? `?${queryString}` : ''}`, {}, {}, {
+        revalidate: 240 // Cache events for 4 minutes
+    })
 }
 
 export async function fetchUserOrders(params: any = {}) {
     const queryString = new URLSearchParams(params).toString()
-    return authenticatedFetch<any>(`/orders${queryString ? `?${queryString}` : ''}`)
+    return authenticatedFetch<any>(`/orders${queryString ? `?${queryString}` : ''}`, {}, {}, {
+        revalidate: 180 // Cache user orders for 3 minutes
+    })
 }
 
 // Admin Dashboard Server Actions
 export async function fetchUsers(params: any = {}) {
     const baseUrl = '/onboarding/filter-users'
-    const data = await authenticatedFetch<PaginatedUserResponseBody>(baseUrl, params)
+    const data = await authenticatedFetch<PaginatedUserResponseBody>(
+        baseUrl,
+        params,
+        {},
+        {
+            revalidate: 180 // Cache for 3 minutes since user data changes moderately
+        }
+    )
     return data
 }
 
@@ -135,5 +150,7 @@ export async function fetchProperties(params: any = {}) {
 
 export async function fetchUserById(userId: number) {
     const baseUrl = '/onboarding/get-user'
-    return authenticatedFetch<{ user: User }>(baseUrl, { id: userId.toString() })
+    return authenticatedFetch<{ user: User }>(baseUrl, { id: userId.toString() }, {}, {
+        revalidate: 600 // Cache individual user data for 10 minutes (changes rarely)
+    })
 }

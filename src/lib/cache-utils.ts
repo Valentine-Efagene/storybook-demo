@@ -49,3 +49,39 @@ export async function invalidateUserCache() {
         console.warn('Cache invalidation failed:', error)
     }
 }
+
+/**
+ * Invalidate user profile cache  
+ */
+export async function invalidateUserProfileCache() {
+    try {
+        revalidatePath('/profile')
+        // Also invalidate any pages that might show user profile info
+        revalidatePath('/settings')
+        revalidatePath('/account')
+    } catch (error) {
+        console.warn('Cache invalidation failed:', error)
+    }
+}
+
+/**
+ * Invalidate user orders cache
+ */
+export async function invalidateUserOrdersCache() {
+    try {
+        revalidatePath('/orders')
+    } catch (error) {
+        console.warn('Cache invalidation failed:', error)
+    }
+}
+
+/**
+ * Invalidate user tickets cache
+ */
+export async function invalidateUserTicketsCache() {
+    try {
+        revalidatePath('/tickets')
+    } catch (error) {
+        console.warn('Cache invalidation failed:', error)
+    }
+}
