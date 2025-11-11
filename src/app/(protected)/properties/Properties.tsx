@@ -6,6 +6,8 @@ import { PropertiesFilters } from "./PropertiesFilters"
 import { UsersPageSkeleton } from "@/components/skeletons/UsersPageSkeleton"
 import { PropertiesGrid } from "./PropertiesGrid"
 import { useSearchParams, useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 interface Props {
     initialQparams: PropertyQueryParams
@@ -33,11 +35,14 @@ export function Properties({ initialQparams }: Props) {
 
     return (
         <div className="flex flex-1 flex-col gap-4 py-12 px-12">
-            {/* Filters load instantly - no Suspense needed */}
             <PropertiesFilters
                 initialQparams={initialQparams}
                 onUpdateParams={updateParams}
             />
+            {/* Filters load instantly - no Suspense needed */}
+            <Button asChild className="self-end mb-2">
+                <Link href="/properties/create">Add Property</Link>
+            </Button>
 
             {/* Only the table and pagination are wrapped in Suspense */}
             <Suspense fallback={<UsersPageSkeleton />}>

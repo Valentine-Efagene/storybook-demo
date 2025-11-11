@@ -17,8 +17,8 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             <NextImage
                 src={ImageHelper.getCdnLink(property.display_image, 'property') || ''}
                 alt={property.title ?? ''}
-                width={400}
-                height={300}
+                width={180}
+                height={172}
                 className="w-[180px] h-[172px] object-cover rounded-tl-lg rounded-bl-lg"
             />
             <div className="flex flex-col gap-2 p-4">
