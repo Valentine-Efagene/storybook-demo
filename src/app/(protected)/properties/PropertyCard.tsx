@@ -25,7 +25,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                 <h3 className="text-sm text-primary-text font-normal">{property.title}</h3>
                 <p className="text-lg text-primary-text font-semibold">{FormatHelper.nairaFormatter.format(property.price)}</p>
                 <p className="text-sm text-secondary-text font-normal">{property.address}</p>
-                <div className="flex gap-4 mt-auto">
+                <div className="flex gap-4 mt-auto flex-wrap">
                     <IconChip icon={Bed} label={`${PropertyHelper.getBedroomCount(property)} Beds`} />
                     <IconChip icon={Bath} label={`${PropertyHelper.getBathroomCount(property)} Baths`} />
                     <IconChip icon={Building} label={property.finished_status} />

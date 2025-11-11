@@ -74,7 +74,7 @@ your search."
         }
 
         return (
-            <div className="grid grid-cols-2 min-h-[calc(100vh-20rem)] gap-4">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] min-h-[calc(100vh-20rem)] gap-4">
                 {paginatedData?.body.properties.map((property) => (
                     <PropertyCard key={property.id} property={property} />
                 ))}

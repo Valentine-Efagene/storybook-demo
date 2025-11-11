@@ -97,7 +97,7 @@ export function UsersFilters({ initialQparams, onUpdateParams }: Props) {
 
     return (
         <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="w-lg">
+            <div className="w-full sm:w-lg">
                 <FormSearchInput
                     placeholder="Filter emails..."
                     defaultValue={search ? search : undefined}
@@ -105,7 +105,6 @@ export function UsersFilters({ initialQparams, onUpdateParams }: Props) {
                 />
             </div>
             <div className="flex gap-4 items-center">
-                {/* Filter dropdown */}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="subtle">
