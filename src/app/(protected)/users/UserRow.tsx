@@ -8,6 +8,7 @@ import { User } from "@/types/user"
 import { format } from "date-fns"
 import { useState } from "react"
 import { UserSheet } from "./UserSheet"
+import StatusTag from "@/components/StatusTag"
 
 interface UserRowProps {
     user: User
@@ -34,7 +35,7 @@ export default function UserRow({ user }: UserRowProps) {
                         </div>
                     </div>
                 </TableCell>
-                <TableCell></TableCell>
+                <TableCell><StatusTag /></TableCell>
                 <TableCell className="text-sm font-normal text-[var(--primary-text)]">{user.created_at ? format(new Date(user.created_at), "PPP") : ''}</TableCell>
             </TableRow>
         </>
