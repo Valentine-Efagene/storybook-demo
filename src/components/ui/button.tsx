@@ -35,6 +35,19 @@ const buttonVariants = cva(
         "icon-lg": "size-10",
       },
     },
+    compoundVariants: [
+      // Subtle variant with different size adjustments
+      {
+        variant: "subtle",
+        size: "sm",
+        class: "text-xs border-[1px] border-[#EDF3F3] shadow-[0px_2px_6px_rgba(8,140,193,0.08)] hover:shadow-[0px_2px_2px_rgba(8,140,193,0.04)]",
+      },
+      {
+        variant: "subtle",
+        size: "lg",
+        class: "text-base border-[1.5px] shadow-[0px_3px_3px_rgba(8,140,193,0.04)] hover:shadow-[0px_6px_6px_rgba(8,140,193,0.08)]",
+      },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",
