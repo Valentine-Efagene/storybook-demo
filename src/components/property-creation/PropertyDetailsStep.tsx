@@ -1,7 +1,8 @@
-import React from "react"
+"use client"
+
 import { Control, FieldErrors, UseFormWatch, Controller } from "react-hook-form"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import TextEditor from "@/components/form/TextEditor"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -81,11 +82,9 @@ export function PropertyDetailsStep({
                                 name="description"
                                 control={control}
                                 render={({ field }) => (
-                                    <Textarea
-                                        id="description"
-                                        placeholder="Enter property description"
-                                        rows={4}
-                                        {...field}
+                                    <TextEditor
+                                        onChange={field.onChange}
+                                        defaultValue={field.value}
                                     />
                                 )}
                             />

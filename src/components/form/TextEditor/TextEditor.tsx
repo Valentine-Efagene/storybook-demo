@@ -120,6 +120,7 @@ export default function TextEditor({ onChange, defaultValue }: IProps) {
             }),
         ],
         content: defaultValue || '',
+        immediatelyRender: false,
         onUpdate: ({ editor }) => {
             const html = editor.getHTML()
             onChange(html)

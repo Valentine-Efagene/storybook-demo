@@ -356,7 +356,7 @@ export const OrientationExamples: Story = {
                     <p className="text-gray-600 text-sm mb-4">
                         Cards arranged in a responsive grid layout - ideal for comparing multiple options.
                     </p>
-                    
+
                     <CardCheckboxGroup
                         options={samplePlans}
                         value={verticalSelection}
@@ -376,7 +376,7 @@ export const OrientationExamples: Story = {
                     <p className="text-gray-600 text-sm mb-4">
                         Cards arranged in a horizontal row with flex wrap - great for side-by-side comparison.
                     </p>
-                    
+
                     <CardCheckboxGroup
                         options={samplePlans}
                         value={horizontalSelection}
@@ -396,7 +396,7 @@ export const OrientationExamples: Story = {
                     <p className="text-gray-600 text-sm mb-4">
                         Horizontal layout works well with fewer options for inline selection.
                     </p>
-                    
+
                     <CardCheckboxGroup
                         options={[samplePlans[0], samplePlans[1]]}
                         value={horizontalSelection}

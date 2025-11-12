@@ -281,13 +281,13 @@ export default function CreatePropertyPage() {
                         )}
                     </div>
                     {/* Actions */}
-                    <div className="p-6 max-w-4xl mx-auto border-gray-200 space-y-3">
-                        <div className="flex gap-2">
+                    <div className="p-6 max-w-xl mx-auto w-full border-gray-200 space-y-3">
+                        <div className="grid gap-2 grid-cols-2">
                             <Button
                                 variant="outline"
                                 onClick={prevStep}
                                 disabled={currentStep === 1}
-                                className="flex-1"
+                                className="w-full"
                             >
                                 Previous
                             </Button>
@@ -295,7 +295,7 @@ export default function CreatePropertyPage() {
                                 <Button
                                     onClick={handleSubmit(handleFinalSubmit)}
                                     disabled={!stepValidation[4]}
-                                    className="flex-1"
+                                    className="w-full"
                                 >
                                     <Save className="h-4 w-4 mr-2" />
                                     Create Property
@@ -303,7 +303,7 @@ export default function CreatePropertyPage() {
                             ) : (
                                 <Button
                                     onClick={nextStep}
-                                    className="flex-1"
+                                    className="w-full"
                                 >
                                     Next
                                     <ArrowRight className="h-4 w-4 ml-2" />
