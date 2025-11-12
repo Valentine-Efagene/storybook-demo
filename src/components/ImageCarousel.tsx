@@ -40,6 +40,8 @@ export default function ImageCarousel({ images, height = 200, width = 300 }: IPr
                                 <NextImage
                                     src={image.url}
                                     alt={`Property ${index + 1}`}
+                                    width={width}
+                                    height={height}
                                     style={{
                                         aspectRatio: `${width}/${height}`,
                                     }}

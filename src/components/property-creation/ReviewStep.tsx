@@ -3,6 +3,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import type { CompletePropertyFormData } from "@/lib/schemas/property"
+import HtmlContent from "../HtmlContent"
+import PropertyHelper from "@/lib/helpers/PropertyHelper"
+import ImageHelper from "@/lib/helpers/ImageHelper"
+import ImageCarousel from "@/components/ImageCarousel"
+import { useEffect, useState, useMemo } from "react"
 
 interface ReviewStepProps {
     formData: CompletePropertyFormData
@@ -59,8 +64,42 @@ export function ReviewStep({ formData }: ReviewStepProps) {
         }
     }
 
+    // Create stable preview URLs for File objects using useMemo
+    const previewImages = useMemo(() => {
+        const allImageFiles = PropertyHelper.getImagesFromFormData(formData)
+        return allImageFiles.map(file => ({
+            url: URL.createObjectURL(file)
+        }))
+    }, [formData.displayImage, formData.floorPlanImages, formData.model3dImages, formData.aerialImages])
+
+    // Cleanup URLs when component unmounts or dependencies change
+    useEffect(() => {
+        return () => {
+            previewImages.forEach(({ url }) => URL.revokeObjectURL(url))
+        }
+    }, [previewImages])
+
     return (
         <div className="max-w-4xl space-y-8">
+            {/* Image Carousel - First item */}
+            {previewImages.length > 0 && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Property Images</CardTitle>
+                        <p className="text-sm text-gray-600">
+                            Preview of all uploaded images for your property listing.
+                        </p>
+                    </CardHeader>
+                    <CardContent>
+                        <ImageCarousel
+                            images={previewImages}
+                            height={300}
+                            width={400}
+                        />
+                    </CardContent>
+                </Card>
+            )}
+
             <Card>
                 <CardHeader>
                     <CardTitle>Review Property Details</CardTitle>
@@ -115,7 +154,7 @@ export function ReviewStep({ formData }: ReviewStepProps) {
                                     <div className="mt-4">
                                         <dt className="text-gray-600 font-medium mb-2">Description:</dt>
                                         <dd className="text-sm bg-white p-3 rounded border">
-                                            {formData.description}
+                                            <HtmlContent htmlString={formData.description} />
                                         </dd>
                                     </div>
                                 )}

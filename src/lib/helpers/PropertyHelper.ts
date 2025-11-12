@@ -120,7 +120,7 @@ export default class PropertyHelper {
     return list
   }
 
-  public static getImages: (property: Property) => (string)[] = (property) => {
+  public static getImages: (property: Pick<Property, 'aerial_image' | 'model_3d_image' | 'floor_plan_image' | 'display_image'>) => (string)[] = (property) => {
     const aerialImages: string[] = property.aerial_image ? JSON.parse(property.aerial_image) : []
     const model3dImages: string[] = property.model_3d_image ? JSON.parse(property.model_3d_image) : []
     const floorPlanImages: string[] = property.floor_plan_image ? JSON.parse(property.floor_plan_image) : []
@@ -135,6 +135,29 @@ export default class PropertyHelper {
     });
 
     return cleaned
+  }
+
+  // New method for form data with File objects
+  public static getImagesFromFormData: (formData: { displayImage?: File; model3dImages?: File[]; floorPlanImages?: File[]; aerialImages?: File[] }) => File[] = (formData) => {
+    const images: File[] = []
+
+    if (formData.displayImage) {
+      images.push(formData.displayImage)
+    }
+
+    if (formData.floorPlanImages) {
+      images.push(...formData.floorPlanImages)
+    }
+
+    if (formData.model3dImages) {
+      images.push(...formData.model3dImages)
+    }
+
+    if (formData.aerialImages) {
+      images.push(...formData.aerialImages)
+    }
+
+    return images
   }
 
   public static getImagesWithTitles: (property: Property) => Record<'aerial' | 'display' | 'floorPlan' | 'model3d', (string | null)[]> = (property) => {
