@@ -27,8 +27,6 @@ export function AmenitiesStep({
         control,
         handleSubmit,
         formState: { errors },
-        watch,
-        setValue,
     } = useForm<AmenitiesFormData>({
         resolver: zodResolver(amenitiesSchema),
         defaultValues: {
@@ -36,15 +34,6 @@ export function AmenitiesStep({
             ...defaultValues,
         },
     })
-
-    const selectedAmenities = watch("amenities") || []
-
-    const toggleAmenity = (amenity: string) => {
-        const newAmenities = selectedAmenities.includes(amenity)
-            ? selectedAmenities.filter((a) => a !== amenity)
-            : [...selectedAmenities, amenity]
-        setValue("amenities", newAmenities)
-    }
 
     const handleFormSubmit = (data: AmenitiesFormData) => {
         onSubmit(data)
@@ -64,45 +53,64 @@ export function AmenitiesStep({
                                 Select all amenities and features available at this property.
                             </p>
 
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                {amenitiesList.map((amenity) => (
-                                    <div
-                                        key={amenity}
-                                        className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
-                                        onClick={() => toggleAmenity(amenity)}
-                                    >
-                                        <Checkbox
-                                            id={`amenity-${amenity}`}
-                                            checked={selectedAmenities.includes(amenity)}
-                                            onChange={() => toggleAmenity(amenity)}
-                                        />
-                                        <label
-                                            htmlFor={`amenity-${amenity}`}
-                                            className="text-sm font-medium cursor-pointer"
-                                        >
-                                            {amenity}
-                                        </label>
-                                    </div>
-                                ))}
-                            </div>
+                            <Controller
+                                name="amenities"
+                                control={control}
+                                render={({ field }) => (
+                                    <div className="space-y-4">
+                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                            {amenitiesList.map((amenity) => {
+                                                const isSelected = field.value?.includes(amenity) || false
+                                                const toggleAmenity = () => {
+                                                    const currentAmenities = field.value || []
+                                                    const newAmenities = isSelected
+                                                        ? currentAmenities.filter((a) => a !== amenity)
+                                                        : [...currentAmenities, amenity]
+                                                    field.onChange(newAmenities)
+                                                }
 
-                            {selectedAmenities.length > 0 && (
-                                <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                                    <h4 className="text-sm font-medium text-blue-900 mb-2">
-                                        Selected Amenities ({selectedAmenities.length})
-                                    </h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {selectedAmenities.map((amenity) => (
-                                            <span
-                                                key={amenity}
-                                                className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-xs"
-                                            >
-                                                {amenity}
-                                            </span>
-                                        ))}
+                                                return (
+                                                    <div
+                                                        key={amenity}
+                                                        className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                                                        onClick={toggleAmenity}
+                                                    >
+                                                        <Checkbox
+                                                            id={`amenity-${amenity}`}
+                                                            checked={isSelected}
+                                                            onCheckedChange={toggleAmenity}
+                                                        />
+                                                        <label
+                                                            htmlFor={`amenity-${amenity}`}
+                                                            className="text-sm font-medium cursor-pointer"
+                                                        >
+                                                            {amenity}
+                                                        </label>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+
+                                        {field.value && field.value.length > 0 && (
+                                            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                                                <h4 className="text-sm font-medium text-blue-900 mb-2">
+                                                    Selected Amenities ({field.value.length})
+                                                </h4>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {field.value.map((amenity: string) => (
+                                                        <span
+                                                            key={amenity}
+                                                            className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-xs"
+                                                        >
+                                                            {amenity}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
-                            )}
+                                )}
+                            />
 
                             {errors.amenities && (
                                 <p className="text-sm text-destructive">{errors.amenities.message}</p>

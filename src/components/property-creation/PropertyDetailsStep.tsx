@@ -28,7 +28,6 @@ export function PropertyDetailsStep({
         control,
         handleSubmit,
         formState: { errors, isValid },
-        register,
     } = useForm<PropertyDetailsFormInputs>({
         resolver: zodResolver(propertyDetailsFormSchema),
         mode: "onChange",
@@ -36,9 +35,9 @@ export function PropertyDetailsStep({
             title: "",
             type: "apartment",
             description: "",
-            bedrooms: 0,
-            bathrooms: 0,
-            squareFeet: 0,
+            bedrooms: undefined,
+            bathrooms: undefined,
+            squareFeet: undefined,
             address: "",
             city: "",
             state: "",
@@ -50,15 +49,8 @@ export function PropertyDetailsStep({
     })
 
     const handleFormSubmit = (data: PropertyDetailsFormInputs) => {
-        // Transform the form data to match the expected output type
-        const transformedData: PropertyDetailsFormData = {
-            ...data,
-            bedrooms: data.bedrooms ? Number(data.bedrooms) : undefined,
-            bathrooms: data.bathrooms ? Number(data.bathrooms) : undefined,
-            squareFeet: data.squareFeet ? Number(data.squareFeet) : undefined,
-            price: Number(data.price),
-        }
-        onSubmit(transformedData)
+        // Data is already in the correct format, no transformation needed
+        onSubmit(data as PropertyDetailsFormData)
         onNext()
     }
 
@@ -79,10 +71,16 @@ export function PropertyDetailsStep({
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="title">Property Title *</Label>
-                                <Input
-                                    id="title"
-                                    placeholder="Enter property title"
-                                    {...register("title")}
+                                <Controller
+                                    name="title"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Input
+                                            id="title"
+                                            placeholder="Enter property title"
+                                            {...field}
+                                        />
+                                    )}
                                 />
                                 {errors.title && (
                                     <p className="text-sm text-destructive">{errors.title.message}</p>
@@ -116,11 +114,17 @@ export function PropertyDetailsStep({
 
                         <div className="space-y-2">
                             <Label htmlFor="description">Description</Label>
-                            <Textarea
-                                id="description"
-                                placeholder="Enter property description"
-                                rows={4}
-                                {...register("description")}
+                            <Controller
+                                name="description"
+                                control={control}
+                                render={({ field }) => (
+                                    <Textarea
+                                        id="description"
+                                        placeholder="Enter property description"
+                                        rows={4}
+                                        {...field}
+                                    />
+                                )}
                             />
                             {errors.description && (
                                 <p className="text-sm text-destructive">{errors.description.message}</p>
@@ -130,12 +134,22 @@ export function PropertyDetailsStep({
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="bedrooms">Bedrooms</Label>
-                                <Input
-                                    id="bedrooms"
-                                    type="number"
-                                    placeholder="0"
-                                    min="0"
-                                    {...register("bedrooms")}
+                                <Controller
+                                    name="bedrooms"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Input
+                                            id="bedrooms"
+                                            type="number"
+                                            placeholder="0"
+                                            min={0}
+                                            value={field.value || ""}
+                                            onChange={(e) => {
+                                                const value = e.target.value
+                                                field.onChange(value === "" ? undefined : Number(value))
+                                            }}
+                                        />
+                                    )}
                                 />
                                 {errors.bedrooms && (
                                     <p className="text-sm text-destructive">{errors.bedrooms.message}</p>
@@ -144,12 +158,22 @@ export function PropertyDetailsStep({
 
                             <div className="space-y-2">
                                 <Label htmlFor="bathrooms">Bathrooms</Label>
-                                <Input
-                                    id="bathrooms"
-                                    type="number"
-                                    placeholder="0"
-                                    min="0"
-                                    {...register("bathrooms")}
+                                <Controller
+                                    name="bathrooms"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Input
+                                            id="bathrooms"
+                                            type="number"
+                                            placeholder="0"
+                                            min="0"
+                                            value={field.value || ""}
+                                            onChange={(e) => {
+                                                const value = e.target.value
+                                                field.onChange(value === "" ? undefined : Number(value))
+                                            }}
+                                        />
+                                    )}
                                 />
                                 {errors.bathrooms && (
                                     <p className="text-sm text-destructive">{errors.bathrooms.message}</p>
@@ -158,12 +182,22 @@ export function PropertyDetailsStep({
 
                             <div className="space-y-2">
                                 <Label htmlFor="squareFeet">Square Feet</Label>
-                                <Input
-                                    id="squareFeet"
-                                    type="number"
-                                    placeholder="0"
-                                    min="0"
-                                    {...register("squareFeet")}
+                                <Controller
+                                    name="squareFeet"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Input
+                                            id="squareFeet"
+                                            type="number"
+                                            placeholder="0"
+                                            min="0"
+                                            value={field.value || ""}
+                                            onChange={(e) => {
+                                                const value = e.target.value
+                                                field.onChange(value === "" ? undefined : Number(value))
+                                            }}
+                                        />
+                                    )}
                                 />
                                 {errors.squareFeet && (
                                     <p className="text-sm text-destructive">{errors.squareFeet.message}</p>
@@ -181,10 +215,16 @@ export function PropertyDetailsStep({
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="address">Address *</Label>
-                            <Input
-                                id="address"
-                                placeholder="Enter full address"
-                                {...register("address")}
+                            <Controller
+                                name="address"
+                                control={control}
+                                render={({ field }) => (
+                                    <Input
+                                        id="address"
+                                        placeholder="Enter full address"
+                                        {...field}
+                                    />
+                                )}
                             />
                             {errors.address && (
                                 <p className="text-sm text-destructive">{errors.address.message}</p>
@@ -194,10 +234,16 @@ export function PropertyDetailsStep({
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="city">City *</Label>
-                                <Input
-                                    id="city"
-                                    placeholder="Enter city"
-                                    {...register("city")}
+                                <Controller
+                                    name="city"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Input
+                                            id="city"
+                                            placeholder="Enter city"
+                                            {...field}
+                                        />
+                                    )}
                                 />
                                 {errors.city && (
                                     <p className="text-sm text-destructive">{errors.city.message}</p>
@@ -206,10 +252,16 @@ export function PropertyDetailsStep({
 
                             <div className="space-y-2">
                                 <Label htmlFor="state">State *</Label>
-                                <Input
-                                    id="state"
-                                    placeholder="Enter state"
-                                    {...register("state")}
+                                <Controller
+                                    name="state"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Input
+                                            id="state"
+                                            placeholder="Enter state"
+                                            {...field}
+                                        />
+                                    )}
                                 />
                                 {errors.state && (
                                     <p className="text-sm text-destructive">{errors.state.message}</p>
@@ -228,13 +280,23 @@ export function PropertyDetailsStep({
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="price">Price *</Label>
-                                <Input
-                                    id="price"
-                                    type="number"
-                                    placeholder="0.00"
-                                    min="0"
-                                    step="0.01"
-                                    {...register("price")}
+                                <Controller
+                                    name="price"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Input
+                                            id="price"
+                                            type="number"
+                                            placeholder="0.00"
+                                            min="0"
+                                            step="0.01"
+                                            value={field.value || ""}
+                                            onChange={(e) => {
+                                                const value = e.target.value
+                                                field.onChange(value === "" ? 0 : Number(value))
+                                            }}
+                                        />
+                                    )}
                                 />
                                 {errors.price && (
                                     <p className="text-sm text-destructive">{errors.price.message}</p>
