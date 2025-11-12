@@ -26,7 +26,7 @@ export const propertyDetailsSchema = z.object({
     city: z.string().min(1, "City is required"),
     state: z.string().min(1, "State is required"),
     price: z.number().min(0, "Price must be 0 or greater"),
-    priceType: z.enum(["sale", "rent", "lease"]),
+    finishing_status: z.enum(["semi_finished", "finished"]).optional(),
     status: z.enum(["available", "pending", "sold", "rented"]),
 })
 
