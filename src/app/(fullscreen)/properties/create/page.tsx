@@ -153,9 +153,9 @@ export default function CreatePropertyPage() {
             </div>
             <div className="flex flex-row flex-1">
                 {/* Left Sidebar Navigation */}
-                <div className="hidden sm:flex w-80 bg-white border-r border-gray-200 flex-col">
+                <div className="hidden sm:flex w-80 bg-white border-r border-gray-200 flex-col sticky top-0 h-screen">
                     {/* Steps Navigation */}
-                    <div className="flex-1 p-6">
+                    <div className="flex-1 p-6 overflow-y-auto">
                         <nav className="space-y-2">
                             {STEPS.map((step) => {
                                 const status = getStepStatus(step.id)
