@@ -18,7 +18,7 @@ export const propertyDetailsFormSchema = z.object({
 export const propertyDetailsSchema = z.object({
     title: z.string().min(1, "Property title is required"),
     type: z.enum(["apartment", "house", "condo", "townhouse"]),
-    description: z.string().optional(),
+    description: z.string().optional(), //.min(1, "Description is required"),
     bedrooms: z.number().min(0, "Bedrooms must be 0 or greater").optional(),
     bathrooms: z.number().min(0, "Bathrooms must be 0 or greater").optional(),
     squareFeet: z.number().min(0, "Square feet must be 0 or greater").optional(),
