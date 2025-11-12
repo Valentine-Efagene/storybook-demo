@@ -30,67 +30,64 @@ export function CustomFilePicker({
     // Convert File[] to FileItem[] on mount and when files prop changes
     React.useEffect(() => {
         const convertFilesToItems = async () => {
-            const items: FileItem[] = []
+            // Create a map of existing items for quick lookup
+            const existingItemsMap = new Map(
+                fileItems.map(item => [
+                    `${item.file.name}-${item.file.size}-${item.file.lastModified}`,
+                    item
+                ])
+            )
+
+            const newItems: FileItem[] = []
 
             for (const file of files) {
-                const existingItem = fileItems.find(item =>
-                    item.file.name === file.name &&
-                    item.file.size === file.size &&
-                    item.file.lastModified === file.lastModified
-                )
+                const fileKey = `${file.name}-${file.size}-${file.lastModified}`
+                const existingItem = existingItemsMap.get(fileKey)
 
                 if (existingItem) {
-                    items.push(existingItem)
+                    // Keep existing item with its current state
+                    newItems.push(existingItem)
                 } else {
+                    // Create new item
                     const newItem: FileItem = {
                         id: generateFileId(),
                         file,
-                        loading: true,
+                        loading: showPreview && file.type.startsWith('image/'),
                         preview: undefined
                     }
 
-                    items.push(newItem)
+                    newItems.push(newItem)
 
-                    // Generate preview asynchronously
+                    // Generate preview asynchronously for images
                     if (showPreview && file.type.startsWith('image/')) {
-                        try {
-                            const preview = await createFilePreview(file)
-                            setFileItems(current =>
-                                current.map(item =>
-                                    item.id === newItem.id
-                                        ? { ...item, preview, loading: false }
-                                        : item
+                        createFilePreview(file)
+                            .then(preview => {
+                                setFileItems(currentItems =>
+                                    currentItems.map(item =>
+                                        item.id === newItem.id
+                                            ? { ...item, preview, loading: false }
+                                            : item
+                                    )
                                 )
-                            )
-                        } catch (error) {
-                            setFileItems(current =>
-                                current.map(item =>
-                                    item.id === newItem.id
-                                        ? { ...item, loading: false, error: 'Failed to load preview' }
-                                        : item
+                            })
+                            .catch(() => {
+                                setFileItems(currentItems =>
+                                    currentItems.map(item =>
+                                        item.id === newItem.id
+                                            ? { ...item, loading: false, error: 'Failed to load preview' }
+                                            : item
+                                    )
                                 )
-                            )
-                        }
-                    } else {
-                        // Set loading to false for non-image files
-                        setTimeout(() => {
-                            setFileItems(current =>
-                                current.map(item =>
-                                    item.id === newItem.id
-                                        ? { ...item, loading: false }
-                                        : item
-                                )
-                            )
-                        }, 100)
+                            })
                     }
                 }
             }
 
-            setFileItems(items)
+            setFileItems(newItems)
         }
 
         convertFilesToItems()
-    }, [files, showPreview])
+    }, [files, showPreview]) // Removed fileItems dependency
 
     const handleFiles = useCallback((newFiles: File[]) => {
         const validationRules = {
