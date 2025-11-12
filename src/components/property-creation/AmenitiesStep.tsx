@@ -1,9 +1,9 @@
-import React from "react"
+"use client"
+
 import { Control, FieldErrors, UseFormWatch, Controller } from "react-hook-form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
 import { CompletePropertyFormData } from "@/lib/schemas/property"
+import { PillCheckboxGroup } from "@/components/form/PillCheckbox"
 
 const amenitiesList = [
     'Parking', 'Pool', 'Gym', 'Balcony', 'Garden', 'Air Conditioning',
@@ -32,33 +32,18 @@ export function AmenitiesStep({
                         name="amenities"
                         control={control}
                         render={({ field }) => (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {amenitiesList.map((amenity) => {
-                                    const isChecked = field.value?.includes(amenity) || false
-
-                                    return (
-                                        <div key={amenity} className="flex items-center space-x-2">
-                                            <Checkbox
-                                                id={amenity}
-                                                checked={isChecked}
-                                                onCheckedChange={(checked) => {
-                                                    const currentValue = field.value || []
-                                                    if (checked) {
-                                                        field.onChange([...currentValue, amenity])
-                                                    } else {
-                                                        field.onChange(currentValue.filter(item => item !== amenity))
-                                                    }
-                                                }}
-                                            />
-                                            <Label
-                                                htmlFor={amenity}
-                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                            >
-                                                {amenity}
-                                            </Label>
-                                        </div>
-                                    )
-                                })}
+                            <div className="space-y-4">
+                                <p className="text-sm text-gray-600">
+                                    Select all amenities that apply to this property. You must select at least one amenity.
+                                </p>
+                                <PillCheckboxGroup
+                                    options={amenitiesList}
+                                    value={field.value || []}
+                                    onChange={field.onChange}
+                                    size="md"
+                                    variant="outline"
+                                    className="justify-start"
+                                />
                             </div>
                         )}
                     />
