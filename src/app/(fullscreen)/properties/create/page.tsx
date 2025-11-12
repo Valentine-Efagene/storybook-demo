@@ -228,7 +228,7 @@ export default function CreatePropertyPage() {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 flex flex-col sm:mt-8">
+                <div className="flex-1 flex flex-col sm:mt-8 mb-20">
                     {/* Step Header */}
                     <div className="bg-white px-8 py-6">
                         <div className="max-w-4xl mx-auto">

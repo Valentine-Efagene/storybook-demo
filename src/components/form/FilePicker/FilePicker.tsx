@@ -28,7 +28,6 @@ export default function FilePicker({ className, ...rest }: IProps) {
   return (
     <div className={`${className} ${style.container}`}><FilePond {...rest}
       allowReorder={false}
-      allowMultiple={false}
       credits={false}
     /></div>
   );
