@@ -2,7 +2,7 @@ import React from "react"
 import { Control, FieldErrors, UseFormWatch, Controller } from "react-hook-form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CompletePropertyFormData } from "@/lib/schemas/property"
-import FilePicker from "@/components/form/FilePicker/FilePicker"
+import { CustomFilePicker } from "@/components/form/CustomFilePicker"
 
 interface GalleryStepProps {
     control: Control<CompletePropertyFormData>
@@ -15,6 +15,19 @@ export function GalleryStep({
     errors,
     watch
 }: GalleryStepProps) {
+    const [fileErrors, setFileErrors] = React.useState<Record<string, string>>({})
+
+    const handleFileError = (fieldName: string, error: string) => {
+        setFileErrors(prev => ({ ...prev, [fieldName]: error }))
+        // Clear error after 5 seconds
+        setTimeout(() => {
+            setFileErrors(prev => {
+                const { [fieldName]: _, ...rest } = prev
+                return rest
+            })
+        }, 5000)
+    }
+
     return (
         <div className="space-y-8 max-w-4xl mx-auto">
             {/* Display Image */}
@@ -27,20 +40,28 @@ export function GalleryStep({
                         name="displayImage"
                         control={control}
                         render={({ field }) => (
-                            <FilePicker
-                                allowMultiple={false}
-                                acceptedFileTypes={['image/*']}
-                                labelIdle='Drag & Drop display image or <span class="filepond--label-action">Browse</span>'
+                            <CustomFilePicker
                                 files={field.value ? [field.value] : []}
-                                onupdatefiles={(fileItems: any) => {
-                                    const files = fileItems.map((item: any) => item.file)
+                                onFilesChange={(files) => {
                                     field.onChange(files[0] || undefined)
                                 }}
+                                allowMultiple={false}
+                                maxFiles={1}
+                                maxFileSize={10}
+                                allowedTypes={['image/*']}
+                                label="Upload display image"
+                                description="This will be the main image shown for your property"
+                                showPreview={true}
+                                showFileSize={true}
+                                accept="image/*"
+                                onError={(error) => handleFileError('displayImage', error)}
                             />
                         )}
                     />
-                    {errors.displayImage && (
-                        <p className="text-sm text-red-600">{errors.displayImage.message}</p>
+                    {(errors.displayImage || fileErrors.displayImage) && (
+                        <p className="text-sm text-red-600">
+                            {errors.displayImage?.message || fileErrors.displayImage}
+                        </p>
                     )}
                 </CardContent>
             </Card>
@@ -55,20 +76,26 @@ export function GalleryStep({
                         name="model3dImages"
                         control={control}
                         render={({ field }) => (
-                            <FilePicker
-                                allowMultiple={true}
-                                acceptedFileTypes={['image/*']}
-                                labelIdle='Drag & Drop 3D model images or <span class="filepond--label-action">Browse</span>'
+                            <CustomFilePicker
                                 files={field.value || []}
-                                onupdatefiles={(fileItems: any) => {
-                                    const files = fileItems.map((item: any) => item.file)
-                                    field.onChange(files)
-                                }}
+                                onFilesChange={field.onChange}
+                                allowMultiple={true}
+                                maxFiles={10}
+                                maxFileSize={10}
+                                allowedTypes={['image/*']}
+                                label="Upload 3D model images"
+                                description="Upload multiple images showing different angles and details"
+                                showPreview={true}
+                                showFileSize={true}
+                                accept="image/*"
+                                onError={(error) => handleFileError('model3dImages', error)}
                             />
                         )}
                     />
-                    {errors.model3dImages && (
-                        <p className="text-sm text-red-600">{errors.model3dImages.message}</p>
+                    {(errors.model3dImages || fileErrors.model3dImages) && (
+                        <p className="text-sm text-red-600">
+                            {errors.model3dImages?.message || fileErrors.model3dImages}
+                        </p>
                     )}
                 </CardContent>
             </Card>
@@ -83,20 +110,26 @@ export function GalleryStep({
                         name="floorPlanImages"
                         control={control}
                         render={({ field }) => (
-                            <FilePicker
-                                allowMultiple={true}
-                                acceptedFileTypes={['image/*']}
-                                labelIdle='Drag & Drop floor plan images or <span class="filepond--label-action">Browse</span>'
+                            <CustomFilePicker
                                 files={field.value || []}
-                                onupdatefiles={(fileItems: any) => {
-                                    const files = fileItems.map((item: any) => item.file)
-                                    field.onChange(files)
-                                }}
+                                onFilesChange={field.onChange}
+                                allowMultiple={true}
+                                maxFiles={5}
+                                maxFileSize={10}
+                                allowedTypes={['image/*']}
+                                label="Upload floor plan images"
+                                description="Upload floor plans and layout diagrams"
+                                showPreview={true}
+                                showFileSize={true}
+                                accept="image/*"
+                                onError={(error) => handleFileError('floorPlanImages', error)}
                             />
                         )}
                     />
-                    {errors.floorPlanImages && (
-                        <p className="text-sm text-red-600">{errors.floorPlanImages.message}</p>
+                    {(errors.floorPlanImages || fileErrors.floorPlanImages) && (
+                        <p className="text-sm text-red-600">
+                            {errors.floorPlanImages?.message || fileErrors.floorPlanImages}
+                        </p>
                     )}
                 </CardContent>
             </Card>
@@ -111,20 +144,26 @@ export function GalleryStep({
                         name="aerialImages"
                         control={control}
                         render={({ field }) => (
-                            <FilePicker
-                                allowMultiple={true}
-                                acceptedFileTypes={['image/*']}
-                                labelIdle='Drag & Drop aerial images or <span class="filepond--label-action">Browse</span>'
+                            <CustomFilePicker
                                 files={field.value || []}
-                                onupdatefiles={(fileItems: any) => {
-                                    const files = fileItems.map((item: any) => item.file)
-                                    field.onChange(files)
-                                }}
+                                onFilesChange={field.onChange}
+                                allowMultiple={true}
+                                maxFiles={8}
+                                maxFileSize={10}
+                                allowedTypes={['image/*']}
+                                label="Upload aerial images"
+                                description="Upload aerial views and exterior shots"
+                                showPreview={true}
+                                showFileSize={true}
+                                accept="image/*"
+                                onError={(error) => handleFileError('aerialImages', error)}
                             />
                         )}
                     />
-                    {errors.aerialImages && (
-                        <p className="text-sm text-red-600">{errors.aerialImages.message}</p>
+                    {(errors.aerialImages || fileErrors.aerialImages) && (
+                        <p className="text-sm text-red-600">
+                            {errors.aerialImages?.message || fileErrors.aerialImages}
+                        </p>
                     )}
                 </CardContent>
             </Card>

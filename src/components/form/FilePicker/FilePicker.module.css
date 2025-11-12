@@ -41,3 +41,25 @@
 :global(.filepond--drop-label label) {
   padding: 0 !important;
 }
+
+.multiple :global(.filepond--list) {
+  display: grid !important;
+  grid-template-columns: repeat(4, 140px);
+  gap: 8px;
+}
+
+.multiple :global(.filepond--item) {
+  width: 140px !important;
+  height: 140px !important;
+}
+
+.multiple :global(.filepond--panel) {
+  display: none;
+}
+
+.multiple :global(.filepond--panel-center) {}
+
+
+.multiple :global(.filepond--item-panel) {}
+
+.multiple :global(.filepond--panel-bottom) {}
