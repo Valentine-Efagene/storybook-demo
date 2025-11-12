@@ -23,6 +23,11 @@ export function AmenitiesStep({
 }: AmenitiesStepProps) {
     return (
         <div className="space-y-8 max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto">
+                <h2 className="text-2xl font-semibold text-gray-900">
+                    Amenities
+                </h2>
+            </div>
             <Card>
                 <CardHeader>
                     <CardTitle>Property Amenities *</CardTitle>

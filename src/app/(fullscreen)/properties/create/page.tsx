@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils"
 import { PropertyDetailsStep } from "@/components/property-creation/PropertyDetailsStep"
 import { GalleryStep } from "@/components/property-creation/GalleryStep"
 import { AmenitiesStep } from "@/components/property-creation/AmenitiesStep"
+import { PlansStep } from "@/components/property-creation/PlansStep"
 import { ReviewStep } from "@/components/property-creation/ReviewStep"
 import { completePropertySchema, type CompletePropertyFormData } from "@/lib/schemas/property"
 
@@ -18,7 +19,8 @@ const STEPS = [
     { id: 1, name: 'Property Details', description: 'Basic information and location', fields: ['title', 'type', 'description', 'bedrooms', 'bathrooms', 'squareFeet', 'address', 'city', 'state', 'price', 'priceType', 'status'] },
     { id: 2, name: 'Gallery', description: 'Upload display image (required)', fields: ['displayImage', 'model3dImages', 'floorPlanImages', 'aerialImages'] },
     { id: 3, name: 'Amenities', description: 'Select at least one amenity', fields: ['amenities'] },
-    { id: 4, name: 'Review', description: 'Review and submit', fields: [] }
+    { id: 4, name: 'Plans', description: 'Choose your listing plan', fields: ['plans'] },
+    { id: 5, name: 'Review', description: 'Review and submit', fields: [] }
 ]
 
 export default function CreatePropertyPage() {
@@ -46,6 +48,7 @@ export default function CreatePropertyPage() {
             floorPlanImages: [],
             aerialImages: [],
             amenities: [],
+            plans: [],
         }
     })
 
@@ -57,6 +60,7 @@ export default function CreatePropertyPage() {
         2: false,
         3: false,
         4: false,
+        5: false,
     })
 
     const canNavigateToStep = (step: number) => {
@@ -64,6 +68,7 @@ export default function CreatePropertyPage() {
         if (step === 2) return stepValidation[1]
         if (step === 3) return stepValidation[1] && stepValidation[2]
         if (step === 4) return stepValidation[1] && stepValidation[2] && stepValidation[3]
+        if (step === 5) return stepValidation[1] && stepValidation[2] && stepValidation[3] && stepValidation[4]
         return false
     }
 
@@ -230,7 +235,7 @@ export default function CreatePropertyPage() {
                 {/* Main Content */}
                 <div className="flex-1 flex flex-col sm:mt-8 mb-20">
                     {/* Step Header */}
-                    <div className="bg-white px-8 py-6">
+                    {/* <div className="bg-white px-8 py-6">
                         <div className="max-w-4xl mx-auto">
                             <h2 className="text-2xl font-semibold text-gray-900">
                                 {STEPS[currentStep - 1].name}
@@ -239,7 +244,7 @@ export default function CreatePropertyPage() {
                                 {STEPS[currentStep - 1].description}
                             </p>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Step Content */}
                     <div className="flex-1 overflow-y-auto p-8">
@@ -265,6 +270,13 @@ export default function CreatePropertyPage() {
                             />
                         )}
                         {currentStep === 4 && (
+                            <PlansStep
+                                control={control}
+                                errors={errors}
+                                watch={watch}
+                            />
+                        )}
+                        {currentStep === 5 && (
                             <ReviewStep formData={watch()} />
                         )}
                     </div>
@@ -282,7 +294,7 @@ export default function CreatePropertyPage() {
                             {currentStep === STEPS.length ? (
                                 <Button
                                     onClick={handleSubmit(handleFinalSubmit)}
-                                    disabled={!stepValidation[3]}
+                                    disabled={!stepValidation[4]}
                                     className="flex-1"
                                 >
                                     <Save className="h-4 w-4 mr-2" />

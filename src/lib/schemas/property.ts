@@ -41,12 +41,18 @@ export const amenitiesSchema = z.object({
     amenities: z.array(z.string()).min(1, "Please select at least one amenity"),
 })
 
+export const plansSchema = z.object({
+    plans: z.array(z.string()).min(1, "Please select at least one plan"),
+})
+
 export const completePropertySchema = propertyDetailsSchema
     .merge(gallerySchema)
     .merge(amenitiesSchema)
+    .merge(plansSchema)
 
 export type PropertyDetailsFormInputs = z.infer<typeof propertyDetailsFormSchema>
 export type PropertyDetailsFormData = z.infer<typeof propertyDetailsSchema>
 export type GalleryFormData = z.infer<typeof gallerySchema>
 export type AmenitiesFormData = z.infer<typeof amenitiesSchema>
+export type PlansFormData = z.infer<typeof plansSchema>
 export type CompletePropertyFormData = z.infer<typeof completePropertySchema>

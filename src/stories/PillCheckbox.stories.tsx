@@ -16,7 +16,7 @@ const meta: Meta<typeof PillCheckbox> = {
             description: 'Size of the pill checkbox'
         },
         variant: {
-            control: 'select', 
+            control: 'select',
             options: ['default', 'outline'],
             description: 'Visual style variant'
         },
@@ -38,7 +38,7 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
     render: (args) => {
         const [checked, setChecked] = useState(args.checked || false)
-        
+
         return (
             <PillCheckbox
                 {...args}
@@ -59,7 +59,7 @@ export const Default: Story = {
 export const Outline: Story = {
     render: (args) => {
         const [checked, setChecked] = useState(args.checked || false)
-        
+
         return (
             <PillCheckbox
                 {...args}
@@ -80,7 +80,7 @@ export const Outline: Story = {
 export const Checked: Story = {
     render: (args) => {
         const [checked, setChecked] = useState(args.checked ?? true)
-        
+
         return (
             <PillCheckbox
                 {...args}
@@ -106,7 +106,7 @@ export const Disabled: Story = {
         disabled: true,
         size: 'md',
         variant: 'default',
-        onCheckedChange: () => {}
+        onCheckedChange: () => { }
     }
 }
 
@@ -195,7 +195,7 @@ export const Variants: Story = {
 export const PropertyAmenities: Story = {
     render: () => {
         const [selectedAmenities, setSelectedAmenities] = useState<string[]>(['Parking', 'Air Conditioning'])
-        
+
         const amenities = [
             'Parking', 'Swimming Pool', 'Gym', 'Balcony', 'Garden', 'Air Conditioning',
             'Elevator', 'Security', 'Laundry', 'Storage', 'Playground', 'Rooftop Deck',
@@ -209,7 +209,7 @@ export const PropertyAmenities: Story = {
                     <p className="text-gray-600 text-sm mb-4">
                         Select all amenities that apply to this property
                     </p>
-                    
+
                     <PillCheckboxGroup
                         options={amenities}
                         value={selectedAmenities}
@@ -233,14 +233,14 @@ export const PropertyAmenities: Story = {
 export const CompactGroup: Story = {
     render: () => {
         const [selectedFeatures, setSelectedFeatures] = useState<string[]>(['Fast', 'Secure'])
-        
+
         const features = ['Fast', 'Secure', 'Reliable', 'Modern', 'Eco-friendly', 'Premium']
 
         return (
             <div className="space-y-4 max-w-2xl">
                 <div>
                     <h3 className="text-lg font-semibold mb-2">Product Features</h3>
-                    
+
                     <PillCheckboxGroup
                         options={features}
                         value={selectedFeatures}
@@ -263,7 +263,7 @@ export const InteractiveExample: Story = {
         const [settings, setSettings] = useState<string[]>(['Notifications', 'Auto-save'])
         const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md')
         const [variant, setVariant] = useState<'default' | 'outline'>('outline')
-        
+
         const options = ['Notifications', 'Auto-save', 'Dark mode', 'Analytics', 'Backups', 'Two-factor auth']
 
         return (
@@ -272,8 +272,8 @@ export const InteractiveExample: Story = {
                 <div className="flex gap-4">
                     <div>
                         <label className="block text-sm font-medium mb-1">Size</label>
-                        <select 
-                            value={size} 
+                        <select
+                            value={size}
                             onChange={(e) => setSize(e.target.value as 'sm' | 'md' | 'lg')}
                             className="border rounded px-2 py-1 text-sm"
                         >
@@ -284,8 +284,8 @@ export const InteractiveExample: Story = {
                     </div>
                     <div>
                         <label className="block text-sm font-medium mb-1">Variant</label>
-                        <select 
-                            value={variant} 
+                        <select
+                            value={variant}
                             onChange={(e) => setVariant(e.target.value as 'default' | 'outline')}
                             className="border rounded px-2 py-1 text-sm"
                         >
