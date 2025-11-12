@@ -16,8 +16,8 @@ import { completePropertySchema, type CompletePropertyFormData } from "@/lib/sch
 
 const STEPS = [
     { id: 1, name: 'Property Details', description: 'Basic information and location', fields: ['title', 'type', 'description', 'bedrooms', 'bathrooms', 'squareFeet', 'address', 'city', 'state', 'price', 'priceType', 'status'] },
-    { id: 2, name: 'Gallery', description: 'Upload property images', fields: ['displayImage', 'model3dImages', 'floorPlanImages', 'aerialImages'] },
-    { id: 3, name: 'Amenities', description: 'Features and facilities', fields: ['amenities'] },
+    { id: 2, name: 'Gallery', description: 'Upload display image (required)', fields: ['displayImage', 'model3dImages', 'floorPlanImages', 'aerialImages'] },
+    { id: 3, name: 'Amenities', description: 'Select at least one amenity', fields: ['amenities'] },
     { id: 4, name: 'Review', description: 'Review and submit', fields: [] }
 ]
 
@@ -41,7 +41,7 @@ export default function CreatePropertyPage() {
             price: 1,
             priceType: "sale",
             status: "available",
-            displayImage: undefined,
+            // displayImage: undefined, // This is required now, will cause validation error until uploaded
             model3dImages: [],
             floorPlanImages: [],
             aerialImages: [],
@@ -74,6 +74,15 @@ export default function CreatePropertyPage() {
         return 'disabled'
     }
 
+    const hasStepErrors = (step: number) => {
+        const stepData = STEPS.find(s => s.id === step)
+        if (!stepData) return false
+
+        return stepData.fields.some(field => {
+            return errors[field as keyof typeof errors]
+        })
+    }
+
     const validateCurrentStep = async () => {
         const currentStepData = STEPS.find(step => step.id === currentStep)
         if (!currentStepData) return false
@@ -81,7 +90,10 @@ export default function CreatePropertyPage() {
         const fieldsToValidate = currentStepData.fields
         if (fieldsToValidate.length === 0) return true
 
+        console.log(`Validating step ${currentStep} fields:`, fieldsToValidate)
         const isValid = await trigger(fieldsToValidate as any)
+        console.log(`Step ${currentStep} validation result:`, isValid)
+
         if (isValid) {
             setStepValidation(prev => ({ ...prev, [currentStep]: true }))
         }
@@ -142,6 +154,7 @@ export default function CreatePropertyPage() {
                         {STEPS.map((step) => {
                             const status = getStepStatus(step.id)
                             const isClickable = canNavigateToStep(step.id)
+                            const hasErrors = hasStepErrors(step.id)
 
                             return (
                                 <div
@@ -150,7 +163,9 @@ export default function CreatePropertyPage() {
                                         "flex items-start gap-3 p-3 rounded-lg transition-colors",
                                         isClickable ? "cursor-pointer" : "cursor-not-allowed",
                                         status === 'current'
-                                            ? "bg-blue-50 border border-blue-200"
+                                            ? hasErrors
+                                                ? "bg-red-50 border border-red-200"
+                                                : "bg-blue-50 border border-blue-200"
                                             : status === 'completed'
                                                 ? "bg-green-50 border border-green-200 hover:bg-green-100"
                                                 : status === 'accessible'
@@ -162,7 +177,9 @@ export default function CreatePropertyPage() {
                                     <div className={cn(
                                         "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium",
                                         status === 'current'
-                                            ? "bg-blue-600 text-white"
+                                            ? hasErrors
+                                                ? "bg-red-600 text-white"
+                                                : "bg-blue-600 text-white"
                                             : status === 'completed'
                                                 ? "bg-green-600 text-white"
                                                 : status === 'accessible'
@@ -179,7 +196,9 @@ export default function CreatePropertyPage() {
                                         <p className={cn(
                                             "text-sm font-medium",
                                             status === 'current'
-                                                ? "text-blue-900"
+                                                ? hasErrors
+                                                    ? "text-red-900"
+                                                    : "text-blue-900"
                                                 : status === 'completed'
                                                     ? "text-green-900"
                                                     : status === 'accessible'

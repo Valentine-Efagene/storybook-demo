@@ -31,14 +31,14 @@ export const propertyDetailsSchema = z.object({
 })
 
 export const gallerySchema = z.object({
-    displayImage: z.instanceof(File).optional(),
+    displayImage: z.instanceof(File, { message: "Display image is required" }),
     model3dImages: z.array(z.instanceof(File)).optional(),
     floorPlanImages: z.array(z.instanceof(File)).optional(),
     aerialImages: z.array(z.instanceof(File)).optional(),
 })
 
 export const amenitiesSchema = z.object({
-    amenities: z.array(z.string()).optional(),
+    amenities: z.array(z.string()).min(1, "Please select at least one amenity"),
 })
 
 export const completePropertySchema = propertyDetailsSchema

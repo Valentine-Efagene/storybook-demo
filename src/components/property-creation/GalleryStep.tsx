@@ -20,7 +20,7 @@ export function GalleryStep({
             {/* Display Image */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Display Image</CardTitle>
+                    <CardTitle>Display Image *</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <Controller

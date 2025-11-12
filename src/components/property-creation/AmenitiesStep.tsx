@@ -25,7 +25,7 @@ export function AmenitiesStep({
         <div className="space-y-8 max-w-4xl mx-auto">
             <Card>
                 <CardHeader>
-                    <CardTitle>Property Amenities</CardTitle>
+                    <CardTitle>Property Amenities *</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <Controller
@@ -35,7 +35,7 @@ export function AmenitiesStep({
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {amenitiesList.map((amenity) => {
                                     const isChecked = field.value?.includes(amenity) || false
-                                    
+
                                     return (
                                         <div key={amenity} className="flex items-center space-x-2">
                                             <Checkbox
