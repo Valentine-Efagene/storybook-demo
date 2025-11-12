@@ -263,12 +263,14 @@ export default function CreatePropertyPage() {
                 <div className="flex-1 flex flex-col">
                     {/* Step Header */}
                     <div className="bg-white px-8 py-6">
-                        <h2 className="text-2xl font-semibold text-gray-900">
-                            {STEPS[currentStep - 1].name}
-                        </h2>
-                        <p className="text-gray-600 mt-1">
-                            {STEPS[currentStep - 1].description}
-                        </p>
+                        <div className="max-w-4xl mx-auto">
+                            <h2 className="text-2xl font-semibold text-gray-900">
+                                {STEPS[currentStep - 1].name}
+                            </h2>
+                            <p className="text-gray-600 mt-1">
+                                {STEPS[currentStep - 1].description}
+                            </p>
+                        </div>
                     </div>
 
                     {/* Step Content */}
