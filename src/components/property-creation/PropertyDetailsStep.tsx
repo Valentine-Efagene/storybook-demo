@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { CompletePropertyFormData } from "@/lib/schemas/property"
+import AmountInput from "../form/AmountInput"
 
 interface PropertyDetailsStepProps {
     control: Control<CompletePropertyFormData>
@@ -244,13 +245,12 @@ export function PropertyDetailsStep({
                                 name="price"
                                 control={control}
                                 render={({ field }) => (
-                                    <Input
+                                    <AmountInput
                                         id="price"
-                                        type="number"
-                                        min="0"
+                                        min={0}
                                         placeholder="Enter price"
                                         {...field}
-                                        onChange={(e) => field.onChange(Number(e.target.value))}
+                                        onChange={(value) => field.onChange(Number(value))}
                                     />
                                 )}
                             />
