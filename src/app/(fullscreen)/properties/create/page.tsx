@@ -128,177 +128,175 @@ export default function CreatePropertyPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex">
-            {/* Left Sidebar Navigation */}
-            <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
-                {/* Header */}
-                <div className="p-6 border-b border-gray-200">
-                    <Link
-                        href="/properties"
-                        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
-                    >
-                        <ArrowLeft className="h-4 w-4" />
-                        Back to Properties
-                    </Link>
-                    <h1 className="text-xl font-semibold text-gray-900">
-                        Create New Property
-                    </h1>
-                    <p className="text-sm text-gray-600 mt-1">
-                        Step {currentStep} of {STEPS.length}
-                    </p>
-                </div>
+        <div className="min-h-screen flex flex-col">
+            {/* Header */}
+            <div className="p-6 border-b flex items-center gap-4">
+                <Link
+                    href="/properties"
+                    className="flex items-center gap-2 text-primary-text hover:text-gray-900 rounded-full bg-tertiary-bg p-3"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                </Link>
+                <p className="text-sm text-primary-text">
+                    Add Property
+                </p>
+            </div>
+            <div className="flex flex-row flex-1">
+                {/* Left Sidebar Navigation */}
+                <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
 
-                {/* Steps Navigation */}
-                <div className="flex-1 p-6">
-                    <nav className="space-y-2">
-                        {STEPS.map((step) => {
-                            const status = getStepStatus(step.id)
-                            const isClickable = canNavigateToStep(step.id)
-                            const hasErrors = hasStepErrors(step.id)
+                    {/* Steps Navigation */}
+                    <div className="flex-1 p-6">
+                        <nav className="space-y-2">
+                            {STEPS.map((step) => {
+                                const status = getStepStatus(step.id)
+                                const isClickable = canNavigateToStep(step.id)
+                                const hasErrors = hasStepErrors(step.id)
 
-                            return (
-                                <div
-                                    key={step.id}
-                                    className={cn(
-                                        "flex items-start gap-3 p-3 rounded-lg transition-colors",
-                                        isClickable ? "cursor-pointer" : "cursor-not-allowed",
-                                        status === 'current'
-                                            ? hasErrors
-                                                ? "bg-red-50 border border-red-200"
-                                                : "bg-blue-50 border border-blue-200"
-                                            : status === 'completed'
-                                                ? "bg-green-50 border border-green-200 hover:bg-green-100"
-                                                : status === 'accessible'
-                                                    ? "hover:bg-gray-50"
-                                                    : "opacity-50"
-                                    )}
-                                    onClick={() => isClickable && goToStep(step.id)}
-                                >
-                                    <div className={cn(
-                                        "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium",
-                                        status === 'current'
-                                            ? hasErrors
-                                                ? "bg-red-600 text-white"
-                                                : "bg-blue-600 text-white"
-                                            : status === 'completed'
-                                                ? "bg-green-600 text-white"
-                                                : status === 'accessible'
-                                                    ? "bg-gray-300 text-gray-600"
-                                                    : "bg-gray-200 text-gray-400"
-                                    )}>
-                                        {status === 'completed' ? (
-                                            <Check className="w-3 h-3" />
-                                        ) : (
-                                            step.id
-                                        )}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className={cn(
-                                            "text-sm font-medium",
+                                return (
+                                    <div
+                                        key={step.id}
+                                        className={cn(
+                                            "flex items-start gap-3 p-3 rounded-lg transition-colors",
+                                            isClickable ? "cursor-pointer" : "cursor-not-allowed",
                                             status === 'current'
                                                 ? hasErrors
-                                                    ? "text-red-900"
-                                                    : "text-blue-900"
+                                                    ? "bg-red-50 border border-red-200"
+                                                    : "bg-blue-50 border border-blue-200"
                                                 : status === 'completed'
-                                                    ? "text-green-900"
+                                                    ? "bg-green-50 border border-green-200 hover:bg-green-100"
                                                     : status === 'accessible'
-                                                        ? "text-gray-900"
-                                                        : "text-gray-400"
+                                                        ? "hover:bg-gray-50"
+                                                        : "opacity-50"
+                                        )}
+                                        onClick={() => isClickable && goToStep(step.id)}
+                                    >
+                                        <div className={cn(
+                                            "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium",
+                                            status === 'current'
+                                                ? hasErrors
+                                                    ? "bg-red-600 text-white"
+                                                    : "bg-blue-600 text-white"
+                                                : status === 'completed'
+                                                    ? "bg-green-600 text-white"
+                                                    : status === 'accessible'
+                                                        ? "bg-gray-300 text-gray-600"
+                                                        : "bg-gray-200 text-gray-400"
                                         )}>
-                                            {step.name}
-                                        </p>
-                                        <p className={cn(
-                                            "text-xs",
-                                            status === 'disabled' ? "text-gray-400" : "text-gray-600"
-                                        )}>
-                                            {step.description}
-                                        </p>
+                                            {status === 'completed' ? (
+                                                <Check className="w-3 h-3" />
+                                            ) : (
+                                                step.id
+                                            )}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className={cn(
+                                                "text-sm font-medium",
+                                                status === 'current'
+                                                    ? hasErrors
+                                                        ? "text-red-900"
+                                                        : "text-blue-900"
+                                                    : status === 'completed'
+                                                        ? "text-green-900"
+                                                        : status === 'accessible'
+                                                            ? "text-gray-900"
+                                                            : "text-gray-400"
+                                            )}>
+                                                {step.name}
+                                            </p>
+                                            <p className={cn(
+                                                "text-xs",
+                                                status === 'disabled' ? "text-gray-400" : "text-gray-600"
+                                            )}>
+                                                {step.description}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        })}
-                    </nav>
+                                )
+                            })}
+                        </nav>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="p-6 border-t border-gray-200 space-y-3">
+                        <div className="flex gap-2">
+                            <Button
+                                variant="outline"
+                                onClick={prevStep}
+                                disabled={currentStep === 1}
+                                className="flex-1"
+                            >
+                                Previous
+                            </Button>
+                            {currentStep === STEPS.length ? (
+                                <Button
+                                    onClick={handleSubmit(handleFinalSubmit)}
+                                    disabled={!stepValidation[3]}
+                                    className="flex-1"
+                                >
+                                    <Save className="h-4 w-4 mr-2" />
+                                    Create Property
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={nextStep}
+                                    className="flex-1"
+                                >
+                                    Next
+                                    <ArrowRight className="h-4 w-4 ml-2" />
+                                </Button>
+                            )}
+                        </div>
+                        <Button
+                            variant="ghost"
+                            onClick={() => router.push('/properties')}
+                            className="w-full"
+                        >
+                            <X className="h-4 w-4 mr-2" />
+                            Cancel
+                        </Button>
+                    </div>
                 </div>
 
-                {/* Actions */}
-                <div className="p-6 border-t border-gray-200 space-y-3">
-                    <div className="flex gap-2">
-                        <Button
-                            variant="outline"
-                            onClick={prevStep}
-                            disabled={currentStep === 1}
-                            className="flex-1"
-                        >
-                            Previous
-                        </Button>
-                        {currentStep === STEPS.length ? (
-                            <Button
-                                onClick={handleSubmit(handleFinalSubmit)}
-                                disabled={!stepValidation[3]}
-                                className="flex-1"
-                            >
-                                <Save className="h-4 w-4 mr-2" />
-                                Create Property
-                            </Button>
-                        ) : (
-                            <Button
-                                onClick={nextStep}
-                                className="flex-1"
-                            >
-                                Next
-                                <ArrowRight className="h-4 w-4 ml-2" />
-                            </Button>
+                {/* Main Content */}
+                <div className="flex-1 flex flex-col">
+                    {/* Step Header */}
+                    <div className="bg-white px-8 py-6">
+                        <h2 className="text-2xl font-semibold text-gray-900">
+                            {STEPS[currentStep - 1].name}
+                        </h2>
+                        <p className="text-gray-600 mt-1">
+                            {STEPS[currentStep - 1].description}
+                        </p>
+                    </div>
+
+                    {/* Step Content */}
+                    <div className="flex-1 overflow-y-auto p-8">
+                        {currentStep === 1 && (
+                            <PropertyDetailsStep
+                                control={control}
+                                errors={errors}
+                                watch={watch}
+                            />
+                        )}
+                        {currentStep === 2 && (
+                            <GalleryStep
+                                control={control}
+                                errors={errors}
+                                watch={watch}
+                            />
+                        )}
+                        {currentStep === 3 && (
+                            <AmenitiesStep
+                                control={control}
+                                errors={errors}
+                                watch={watch}
+                            />
+                        )}
+                        {currentStep === 4 && (
+                            <ReviewStep formData={watch()} />
                         )}
                     </div>
-                    <Button
-                        variant="ghost"
-                        onClick={() => router.push('/properties')}
-                        className="w-full"
-                    >
-                        <X className="h-4 w-4 mr-2" />
-                        Cancel
-                    </Button>
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col">
-                {/* Step Header */}
-                <div className="bg-white border-b border-gray-200 px-8 py-6">
-                    <h2 className="text-2xl font-semibold text-gray-900">
-                        {STEPS[currentStep - 1].name}
-                    </h2>
-                    <p className="text-gray-600 mt-1">
-                        {STEPS[currentStep - 1].description}
-                    </p>
-                </div>
-
-                {/* Step Content */}
-                <div className="flex-1 overflow-y-auto p-8">
-                    {currentStep === 1 && (
-                        <PropertyDetailsStep
-                            control={control}
-                            errors={errors}
-                            watch={watch}
-                        />
-                    )}
-                    {currentStep === 2 && (
-                        <GalleryStep
-                            control={control}
-                            errors={errors}
-                            watch={watch}
-                        />
-                    )}
-                    {currentStep === 3 && (
-                        <AmenitiesStep
-                            control={control}
-                            errors={errors}
-                            watch={watch}
-                        />
-                    )}
-                    {currentStep === 4 && (
-                        <ReviewStep formData={watch()} />
-                    )}
                 </div>
             </div>
         </div>

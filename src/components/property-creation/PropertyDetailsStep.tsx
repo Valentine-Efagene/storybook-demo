@@ -44,7 +44,7 @@ export function PropertyDetailsStep({
                                 <p className="text-sm text-red-600">{errors.title.message}</p>
                             )}
                         </div>
-                        
+
                         <div className="space-y-2">
                             <Label htmlFor="type">Property Type</Label>
                             <Controller
@@ -118,7 +118,7 @@ export function PropertyDetailsStep({
                                 <p className="text-sm text-red-600">{errors.bedrooms.message}</p>
                             )}
                         </div>
-                        
+
                         <div className="space-y-2">
                             <Label htmlFor="bathrooms">Bathrooms</Label>
                             <Controller
@@ -140,7 +140,7 @@ export function PropertyDetailsStep({
                                 <p className="text-sm text-red-600">{errors.bathrooms.message}</p>
                             )}
                         </div>
-                        
+
                         <div className="space-y-2">
                             <Label htmlFor="squareFeet">Square Feet</Label>
                             <Controller
@@ -189,7 +189,7 @@ export function PropertyDetailsStep({
                                 <p className="text-sm text-red-600">{errors.address.message}</p>
                             )}
                         </div>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor="city">City</Label>
@@ -208,7 +208,7 @@ export function PropertyDetailsStep({
                                     <p className="text-sm text-red-600">{errors.city.message}</p>
                                 )}
                             </div>
-                            
+
                             <div className="space-y-2">
                                 <Label htmlFor="state">State</Label>
                                 <Controller
@@ -258,7 +258,7 @@ export function PropertyDetailsStep({
                                 <p className="text-sm text-red-600">{errors.price.message}</p>
                             )}
                         </div>
-                        
+
                         <div className="space-y-2">
                             <Label htmlFor="priceType">Price Type</Label>
                             <Controller
@@ -281,7 +281,7 @@ export function PropertyDetailsStep({
                                 <p className="text-sm text-red-600">{errors.priceType.message}</p>
                             )}
                         </div>
-                        
+
                         <div className="space-y-2">
                             <Label htmlFor="status">Status</Label>
                             <Controller
