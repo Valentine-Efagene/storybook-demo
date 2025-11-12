@@ -149,26 +149,90 @@ export function ReviewStep({ formData }: ReviewStepProps) {
                         </div>
 
                         {/* Images */}
-                        {formData.images && formData.images.length > 0 && (
-                            <div>
-                                <h3 className="font-semibold text-lg text-gray-900 mb-4">Images</h3>
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <p className="text-sm text-gray-600">
-                                        {formData.images.length} image(s) selected for upload
-                                    </p>
-                                    <div className="mt-2 space-y-1">
-                                        {formData.images.map((file, index) => (
-                                            <div key={index} className="flex items-center justify-between text-sm">
-                                                <span className="truncate">{file.name}</span>
-                                                <span className="text-gray-500 ml-2">
-                                                    {(file.size / 1024 / 1024).toFixed(2)} MB
-                                                </span>
-                                            </div>
-                                        ))}
+                        <div>
+                            <h3 className="font-semibold text-lg text-gray-900 mb-4">Images</h3>
+                            <div className="space-y-4">
+                                {/* Display Image */}
+                                {formData.displayImage && (
+                                    <div className="bg-gray-50 rounded-lg p-4">
+                                        <h4 className="text-sm font-medium text-gray-900 mb-2">Main Display Image</h4>
+                                        <div className="flex items-center justify-between text-sm">
+                                            <span className="truncate">{formData.displayImage.name}</span>
+                                            <span className="text-gray-500 ml-2">
+                                                {(formData.displayImage.size / 1024 / 1024).toFixed(2)} MB
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
+
+                                {/* Floor Plan Images */}
+                                {formData.floorPlanImages && formData.floorPlanImages.length > 0 && (
+                                    <div className="bg-gray-50 rounded-lg p-4">
+                                        <h4 className="text-sm font-medium text-gray-900 mb-2">
+                                            Floor Plans ({formData.floorPlanImages.length})
+                                        </h4>
+                                        <div className="space-y-1">
+                                            {formData.floorPlanImages.map((file, index) => (
+                                                <div key={index} className="flex items-center justify-between text-sm">
+                                                    <span className="truncate">{file.name}</span>
+                                                    <span className="text-gray-500 ml-2">
+                                                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* 3D Model Images */}
+                                {formData.model3dImages && formData.model3dImages.length > 0 && (
+                                    <div className="bg-gray-50 rounded-lg p-4">
+                                        <h4 className="text-sm font-medium text-gray-900 mb-2">
+                                            3D Models & Renderings ({formData.model3dImages.length})
+                                        </h4>
+                                        <div className="space-y-1">
+                                            {formData.model3dImages.map((file, index) => (
+                                                <div key={index} className="flex items-center justify-between text-sm">
+                                                    <span className="truncate">{file.name}</span>
+                                                    <span className="text-gray-500 ml-2">
+                                                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Aerial Images */}
+                                {formData.aerialImages && formData.aerialImages.length > 0 && (
+                                    <div className="bg-gray-50 rounded-lg p-4">
+                                        <h4 className="text-sm font-medium text-gray-900 mb-2">
+                                            Aerial & Exterior Views ({formData.aerialImages.length})
+                                        </h4>
+                                        <div className="space-y-1">
+                                            {formData.aerialImages.map((file, index) => (
+                                                <div key={index} className="flex items-center justify-between text-sm">
+                                                    <span className="truncate">{file.name}</span>
+                                                    <span className="text-gray-500 ml-2">
+                                                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* No Images Message */}
+                                {!formData.displayImage &&
+                                    (!formData.floorPlanImages || formData.floorPlanImages.length === 0) &&
+                                    (!formData.model3dImages || formData.model3dImages.length === 0) &&
+                                    (!formData.aerialImages || formData.aerialImages.length === 0) && (
+                                        <div className="bg-gray-50 rounded-lg p-4">
+                                            <p className="text-sm text-gray-600">No images uploaded</p>
+                                        </div>
+                                    )}
                             </div>
-                        )}
+                        </div>
 
                         {/* Amenities */}
                         {formData.amenities && formData.amenities.length > 0 && (

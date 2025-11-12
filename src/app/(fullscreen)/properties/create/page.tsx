@@ -103,7 +103,10 @@ export default function CreatePropertyPage() {
         // Combine all form data
         const completeData: CompletePropertyFormData = {
             ...propertyDetails,
-            images: galleryData?.images || [],
+            displayImage: galleryData?.displayImage,
+            model3dImages: galleryData?.model3dImages || [],
+            floorPlanImages: galleryData?.floorPlanImages || [],
+            aerialImages: galleryData?.aerialImages || [],
             amenities: amenitiesData?.amenities || [],
         }
 
@@ -150,7 +153,10 @@ export default function CreatePropertyPage() {
 
         return {
             ...propertyDetails,
-            images: galleryData?.images || [],
+            displayImage: galleryData?.displayImage,
+            model3dImages: galleryData?.model3dImages || [],
+            floorPlanImages: galleryData?.floorPlanImages || [],
+            aerialImages: galleryData?.aerialImages || [],
             amenities: amenitiesData?.amenities || [],
         }
     }

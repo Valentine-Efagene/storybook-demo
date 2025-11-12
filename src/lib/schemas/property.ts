@@ -31,7 +31,10 @@ export const propertyDetailsSchema = z.object({
 })
 
 export const gallerySchema = z.object({
-    images: z.array(z.instanceof(File)).optional(),
+    displayImage: z.instanceof(File).optional(),
+    model3dImages: z.array(z.instanceof(File)).optional(),
+    floorPlanImages: z.array(z.instanceof(File)).optional(),
+    aerialImages: z.array(z.instanceof(File)).optional(),
 })
 
 export const amenitiesSchema = z.object({

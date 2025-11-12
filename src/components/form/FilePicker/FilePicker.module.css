@@ -2,7 +2,7 @@
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  border: 1px solid var(--green-100);
+  border: 1px solid var(--primary-text);
   transition: 300ms;
   background-color: #fff;
 }
@@ -11,7 +11,7 @@
  Pair with filepond--drop-label in index.css
 */
 .container:hover {
-  border: 1px solid var(--outline-color-lighter);
+  border: 1px solid var(--primary-text);
 }
 
 .container * {
@@ -34,7 +34,7 @@
 }
 
 :global(.filepond--drop-label:hover) {
-  background-color: var(--blue-100);
+  background-color: var(--tertiary-bg);
 }
 
 :global(.filepond--drop-label label) {
