@@ -6,10 +6,10 @@ export interface PropertyQueryParams extends QueryParams {
     status?: PropertyStatus | null
 }
 
-export type IPropertyType = "condominium" | "fully_detached_duplex" | "semi_detached_duplex" | "detached_bungalows" | "apartments" | "flats" | "terraces" | "maisonette" | "penthouse" | "terrace_bungalows"
+export type PropertyType = "condominium" | "fully_detached_duplex" | "semi_detached_duplex" | "detached_bungalows" | "apartments" | "flats" | "terraces" | "maisonette" | "penthouse" | "terrace_bungalows"
     | "semi_detached_bungalow" | "terrace_duplex" | "fully_detached_duplex"
 
-export type IPropertyFinishStatus = 'finished' | 'semi_finished'
+export type PropertyFinishStatus = 'finished' | 'semi_finished'
 
 export interface Apartment {
     id: number
@@ -49,6 +49,30 @@ export interface Building {
     total_available?: number | null,
 }
 
+export interface PropertyUpdateDto {
+    property_id: number,
+    title: string
+    ready_for_purchase: boolean
+    address: string | undefined
+    state: string | undefined
+    city: string | undefined
+    property_type: PropertyType | undefined
+    finished_status: PropertyFinishStatus,
+    model_3d_image: string[] | null,
+    floor_plan_image: string[] | null,
+    aerial_image: string[] | null,
+    display_image: string[] | null,
+    youtube_url: string | undefined,
+    administrative_fee: number
+
+    // Needed
+    // status: string | undefined
+    units: number | null
+    price?: number,
+    finished_price?: number,
+    about?: string
+}
+
 export interface PropertyDocument {
     name?: string,
     file?: string,
@@ -76,7 +100,7 @@ export interface Property {
     amenities: string | null,
     project_id: number
     project_property_id: number | null
-    type: IPropertyType
+    type: PropertyType
     units: number | null
     ready_for_purchase: boolean,
     multiple_buildings: boolean
@@ -85,7 +109,7 @@ export interface Property {
     is_vacant: boolean
     time_to_be_vacant: string | null
     approval_number: string | null
-    finished_status: IPropertyFinishStatus
+    finished_status: PropertyFinishStatus
     youtube_url: string | null
     display_image: string | null
     model_3d_image: string | null

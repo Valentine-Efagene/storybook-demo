@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { useForm, Controller } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, ArrowRight, Save, X, Check } from "lucide-react"
 import Link from "next/link"
@@ -10,155 +12,107 @@ import { PropertyDetailsStep } from "@/components/property-creation/PropertyDeta
 import { GalleryStep } from "@/components/property-creation/GalleryStep"
 import { AmenitiesStep } from "@/components/property-creation/AmenitiesStep"
 import { ReviewStep } from "@/components/property-creation/ReviewStep"
-import type {
-    PropertyDetailsFormData,
-    GalleryFormData,
-    AmenitiesFormData,
-    CompletePropertyFormData
-} from "@/lib/schemas/property"
+import { completePropertySchema, type CompletePropertyFormData } from "@/lib/schemas/property"
 
 const STEPS = [
-    { id: 1, name: 'Property Details', description: 'Basic information and location' },
-    { id: 2, name: 'Gallery', description: 'Upload property images' },
-    { id: 3, name: 'Amenities', description: 'Features and facilities' },
-    { id: 4, name: 'Review', description: 'Review and submit' }
+    { id: 1, name: 'Property Details', description: 'Basic information and location', fields: ['title', 'type', 'description', 'bedrooms', 'bathrooms', 'squareFeet', 'address', 'city', 'state', 'price', 'priceType', 'status'] },
+    { id: 2, name: 'Gallery', description: 'Upload property images', fields: ['displayImage', 'model3dImages', 'floorPlanImages', 'aerialImages'] },
+    { id: 3, name: 'Amenities', description: 'Features and facilities', fields: ['amenities'] },
+    { id: 4, name: 'Review', description: 'Review and submit', fields: [] }
 ]
 
 export default function CreatePropertyPage() {
-    const router = useRouter()
     const [currentStep, setCurrentStep] = useState(1)
-    const [isSubmitting, setIsSubmitting] = useState(false)
+    const router = useRouter()
 
-    // Form data for each step
-    const [propertyDetails, setPropertyDetails] = useState<PropertyDetailsFormData | null>(null)
-    const [galleryData, setGalleryData] = useState<GalleryFormData | null>(null)
-    const [amenitiesData, setAmenitiesData] = useState<AmenitiesFormData | null>(null)
-
-    // Track validation status for current step
-    const [isCurrentStepValid, setIsCurrentStepValid] = useState(false)
-
-    const handleNext = () => {
-        // For Property Details step, trigger form validation
-        if (currentStep === 1) {
-            const form = document.getElementById('property-details-form') as HTMLFormElement
-            if (form) {
-                form.requestSubmit()
-            }
+    const form = useForm<CompletePropertyFormData>({
+        resolver: zodResolver(completePropertySchema),
+        mode: "onChange",
+        defaultValues: {
+            title: "",
+            type: "house",
+            description: "",
+            bedrooms: 1,
+            bathrooms: 1,
+            squareFeet: 1,
+            address: "",
+            city: "",
+            state: "",
+            price: 1,
+            priceType: "sale",
+            status: "available",
+            displayImage: undefined,
+            model3dImages: [],
+            floorPlanImages: [],
+            aerialImages: [],
+            amenities: [],
         }
-        // For Gallery step, trigger form validation  
-        else if (currentStep === 2) {
-            const form = document.getElementById('gallery-form') as HTMLFormElement
-            if (form) {
-                form.requestSubmit()
-            }
+    })
+
+    const { control, trigger, formState: { errors }, watch, handleSubmit } = form
+
+    // Validation state for each step
+    const [stepValidation, setStepValidation] = useState({
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+    })
+
+    const canNavigateToStep = (step: number) => {
+        if (step === 1) return true
+        if (step === 2) return stepValidation[1]
+        if (step === 3) return stepValidation[1] && stepValidation[2]
+        if (step === 4) return stepValidation[1] && stepValidation[2] && stepValidation[3]
+        return false
+    }
+
+    const getStepStatus = (step: number) => {
+        if (currentStep === step) return 'current'
+        if (stepValidation[step as keyof typeof stepValidation]) return 'completed'
+        if (canNavigateToStep(step)) return 'accessible'
+        return 'disabled'
+    }
+
+    const validateCurrentStep = async () => {
+        const currentStepData = STEPS.find(step => step.id === currentStep)
+        if (!currentStepData) return false
+
+        const fieldsToValidate = currentStepData.fields
+        if (fieldsToValidate.length === 0) return true
+
+        const isValid = await trigger(fieldsToValidate as any)
+        if (isValid) {
+            setStepValidation(prev => ({ ...prev, [currentStep]: true }))
         }
-        // For Amenities step, trigger form validation
-        else if (currentStep === 3) {
-            const form = document.getElementById('amenities-form') as HTMLFormElement
-            if (form) {
-                form.requestSubmit()
+        return isValid
+    }
+
+    const nextStep = async () => {
+        const isValid = await validateCurrentStep()
+        if (isValid) {
+            const nextStepNumber = currentStep + 1
+            if (nextStepNumber <= STEPS.length) {
+                setCurrentStep(nextStepNumber)
             }
         }
     }
 
-    const handlePrevious = () => {
+    const prevStep = () => {
         if (currentStep > 1) {
             setCurrentStep(currentStep - 1)
         }
     }
 
-    const handleStepClick = (stepId: number) => {
-        // Only allow navigation to completed steps or the next step
-        if (stepId <= currentStep || isStepComplete(stepId - 1)) {
-            setCurrentStep(stepId)
+    const goToStep = (step: number) => {
+        if (canNavigateToStep(step)) {
+            setCurrentStep(step)
         }
     }
 
-    const handlePropertyDetailsSubmit = (data: PropertyDetailsFormData) => {
-        setPropertyDetails(data)
-        handleStepNext()
-    }
-
-    const handleGallerySubmit = (data: GalleryFormData) => {
-        setGalleryData(data)
-        handleStepNext()
-    }
-
-    const handleAmenitiesSubmit = (data: AmenitiesFormData) => {
-        setAmenitiesData(data)
-        handleStepNext()
-    }
-
-    const handleStepNext = () => {
-        if (currentStep < STEPS.length) {
-            setCurrentStep(currentStep + 1)
-        }
-    }
-
-    const handleFinalSubmit = async () => {
-        if (!propertyDetails) return
-
-        setIsSubmitting(true)
-
-        // Combine all form data
-        const completeData: CompletePropertyFormData = {
-            ...propertyDetails,
-            displayImage: galleryData?.displayImage,
-            model3dImages: galleryData?.model3dImages || [],
-            floorPlanImages: galleryData?.floorPlanImages || [],
-            aerialImages: galleryData?.aerialImages || [],
-            amenities: amenitiesData?.amenities || [],
-        }
-
-        // TODO: Implement property creation logic
-        console.log("Creating property...", completeData)
-
-        // Simulate API call
-        setTimeout(() => {
-            setIsSubmitting(false)
-            router.push('/properties')
-        }, 2000)
-    }
-
-    const handleCancel = () => {
+    const handleFinalSubmit = async (data: CompletePropertyFormData) => {
+        console.log('Complete form data:', data)
         router.push('/properties')
-    }
-
-    const isStepComplete = (stepId: number) => {
-        if (stepId === 1) {
-            return propertyDetails !== null
-        }
-        if (stepId === 2) {
-            return galleryData !== null
-        }
-        if (stepId === 3) {
-            return amenitiesData !== null
-        }
-        return false
-    }
-
-    const canProceed = () => {
-        if (currentStep === 4) {
-            return propertyDetails !== null
-        }
-        if (currentStep === 1) {
-            return isCurrentStepValid
-        }
-        return true // Other steps are optional
-    }
-
-    // Get complete form data for review step
-    const getCompleteFormData = (): CompletePropertyFormData | null => {
-        if (!propertyDetails) return null
-
-        return {
-            ...propertyDetails,
-            displayImage: galleryData?.displayImage,
-            model3dImages: galleryData?.model3dImages || [],
-            floorPlanImages: galleryData?.floorPlanImages || [],
-            aerialImages: galleryData?.aerialImages || [],
-            amenities: amenitiesData?.amenities || [],
-        }
     }
 
     return (
@@ -185,49 +139,65 @@ export default function CreatePropertyPage() {
                 {/* Steps Navigation */}
                 <div className="flex-1 p-6">
                     <nav className="space-y-2">
-                        {STEPS.map((step) => (
-                            <div
-                                key={step.id}
-                                className={cn(
-                                    "flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-colors",
-                                    currentStep === step.id
-                                        ? "bg-blue-50 border border-blue-200"
-                                        : "hover:bg-gray-50",
-                                    step.id < currentStep && "bg-green-50 border border-green-200"
-                                )}
-                                onClick={() => handleStepClick(step.id)}
-                            >
-                                <div className={cn(
-                                    "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium",
-                                    currentStep === step.id
-                                        ? "bg-blue-600 text-white"
-                                        : step.id < currentStep
-                                            ? "bg-green-600 text-white"
-                                            : "bg-gray-300 text-gray-600"
-                                )}>
-                                    {step.id < currentStep ? (
-                                        <Check className="w-3 h-3" />
-                                    ) : (
-                                        step.id
+                        {STEPS.map((step) => {
+                            const status = getStepStatus(step.id)
+                            const isClickable = canNavigateToStep(step.id)
+
+                            return (
+                                <div
+                                    key={step.id}
+                                    className={cn(
+                                        "flex items-start gap-3 p-3 rounded-lg transition-colors",
+                                        isClickable ? "cursor-pointer" : "cursor-not-allowed",
+                                        status === 'current'
+                                            ? "bg-blue-50 border border-blue-200"
+                                            : status === 'completed'
+                                                ? "bg-green-50 border border-green-200 hover:bg-green-100"
+                                                : status === 'accessible'
+                                                    ? "hover:bg-gray-50"
+                                                    : "opacity-50"
                                     )}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className={cn(
-                                        "text-sm font-medium",
-                                        currentStep === step.id
-                                            ? "text-blue-900"
-                                            : step.id < currentStep
-                                                ? "text-green-900"
-                                                : "text-gray-900"
+                                    onClick={() => isClickable && goToStep(step.id)}
+                                >
+                                    <div className={cn(
+                                        "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium",
+                                        status === 'current'
+                                            ? "bg-blue-600 text-white"
+                                            : status === 'completed'
+                                                ? "bg-green-600 text-white"
+                                                : status === 'accessible'
+                                                    ? "bg-gray-300 text-gray-600"
+                                                    : "bg-gray-200 text-gray-400"
                                     )}>
-                                        {step.name}
-                                    </p>
-                                    <p className="text-xs text-gray-600">
-                                        {step.description}
-                                    </p>
+                                        {status === 'completed' ? (
+                                            <Check className="w-3 h-3" />
+                                        ) : (
+                                            step.id
+                                        )}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className={cn(
+                                            "text-sm font-medium",
+                                            status === 'current'
+                                                ? "text-blue-900"
+                                                : status === 'completed'
+                                                    ? "text-green-900"
+                                                    : status === 'accessible'
+                                                        ? "text-gray-900"
+                                                        : "text-gray-400"
+                                        )}>
+                                            {step.name}
+                                        </p>
+                                        <p className={cn(
+                                            "text-xs",
+                                            status === 'disabled' ? "text-gray-400" : "text-gray-600"
+                                        )}>
+                                            {step.description}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            )
+                        })}
                     </nav>
                 </div>
 
@@ -236,7 +206,7 @@ export default function CreatePropertyPage() {
                     <div className="flex gap-2">
                         <Button
                             variant="outline"
-                            onClick={handlePrevious}
+                            onClick={prevStep}
                             disabled={currentStep === 1}
                             className="flex-1"
                         >
@@ -244,17 +214,16 @@ export default function CreatePropertyPage() {
                         </Button>
                         {currentStep === STEPS.length ? (
                             <Button
-                                onClick={handleFinalSubmit}
-                                disabled={isSubmitting || !canProceed()}
+                                onClick={handleSubmit(handleFinalSubmit)}
+                                disabled={!stepValidation[3]}
                                 className="flex-1"
                             >
                                 <Save className="h-4 w-4 mr-2" />
-                                {isSubmitting ? 'Creating...' : 'Create Property'}
+                                Create Property
                             </Button>
                         ) : (
                             <Button
-                                onClick={handleNext}
-                                disabled={!canProceed()}
+                                onClick={nextStep}
                                 className="flex-1"
                             >
                                 Next
@@ -264,8 +233,7 @@ export default function CreatePropertyPage() {
                     </div>
                     <Button
                         variant="ghost"
-                        onClick={handleCancel}
-                        disabled={isSubmitting}
+                        onClick={() => router.push('/properties')}
                         className="w-full"
                     >
                         <X className="h-4 w-4 mr-2" />
@@ -290,28 +258,27 @@ export default function CreatePropertyPage() {
                 <div className="flex-1 overflow-y-auto p-8">
                     {currentStep === 1 && (
                         <PropertyDetailsStep
-                            defaultValues={propertyDetails || undefined}
-                            onSubmit={handlePropertyDetailsSubmit}
-                            onNext={handleStepNext}
-                            onValidationChange={setIsCurrentStepValid}
+                            control={control}
+                            errors={errors}
+                            watch={watch}
                         />
                     )}
                     {currentStep === 2 && (
                         <GalleryStep
-                            defaultValues={galleryData || undefined}
-                            onSubmit={handleGallerySubmit}
-                            onNext={handleStepNext}
+                            control={control}
+                            errors={errors}
+                            watch={watch}
                         />
                     )}
                     {currentStep === 3 && (
                         <AmenitiesStep
-                            defaultValues={amenitiesData || undefined}
-                            onSubmit={handleAmenitiesSubmit}
-                            onNext={handleStepNext}
+                            control={control}
+                            errors={errors}
+                            watch={watch}
                         />
                     )}
-                    {currentStep === 4 && getCompleteFormData() && (
-                        <ReviewStep formData={getCompleteFormData()!} />
+                    {currentStep === 4 && (
+                        <ReviewStep formData={watch()} />
                     )}
                 </div>
             </div>

@@ -37,7 +37,7 @@ const items = [
             },
             {
                 title: "Saved",
-                url: "#",
+                url: "/",
                 icon: Heart,
             },
         ]

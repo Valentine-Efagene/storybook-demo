@@ -1,11 +1,9 @@
-"use client"
-
-import { useForm, Controller } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@/components/ui/button"
+import React from "react"
+import { Control, FieldErrors, UseFormWatch, Controller } from "react-hook-form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
-import { amenitiesSchema, type AmenitiesFormData } from "@/lib/schemas/property"
+import { Label } from "@/components/ui/label"
+import { CompletePropertyFormData } from "@/lib/schemas/property"
 
 const amenitiesList = [
     'Parking', 'Pool', 'Gym', 'Balcony', 'Garden', 'Air Conditioning',
@@ -13,117 +11,62 @@ const amenitiesList = [
 ]
 
 interface AmenitiesStepProps {
-    defaultValues?: Partial<AmenitiesFormData>
-    onSubmit: (data: AmenitiesFormData) => void
-    onNext: () => void
+    control: Control<CompletePropertyFormData>
+    errors: FieldErrors<CompletePropertyFormData>
+    watch: UseFormWatch<CompletePropertyFormData>
 }
 
 export function AmenitiesStep({
-    defaultValues,
-    onSubmit,
-    onNext
+    control,
+    errors,
+    watch
 }: AmenitiesStepProps) {
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<AmenitiesFormData>({
-        resolver: zodResolver(amenitiesSchema),
-        defaultValues: {
-            amenities: [],
-            ...defaultValues,
-        },
-    })
-
-    const handleFormSubmit = (data: AmenitiesFormData) => {
-        onSubmit(data)
-        onNext()
-    }
-
     return (
-        <div className="max-w-4xl space-y-8">
-            <form id="amenities-form" onSubmit={handleSubmit(handleFormSubmit)} className="space-y-8">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Property Features & Amenities</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-4">
-                            <p className="text-sm text-gray-600">
-                                Select all amenities and features available at this property.
-                            </p>
-
-                            <Controller
-                                name="amenities"
-                                control={control}
-                                render={({ field }) => (
-                                    <div className="space-y-4">
-                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                            {amenitiesList.map((amenity) => {
-                                                const isSelected = field.value?.includes(amenity) || false
-                                                const toggleAmenity = () => {
-                                                    const currentAmenities = field.value || []
-                                                    const newAmenities = isSelected
-                                                        ? currentAmenities.filter((a) => a !== amenity)
-                                                        : [...currentAmenities, amenity]
-                                                    field.onChange(newAmenities)
-                                                }
-
-                                                return (
-                                                    <div
-                                                        key={amenity}
-                                                        className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
-                                                        onClick={toggleAmenity}
-                                                    >
-                                                        <Checkbox
-                                                            id={`amenity-${amenity}`}
-                                                            checked={isSelected}
-                                                            onCheckedChange={toggleAmenity}
-                                                        />
-                                                        <label
-                                                            htmlFor={`amenity-${amenity}`}
-                                                            className="text-sm font-medium cursor-pointer"
-                                                        >
-                                                            {amenity}
-                                                        </label>
-                                                    </div>
-                                                )
-                                            })}
+        <div className="space-y-8 max-w-4xl mx-auto">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Property Amenities</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <Controller
+                        name="amenities"
+                        control={control}
+                        render={({ field }) => (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {amenitiesList.map((amenity) => {
+                                    const isChecked = field.value?.includes(amenity) || false
+                                    
+                                    return (
+                                        <div key={amenity} className="flex items-center space-x-2">
+                                            <Checkbox
+                                                id={amenity}
+                                                checked={isChecked}
+                                                onCheckedChange={(checked) => {
+                                                    const currentValue = field.value || []
+                                                    if (checked) {
+                                                        field.onChange([...currentValue, amenity])
+                                                    } else {
+                                                        field.onChange(currentValue.filter(item => item !== amenity))
+                                                    }
+                                                }}
+                                            />
+                                            <Label
+                                                htmlFor={amenity}
+                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                            >
+                                                {amenity}
+                                            </Label>
                                         </div>
-
-                                        {field.value && field.value.length > 0 && (
-                                            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                                                <h4 className="text-sm font-medium text-blue-900 mb-2">
-                                                    Selected Amenities ({field.value.length})
-                                                </h4>
-                                                <div className="flex flex-wrap gap-2">
-                                                    {field.value.map((amenity: string) => (
-                                                        <span
-                                                            key={amenity}
-                                                            className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-xs"
-                                                        >
-                                                            {amenity}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                            />
-
-                            {errors.amenities && (
-                                <p className="text-sm text-destructive">{errors.amenities.message}</p>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Hidden submit button - form submission is handled by parent */}
-                <Button type="submit" className="hidden">
-                    Submit
-                </Button>
-            </form>
+                                    )
+                                })}
+                            </div>
+                        )}
+                    />
+                    {errors.amenities && (
+                        <p className="text-sm text-red-600">{errors.amenities.message}</p>
+                    )}
+                </CardContent>
+            </Card>
         </div>
     )
 }
