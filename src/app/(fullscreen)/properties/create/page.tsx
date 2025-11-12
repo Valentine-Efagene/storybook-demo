@@ -127,59 +127,29 @@ export default function CreatePropertyPage() {
         router.push('/properties')
     }
 
-    {/* Actions */ }
-    const actions = <div className="p-6 border-t border-gray-200 space-y-3">
-        <div className="flex gap-2">
-            <Button
-                variant="outline"
-                onClick={prevStep}
-                disabled={currentStep === 1}
-                className="flex-1"
-            >
-                Previous
-            </Button>
-            {currentStep === STEPS.length ? (
-                <Button
-                    onClick={handleSubmit(handleFinalSubmit)}
-                    disabled={!stepValidation[3]}
-                    className="flex-1"
-                >
-                    <Save className="h-4 w-4 mr-2" />
-                    Create Property
-                </Button>
-            ) : (
-                <Button
-                    onClick={nextStep}
-                    className="flex-1"
-                >
-                    Next
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-            )}
-        </div>
-        <Button
-            variant="ghost"
-            onClick={() => router.push('/properties')}
-            className="w-full"
-        >
-            <X className="h-4 w-4 mr-2" />
-            Cancel
-        </Button>
-    </div>
-
     return (
         <div className="min-h-screen flex flex-col">
             {/* Header */}
-            <div className="p-6 border-b flex items-center gap-4">
-                <Link
-                    href="/properties"
-                    className="flex items-center gap-2 text-primary-text hover:text-gray-900 rounded-full bg-tertiary-bg p-3"
+            <div className="p-6 border-b flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                    <Link
+                        href="/properties"
+                        className="flex items-center gap-2 text-primary-text hover:text-gray-900 rounded-full bg-tertiary-bg p-3"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                    </Link>
+                    <p className="text-sm text-primary-text">
+                        Add Property
+                    </p>
+                </div>
+                <Button
+                    variant="subtle"
+                    size="sm"
+                    onClick={() => router.push('/properties')}
+                    className="ml-auto"
                 >
-                    <ArrowLeft className="h-4 w-4" />
-                </Link>
-                <p className="text-sm text-primary-text">
-                    Add Property
-                </p>
+                    Cancel
+                </Button>
             </div>
             <div className="flex flex-row flex-1">
                 {/* Left Sidebar Navigation */}
@@ -255,12 +225,10 @@ export default function CreatePropertyPage() {
                             })}
                         </nav>
                     </div>
-
-                    {actions}
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 flex flex-col">
+                <div className="flex-1 flex flex-col sm:mt-8">
                     {/* Step Header */}
                     <div className="bg-white px-8 py-6">
                         <div className="max-w-4xl mx-auto">
@@ -300,8 +268,36 @@ export default function CreatePropertyPage() {
                             <ReviewStep formData={watch()} />
                         )}
                     </div>
-                    <div className="flex flex-col sm:hidden">
-                        {actions}
+                    {/* Actions */}
+                    <div className="p-6 max-w-4xl mx-auto border-gray-200 space-y-3">
+                        <div className="flex gap-2">
+                            <Button
+                                variant="outline"
+                                onClick={prevStep}
+                                disabled={currentStep === 1}
+                                className="flex-1"
+                            >
+                                Previous
+                            </Button>
+                            {currentStep === STEPS.length ? (
+                                <Button
+                                    onClick={handleSubmit(handleFinalSubmit)}
+                                    disabled={!stepValidation[3]}
+                                    className="flex-1"
+                                >
+                                    <Save className="h-4 w-4 mr-2" />
+                                    Create Property
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={nextStep}
+                                    className="flex-1"
+                                >
+                                    Next
+                                    <ArrowRight className="h-4 w-4 ml-2" />
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
