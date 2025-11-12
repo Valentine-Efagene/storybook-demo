@@ -127,6 +127,46 @@ export default function CreatePropertyPage() {
         router.push('/properties')
     }
 
+    {/* Actions */ }
+    const actions = <div className="p-6 border-t border-gray-200 space-y-3">
+        <div className="flex gap-2">
+            <Button
+                variant="outline"
+                onClick={prevStep}
+                disabled={currentStep === 1}
+                className="flex-1"
+            >
+                Previous
+            </Button>
+            {currentStep === STEPS.length ? (
+                <Button
+                    onClick={handleSubmit(handleFinalSubmit)}
+                    disabled={!stepValidation[3]}
+                    className="flex-1"
+                >
+                    <Save className="h-4 w-4 mr-2" />
+                    Create Property
+                </Button>
+            ) : (
+                <Button
+                    onClick={nextStep}
+                    className="flex-1"
+                >
+                    Next
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+            )}
+        </div>
+        <Button
+            variant="ghost"
+            onClick={() => router.push('/properties')}
+            className="w-full"
+        >
+            <X className="h-4 w-4 mr-2" />
+            Cancel
+        </Button>
+    </div>
+
     return (
         <div className="min-h-screen flex flex-col">
             {/* Header */}
@@ -143,8 +183,7 @@ export default function CreatePropertyPage() {
             </div>
             <div className="flex flex-row flex-1">
                 {/* Left Sidebar Navigation */}
-                <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
-
+                <div className="hidden sm:flex w-80 bg-white border-r border-gray-200 flex-col">
                     {/* Steps Navigation */}
                     <div className="flex-1 p-6">
                         <nav className="space-y-2">
@@ -217,45 +256,7 @@ export default function CreatePropertyPage() {
                         </nav>
                     </div>
 
-                    {/* Actions */}
-                    <div className="p-6 border-t border-gray-200 space-y-3">
-                        <div className="flex gap-2">
-                            <Button
-                                variant="outline"
-                                onClick={prevStep}
-                                disabled={currentStep === 1}
-                                className="flex-1"
-                            >
-                                Previous
-                            </Button>
-                            {currentStep === STEPS.length ? (
-                                <Button
-                                    onClick={handleSubmit(handleFinalSubmit)}
-                                    disabled={!stepValidation[3]}
-                                    className="flex-1"
-                                >
-                                    <Save className="h-4 w-4 mr-2" />
-                                    Create Property
-                                </Button>
-                            ) : (
-                                <Button
-                                    onClick={nextStep}
-                                    className="flex-1"
-                                >
-                                    Next
-                                    <ArrowRight className="h-4 w-4 ml-2" />
-                                </Button>
-                            )}
-                        </div>
-                        <Button
-                            variant="ghost"
-                            onClick={() => router.push('/properties')}
-                            className="w-full"
-                        >
-                            <X className="h-4 w-4 mr-2" />
-                            Cancel
-                        </Button>
-                    </div>
+                    {actions}
                 </div>
 
                 {/* Main Content */}
@@ -296,6 +297,9 @@ export default function CreatePropertyPage() {
                         {currentStep === 4 && (
                             <ReviewStep formData={watch()} />
                         )}
+                    </div>
+                    <div className="flex flex-col sm:hidden">
+                        {actions}
                     </div>
                 </div>
             </div>
