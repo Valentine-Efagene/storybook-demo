@@ -13,7 +13,7 @@ This section contains all the components used in the property creation flow. Eac
 ## Components Overview
 
 - **PropertyDetailsStep**: Collects basic property information including title, type, description, location, and pricing
-- **GalleryStep**: Handles image uploads with separate categories for display image, floor plans, 3D models, and aerial views (Storybook version available separately due to FilePond dependencies)
+- **GalleryStep**: Handles image uploads with separate categories for display image, floor plans, 3D models, and aerial views with our custom file picker
 - **AmenitiesStep**: Manages selection of property amenities and features
 - **ReviewStep**: Displays a comprehensive summary of all entered data before submission
 - **Complete Flow**: Shows how PropertyDetailsStep, AmenitiesStep, and ReviewStep work together (simplified for Storybook)
@@ -23,7 +23,7 @@ This section contains all the components used in the property creation flow. Eac
 - ✅ **Consistent State Management**: All components use React Hook Form exclusively, no additional React state
 - ✅ **Controller Pattern**: All form fields use the Controller component for better flexibility
 - ✅ **Real-time Validation**: Zod schemas provide instant feedback and type safety
-- ✅ **File Upload Integration**: FilePicker components with drag & drop, image preview, and auto-optimization
+- ✅ **File Upload Integration**: Custom file picker components with drag & drop, image preview, and validation
 - ✅ **Responsive Design**: All components work seamlessly across different screen sizes
 - ✅ **TypeScript Support**: Full type safety with proper TypeScript interfaces
 

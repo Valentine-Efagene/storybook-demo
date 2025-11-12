@@ -11,12 +11,14 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Banknote, Building2, CircleHelp, HandCoins, Heart, Home, Settings, User, Wallet } from "lucide-react"
+import { Banknote, Building2, CircleHelp, HandCoins, Heart, Home, LucideProps, Settings, User, Wallet } from "lucide-react"
 import Logo from "./icons/Logo"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import type { Route } from 'next'
+import { ForwardRefExoticComponent, RefAttributes } from "react"
 
-const items = [
+const items: { title: string; items: { title: string; url: Route; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }[] }[] = [
     {
         title: "Dashboard",
         items: [
@@ -47,12 +49,12 @@ const items = [
         items: [
             {
                 title: "Contribution",
-                url: "#",
+                url: "/",
                 icon: Banknote,
             },
             {
                 title: "Mortgage",
-                url: "#",
+                url: "/",
                 icon: HandCoins,
             },
         ]
@@ -62,12 +64,12 @@ const items = [
         items: [
             {
                 title: "Wallet",
-                url: "#",
+                url: "/",
                 icon: Wallet,
             },
             {
                 title: "Settings",
-                url: "#",
+                url: "/",
                 icon: Settings,
             },
         ]

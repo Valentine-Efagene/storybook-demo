@@ -6,11 +6,12 @@ import FormatHelper from "@/lib/helpers/FormatHelper";
 import { toast } from "sonner";
 import { Copy } from "lucide-react";
 import TextLimit from "../TextLimit";
+import type { Route } from "next";
 
 interface IProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   label: string | null;
-  value: string | undefined | null | number | boolean;
+  value: string | undefined | null | number | boolean | Route;
   indicatorColor?: string;
   showIndicator?: boolean;
   underlined?: boolean;
@@ -68,7 +69,7 @@ export default function DetailCard(props: IProps) {
         return <Link href={`mailto:${value}`}>{value}</Link>
 
       case 'url':
-        return <Link href={`${value}`}>{value}</Link>
+        return <Link href={value as Route} target="_blank" rel="noopener noreferrer">{value}</Link>
 
       case 'boolean':
         return value ? 'Yes' : 'No'
