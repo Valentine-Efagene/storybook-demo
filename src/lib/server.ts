@@ -190,7 +190,7 @@ export async function updateSession(req: NextRequest) {
 
 async function tokens(refreshToken: string) {
     try {
-        const apiUrl = `${process.env.API_BASE_URL}/auth/refresh`;
+        const apiUrl = `${process.env.API_BASE_URL}/onboarding/refresh`;
         const resp = await fetch(apiUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
