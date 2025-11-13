@@ -17,7 +17,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { ResponsiveDialog } from "./ResponsiveDialog"
 import { User, Settings, LogOut, Shield, CreditCard, ChevronDown } from "lucide-react"
 import { signOut } from "@/app/signin/actions"
 import { toast } from "sonner"

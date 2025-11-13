@@ -69,7 +69,7 @@ export default function DetailCard(props: IProps) {
         return <Link href={`mailto:${value}`}>{value}</Link>
 
       case 'url':
-        return <Link href={value as Route} target="_blank" rel="noopener noreferrer">{value}</Link>
+        return <Link href={value as any} target="_blank" rel="noopener noreferrer">{value}</Link>
 
       case 'boolean':
         return value ? 'Yes' : 'No'
