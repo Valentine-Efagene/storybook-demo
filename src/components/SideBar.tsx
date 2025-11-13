@@ -69,7 +69,7 @@ const items: { title: string; items: { title: string; url: Route; icon: ForwardR
             },
             {
                 title: "Settings",
-                url: "/",
+                url: "/settings",
                 icon: Settings,
             },
         ]

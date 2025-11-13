@@ -29,7 +29,7 @@ export default function UserRow({ user }: UserRowProps) {
                                 {UserHelper.getInitials(user)}
                             </AvatarFallback>
                         </Avatar>
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col">
                             <div className="text-sm font-normal text-[var(--primary-text)]">{UserHelper.getFullName(user) || "User"}</div>
                             <div className="text-sm font-normal text-[var(--secondary-text)]">{user.email}</div>
                         </div>

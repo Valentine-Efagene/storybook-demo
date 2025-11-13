@@ -4,6 +4,7 @@ import "./globals.css";
 import "yet-another-react-lightbox/styles.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { Toaster } from "sonner";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -38,6 +39,11 @@ export default function RootLayout({
                         {children}
                     </AuthProvider>
                 </QueryProvider>
+                <Toaster
+                    position="top-right"
+                    expand={true}
+                    richColors={true}
+                />
             </body>
         </html>
     );
