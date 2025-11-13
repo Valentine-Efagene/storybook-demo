@@ -25,9 +25,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // Handle route changes
         const publicRoutes = ['/signin', '/signup', '/forgot-password', '/reset-password']
         const isPublicRoute = publicRoutes.includes(pathname)
-        
+
         const tokenManager = getTokenManager()
-        
+
         if (isPublicRoute) {
             // Stop token management on public routes
             tokenManager.stopTokenManagement?.()

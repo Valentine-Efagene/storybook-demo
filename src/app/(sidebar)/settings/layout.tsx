@@ -8,9 +8,9 @@ const tabs: {
     name: string;
     href: Route;
 }[] = [
-        { name: "Profile", href: "/settings" },
-        { name: "Account", href: "/settings/plan-management" },
-        { name: "Notifications", href: "/settings/legal-documents" },
+        { name: "Currency Management", href: "/settings" },
+        { name: "Plan Management", href: "/settings/plan-management" },
+        { name: "Legal Documents", href: "/settings/legal-documents" },
     ]
 
 export default function SettingsLayout({
