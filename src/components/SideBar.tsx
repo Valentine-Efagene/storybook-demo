@@ -39,7 +39,7 @@ const items: { title: string; items: { title: string; url: Route; icon: ForwardR
             },
             {
                 title: "Saved",
-                url: "/",
+                url: "/saved",
                 icon: Heart,
             },
         ]
@@ -49,12 +49,12 @@ const items: { title: string; items: { title: string; url: Route; icon: ForwardR
         items: [
             {
                 title: "Contribution",
-                url: "/",
+                url: "/contribution",
                 icon: Banknote,
             },
             {
                 title: "Mortgage",
-                url: "/",
+                url: "/mortgage",
                 icon: HandCoins,
             },
         ]
@@ -64,7 +64,7 @@ const items: { title: string; items: { title: string; url: Route; icon: ForwardR
         items: [
             {
                 title: "Wallet",
-                url: "/",
+                url: "/wallet",
                 icon: Wallet,
             },
             {
