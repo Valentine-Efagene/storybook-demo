@@ -125,7 +125,7 @@ export function ReviewStep({ formData }: ReviewStepProps) {
     return (
         <div className="max-w-4xl mx-auto space-y-6 flex flex-col">
             {/* Header Section */}
-            <div className="text-center space-y-2 pb-6">
+            <div className="space-y-2 pb-6">
                 <h1 className="text-3xl font-bold text-gray-900">Review Your Property Listing</h1>
                 <p className="text-lg text-gray-600">
                     Please review all information below to ensure accuracy before submitting your property listing.
