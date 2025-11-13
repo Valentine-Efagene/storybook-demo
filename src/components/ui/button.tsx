@@ -65,7 +65,7 @@ export interface ButtonProps extends React.ComponentProps<"button">, VariantProp
 
 function Button({
   className,
-  variant,
+  variant = "default",
   size,
   asChild = false,
   loading = false,
@@ -105,7 +105,12 @@ function Button({
     if (loading) {
       return (
         <>
-          <Spinner />
+          <Spinner className={cn("", {
+            "text-white": variant === "default",
+            "text-destructive": variant === "destructive",
+            "text-[#026993]": variant === "outline",
+            "text-gray-700": variant === "subtle",
+          })} />
           {children && <span>Loading...</span>}
         </>
       )

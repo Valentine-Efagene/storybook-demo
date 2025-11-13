@@ -285,7 +285,7 @@ export const LoadingStates: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
       <Button loading>Loading</Button>
-      <Button loading>Loading Custom</Button>
+      <Button loading variant='subtle'>Loading</Button>
       <Button loading variant="outline">Loading Outline</Button>
     </div>
   ),
