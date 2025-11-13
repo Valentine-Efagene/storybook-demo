@@ -7,6 +7,8 @@ export interface ApiPaginationMeta {
     sortBy: string[][]
 }
 
+export interface SVGProps extends React.SVGAttributes<SVGElement> { }
+
 export interface ImagePlaceholder {
     src: string;
     blurDataURL: string;
