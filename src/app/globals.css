@@ -13,6 +13,7 @@
   --color-accent-red-light-bg: var(--accent-red-light-bg);
   --color-secondary-bg: var(--secondary-bg);
   --color-primary-border: var(--primary-border);
+  --color-brand-border: var(--brand-border);
 
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
@@ -67,6 +68,7 @@
   --accent-red-light-bg: #EDF3F3;
   --secondary-bg: #F8FAFA;
   --primary-border: #DAE6E7;
+  --brand-border: #026993;
 
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
