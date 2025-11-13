@@ -190,10 +190,32 @@ export async function updateSession(req: NextRequest) {
 
 async function tokens(refreshToken: string) {
     try {
-        const apiUrl = `${process.env.API_BASE_URL}/onboarding/refresh`;
+        // Get access token from cookies to include as Bearer token
+        const cookieStore = await cookies()
+        const accessToken = cookieStore.get('accessToken')?.value
+
+        if (!accessToken) {
+            console.error("No access token available for refresh request");
+            return null;
+        }
+
+        // Decode the access token to extract user ID
+        const decoded = jose.decodeJwt(accessToken);
+        const userId = decoded.sub || decoded.user_id || decoded.id;
+
+        if (!userId) {
+            console.error("No user ID found in access token");
+            return null;
+        }
+
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/onboarding/refresh`;
         const resp = await fetch(apiUrl, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`,
+                "user_id": userId.toString()
+            },
             body: JSON.stringify({ refreshToken }),
         });
 
@@ -201,8 +223,8 @@ async function tokens(refreshToken: string) {
 
         const data: ApiResponse<IAuthData> = await resp.json();
         return {
-            accessToken: data.payload.token.authToken,
-            refreshToken: data.payload.token.authToken,
+            accessToken: data.body.token.authToken,
+            refreshToken: data.body.token.authToken,
         };
     } catch (err) {
         console.error("Error refreshing tokens:", err);
@@ -242,7 +264,7 @@ export async function clearSession(req: NextRequest, reason?: string) {
 
 async function invalidateRefreshToken(refreshToken: string) {
     try {
-        const apiUrl = `${process.env.API_BASE_URL}/auth/invalidate`;
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/invalidate`;
         const resp = await fetch(apiUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },

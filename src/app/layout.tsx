@@ -3,6 +3,7 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "yet-another-react-lightbox/styles.css";
 import { QueryProvider } from "@/providers/query-provider";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -33,7 +34,9 @@ export default function RootLayout({
                 className={`${inter.variable} ${geistMono.variable} antialiased font-inter`}
             >
                 <QueryProvider>
-                    {children}
+                    <AuthProvider>
+                        {children}
+                    </AuthProvider>
                 </QueryProvider>
             </body>
         </html>
