@@ -58,7 +58,7 @@ export default function page() {
                 {currencies.map((currency) => (
                     <div
                         key={`${currency.from}-${currency.to}`}
-                        className="p-4 border border-gray-200 rounded-lg shadow-sm m-2"
+                        className="p-4 border border-primary-border rounded-lg m-2"
                     >
                         <div className="flex flex-row items-center justify-between gap-2 mb-4">
                             <div className="text-8xl rounded-full w-10 h-10 flex items-center justify-center overflow-hidden">
