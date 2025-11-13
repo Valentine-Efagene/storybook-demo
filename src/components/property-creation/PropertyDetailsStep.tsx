@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { CompletePropertyFormData } from "@/lib/schemas/property"
 import AmountInput from "../form/AmountInput"
+import NumberInput from "../form/NumberInput"
 
 interface PropertyDetailsStepProps {
     control: Control<CompletePropertyFormData>
@@ -20,6 +21,8 @@ export function PropertyDetailsStep({
     errors,
     watch
 }: PropertyDetailsStepProps) {
+    const currency = watch("currency");
+
     return (
         <form className="space-y-8 max-w-4xl mx-auto">
             <div className="max-w-4xl mx-auto">
@@ -249,9 +252,11 @@ export function PropertyDetailsStep({
                                 name="price"
                                 control={control}
                                 render={({ field }) => (
-                                    <AmountInput
+                                    <NumberInput
                                         id="price"
                                         min={0}
+                                        unitLeft={currency == "NGN" ? "₦" : currency == "USD" ? "$" : undefined}
+                                        unitRight={currency}
                                         placeholder="Enter price"
                                         {...field}
                                         onChange={(value) => field.onChange(Number(value))}
@@ -264,25 +269,24 @@ export function PropertyDetailsStep({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="priceType">Price Type</Label>
+                            <Label htmlFor="currency">Currency</Label>
                             <Controller
-                                name="priceType"
+                                name="currency"
                                 control={control}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select price type" />
+                                            <SelectValue placeholder="Select currency" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="sale">For Sale</SelectItem>
-                                            <SelectItem value="rent">For Rent</SelectItem>
-                                            <SelectItem value="lease">For Lease</SelectItem>
+                                            <SelectItem value="NGN">Nigerian Naira (₦)</SelectItem>
+                                            <SelectItem value="USD">US Dollar ($)</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 )}
                             />
-                            {errors.priceType && (
-                                <p className="text-sm text-red-600">{errors.priceType.message}</p>
+                            {errors.currency && (
+                                <p className="text-sm text-red-600">{errors.currency.message}</p>
                             )}
                         </div>
 

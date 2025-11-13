@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "yet-another-react-lightbox/styles.css";
 import { QueryProvider } from "@/providers/query-provider";
 
 const inter = Inter({

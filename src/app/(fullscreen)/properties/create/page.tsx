@@ -16,7 +16,7 @@ import { ReviewStep } from "@/components/property-creation/ReviewStep"
 import { completePropertySchema, type CompletePropertyFormData } from "@/lib/schemas/property"
 
 const STEPS = [
-    { id: 1, name: 'Property Details', description: 'Basic information and location', fields: ['title', 'type', 'description', 'bedrooms', 'bathrooms', 'squareFeet', 'address', 'city', 'state', 'price', 'priceType', 'status'] },
+    { id: 1, name: 'Property Details', description: 'Basic information and location', fields: ['title', 'type', 'description', 'bedrooms', 'bathrooms', 'squareFeet', 'address', 'city', 'state', 'price', 'currency', 'status'] },
     { id: 2, name: 'Gallery', description: 'Upload display image (required)', fields: ['displayImage', 'model3dImages', 'floorPlanImages', 'aerialImages'] },
     { id: 3, name: 'Amenities', description: 'Select at least one amenity', fields: ['amenities'] },
     { id: 4, name: 'Plans', description: 'Choose your listing plan', fields: ['plans'] },
@@ -41,7 +41,7 @@ export default function CreatePropertyPage() {
             city: "",
             state: "",
             price: 1,
-            priceType: "sale",
+            currency: "NGN",
             status: "available",
             // displayImage: undefined, // This is required now, will cause validation error until uploaded
             model3dImages: [],
