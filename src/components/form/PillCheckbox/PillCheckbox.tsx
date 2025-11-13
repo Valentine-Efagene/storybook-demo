@@ -1,8 +1,8 @@
 "use client"
 
 import React from 'react'
-import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Check } from 'lucide-react'
 
 interface PillCheckboxProps {
     id: string
@@ -47,7 +47,7 @@ export function PillCheckbox({
     const baseClasses = cn(
         "inline-flex items-center gap-2 rounded-full font-medium cursor-pointer",
         "transition-all duration-200 ease-in-out",
-        "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+        "focus:outline-none focus:ring-2 focus:ring-primary-border focus:ring-offset-2",
         "select-none border",
         sizeClasses[size],
         {
@@ -58,9 +58,9 @@ export function PillCheckbox({
                 variant === 'default' && !checked && !disabled,
 
             // Outline variant styles
-            'bg-blue-50 text-blue-700 border-blue-300 hover:bg-blue-100':
+            'text-primary-text border-primary-border hover:bg-tertiary-bg':
                 variant === 'outline' && checked && !disabled,
-            'bg-white text-gray-700 border-gray-300 hover:bg-gray-50':
+            'bg-white text-primary-text border-primary-text hover:bg-gray-50':
                 variant === 'outline' && !checked && !disabled,
 
             // Disabled styles
