@@ -147,14 +147,17 @@ export function PropertyDetailsStep({
                                 name="bedrooms"
                                 control={control}
                                 render={({ field }) => (
-                                    <Input
-                                        id="bedrooms"
-                                        type="number"
-                                        min="0"
-                                        placeholder="Number of bedrooms"
-                                        {...field}
-                                        onChange={(e) => field.onChange(Number(e.target.value))}
-                                    />
+                                    <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value?.toString()}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select bedrooms" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="1">1 Bedroom</SelectItem>
+                                            <SelectItem value="2">2 Bedrooms</SelectItem>
+                                            <SelectItem value="3">3 Bedrooms</SelectItem>
+                                            <SelectItem value="4">4 Bedrooms</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 )}
                             />
                             {errors.bedrooms && (
@@ -168,15 +171,17 @@ export function PropertyDetailsStep({
                                 name="bathrooms"
                                 control={control}
                                 render={({ field }) => (
-                                    <Input
-                                        id="bathrooms"
-                                        type="number"
-                                        min="0"
-                                        step="0.5"
-                                        placeholder="Number of bathrooms"
-                                        {...field}
-                                        onChange={(e) => field.onChange(Number(e.target.value))}
-                                    />
+                                    <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value?.toString()}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select bathrooms" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="1">1 Bathroom</SelectItem>
+                                            <SelectItem value="2">2 Bathrooms</SelectItem>
+                                            <SelectItem value="3">3 Bathrooms</SelectItem>
+                                            <SelectItem value="4">4 Bathrooms</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 )}
                             />
                             {errors.bathrooms && (
@@ -185,7 +190,7 @@ export function PropertyDetailsStep({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="squareFeet">Square Feet</Label>
+                            <Label htmlFor="squareFeet">Number of Units</Label>
                             <Controller
                                 name="squareFeet"
                                 control={control}
@@ -194,7 +199,7 @@ export function PropertyDetailsStep({
                                         id="squareFeet"
                                         type="number"
                                         min="0"
-                                        placeholder="Total square feet"
+                                        placeholder="Total number of units"
                                         {...field}
                                         onChange={(e) => field.onChange(Number(e.target.value))}
                                     />
