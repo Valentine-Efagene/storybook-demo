@@ -12,7 +12,7 @@ export default function ProtectedLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="flex-1 min-h-screen">
+      <main className="flex-1 min-h-screen w-full lg:max-w-[min(100vw,2400px)]">
         <Header />
         {children}
       </main>
