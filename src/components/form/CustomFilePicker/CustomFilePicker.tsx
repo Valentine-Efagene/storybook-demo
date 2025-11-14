@@ -27,67 +27,77 @@ export function CustomFilePicker({
     const [dragActive, setDragActive] = useState(false)
     const fileInputRef = useRef<HTMLInputElement>(null)
 
+    const getUpdatedItems = async (files: File[]): Promise<FileItem[]> => {
+        const newItems: FileItem[] = []
+        const existingItemsMap = new Map(
+            fileItems.map(item => [
+                `${item.file.name}-${item.file.size}-${item.file.lastModified}`,
+                item
+            ])
+        )
+
+        for (const file of files) {
+            const fileKey = `${file.name}-${file.size}-${file.lastModified}`
+            const existingItem = existingItemsMap.get(fileKey)
+
+            if (existingItem) {
+                // Keep existing item with its current state
+                newItems.push(existingItem)
+            } else {
+                // Create new item
+                const newItem: FileItem = {
+                    id: generateFileId(),
+                    file,
+                    loading: showPreview && file.type.startsWith('image/'),
+                    preview: undefined
+                }
+
+                newItems.push(newItem)
+            }
+        }
+
+        return newItems
+    }
+
+    const generatePreviewsForNewItems = useCallback(async (items: FileItem[]) => {
+        for (const item of items) {
+            // Only generate previews for new items that don't have one yet and are images
+            if (showPreview && item.file.type.startsWith('image/') && item.loading && !item.preview) {
+                try {
+                    const preview = await createFilePreview(item.file)
+                    setFileItems(currentItems =>
+                        currentItems.map(currentItem =>
+                            currentItem.id === item.id
+                                ? { ...currentItem, preview, loading: false }
+                                : currentItem
+                        )
+                    )
+                } catch (error) {
+                    setFileItems(currentItems =>
+                        currentItems.map(currentItem =>
+                            currentItem.id === item.id
+                                ? { ...currentItem, loading: false, error: 'Failed to load preview' }
+                                : currentItem
+                        )
+                    )
+                }
+            }
+        }
+    }, [showPreview])
+
     // Convert File[] to FileItem[] on mount and when files prop changes
     React.useEffect(() => {
         const convertFilesToItems = async () => {
-            // Create a map of existing items for quick lookup
-            const existingItemsMap = new Map(
-                fileItems.map(item => [
-                    `${item.file.name}-${item.file.size}-${item.file.lastModified}`,
-                    item
-                ])
-            )
-
-            const newItems: FileItem[] = []
-
-            for (const file of files) {
-                const fileKey = `${file.name}-${file.size}-${file.lastModified}`
-                const existingItem = existingItemsMap.get(fileKey)
-
-                if (existingItem) {
-                    // Keep existing item with its current state
-                    newItems.push(existingItem)
-                } else {
-                    // Create new item
-                    const newItem: FileItem = {
-                        id: generateFileId(),
-                        file,
-                        loading: showPreview && file.type.startsWith('image/'),
-                        preview: undefined
-                    }
-
-                    newItems.push(newItem)
-
-                    // Generate preview asynchronously for images
-                    if (showPreview && file.type.startsWith('image/')) {
-                        createFilePreview(file)
-                            .then(preview => {
-                                setFileItems(currentItems =>
-                                    currentItems.map(item =>
-                                        item.id === newItem.id
-                                            ? { ...item, preview, loading: false }
-                                            : item
-                                    )
-                                )
-                            })
-                            .catch(() => {
-                                setFileItems(currentItems =>
-                                    currentItems.map(item =>
-                                        item.id === newItem.id
-                                            ? { ...item, loading: false, error: 'Failed to load preview' }
-                                            : item
-                                    )
-                                )
-                            })
-                    }
-                }
-            }
-
+            const newItems = await getUpdatedItems(files)
             setFileItems(newItems)
+            console.log(newItems.map(o => o.file.name).join(', '))
+
+            // Generate previews for new items after setting them
+            generatePreviewsForNewItems(newItems)
         }
 
         convertFilesToItems()
-    }, [files, showPreview]) // Removed fileItems dependency
+    }, [files, showPreview, generatePreviewsForNewItems])
 
     const handleFiles = useCallback((newFiles: File[]) => {
         const validationRules = {
@@ -154,6 +164,7 @@ export function CustomFilePicker({
                 file.lastModified === fileToRemove.lastModified)
         )
         onFilesChange(updatedFiles)
+
     }, [files, onFilesChange])
 
     const handleDrop = useCallback((e: React.DragEvent) => {
