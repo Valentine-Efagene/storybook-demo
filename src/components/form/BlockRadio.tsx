@@ -84,7 +84,7 @@ export function BlockRadio({
 
                             // State styling
                             isSelected
-                                ? "border-primary bg-primary/5 text-primary-foreground"
+                                ? "border-sidebar-foreground bg-primary/5 text-primary-text"
                                 : "border-border bg-background hover:bg-muted/50",
 
                             // Disabled styling  
@@ -110,7 +110,7 @@ export function BlockRadio({
                             "rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all",
                             notchSizes[size],
                             isSelected
-                                ? "border-primary bg-primary"
+                                ? "border-sidebar-foreground bg-sidebar-foreground"
                                 : "border-muted-foreground/30 bg-transparent"
                         )}>
                             {isSelected && (

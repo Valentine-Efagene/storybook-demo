@@ -24,7 +24,7 @@ const completionStatusOptions: BlockRadioOption[] = [
         label: 'Under Construction',
     },
     {
-        value: 'move_in_ready',
+        value: 'completed',
         label: 'Move-in Ready',
     },
 ]
