@@ -8,7 +8,7 @@ import { ProfileDropdown } from "./ProfileDropdown"
 import { SidebarTrigger } from "./ui/sidebar"
 import { getCurrentUserFromSession } from "@/actions/user-session"
 import { QUERY_KEYS } from "@/types/user"
-import { TokenStatus } from "./debug/TokenStatus";
+// import { TokenStatus } from "./debug/TokenStatus";
 
 export async function Header() {
     const queryClient = new QueryClient()
@@ -30,7 +30,7 @@ export async function Header() {
                 <SidebarTrigger />
                 <Breadcrumbs />
             </div>
-            <TokenStatus />
+            {/* <TokenStatus /> */}
             <HydrationBoundary state={dehydratedState}>
                 <ProfileDropdown />
             </HydrationBoundary>

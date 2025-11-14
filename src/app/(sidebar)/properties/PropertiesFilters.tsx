@@ -13,6 +13,7 @@ import { format } from "date-fns"
 import { FormGroup } from "@/components/form/FormGroup"
 import { PropertyQueryParams, PropertyStatus } from "@/types/property"
 import Tab from "@/components/Tab"
+import Link from "next/link"
 
 interface Props {
     initialQparams: PropertyQueryParams
@@ -86,9 +87,9 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="border-b">
+            <div className="border-b flex items-center justify-between">
                 <Tab
-                    className="mb-[-2px]"
+                    className="mb-[-10px]"
                     items={[
                         { value: "", label: "All Properties" },
                         { value: "allocated", label: "Allocated" },
@@ -97,6 +98,9 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
                     value={status || ""}
                     onValueChange={(value) => onStatusChange(value as PropertyStatus)}
                 />
+                <Button asChild className="self-end mb-2">
+                    <Link href="/properties/create">Add Property</Link>
+                </Button>
             </div>
 
             <div className="flex items-center justify-between flex-wrap gap-4">
