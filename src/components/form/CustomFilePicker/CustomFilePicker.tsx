@@ -1,3 +1,14 @@
+/**
+ * BUG DOCUMENTATION:
+ * React Hook Form's Controller can have timing issues for single file fields (File | undefined),
+ * where `field.value` may be stale after calling `field.onChange(undefined)`. This causes the picker to display
+ * a removed file until the next navigation or re-render. However, `useWatch` always reflects the true form state.
+ *
+ * For reliable single file uploads, use the SingleFilePicker wrapper component, which synchronizes the picker UI
+ * with the actual form state using `useWatch`. For multiple files, use CustomFilePicker directly.
+ *
+ * See: https://github.com/react-hook-form/react-hook-form/issues/1101 (related timing issue)
+ */
 "use client"
 
 import React, { useState, useCallback, useRef } from 'react'
@@ -6,8 +17,13 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { CustomFilePickerProps, FileItem } from './types'
 import { validateFile, formatFileSize, generateFileId, createFilePreview } from './utils'
-import { watch } from 'fs'
 
+
+/**
+ * 
+ * @param param0 
+ * @returns 
+ */
 export function CustomFilePicker({
     files = [],
     onFilesChange,
