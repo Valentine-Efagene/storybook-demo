@@ -9,12 +9,25 @@ import { Label } from "@/components/ui/label"
 import { CompletePropertyFormData } from "@/lib/schemas/property"
 import AmountInput from "../form/AmountInput"
 import NumberInput from "../form/NumberInput"
+import { BlockRadio, BlockRadioOption } from "@/components/form/BlockRadio"
 
 interface PropertyDetailsStepProps {
     control: Control<CompletePropertyFormData>
     errors: FieldErrors<CompletePropertyFormData>
     watch: UseFormWatch<CompletePropertyFormData>
 }
+
+// Completion status options for BlockRadio
+const completionStatusOptions: BlockRadioOption[] = [
+    {
+        value: 'under_construction',
+        label: 'Under Construction',
+    },
+    {
+        value: 'move_in_ready',
+        label: 'Move-in Ready',
+    },
+]
 
 export function PropertyDetailsStep({
     control,
@@ -35,8 +48,30 @@ export function PropertyDetailsStep({
                 <CardHeader>
                     <CardTitle>Basic Information</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <CardContent className="space-y-6 w-full">
+                    {/* Completion Status Section */}
+                    <div className="space-y-4">
+                        <Label>Completion Status</Label>
+                        <Controller
+                            name="completion_status"
+                            control={control}
+                            render={({ field }) => (
+                                <BlockRadio
+                                    className="w-full grid grid-cols-2"
+                                    options={completionStatusOptions}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    name="completion_status"
+                                    orientation="horizontal"
+                                    size="md"
+                                />
+                            )}
+                        />
+                        {errors.completion_status && (
+                            <p className="text-sm text-red-600">{errors.completion_status.message}</p>
+                        )}
+                    </div>
+                    <div className="grid grid-cols-1 gap-6 w-full">
                         <div className="md:col-span-2 space-y-2">
                             <Label htmlFor="title">Property Title</Label>
                             <Controller
@@ -55,14 +90,14 @@ export function PropertyDetailsStep({
                             )}
                         </div>
 
-                        <div className="space-y-2">
+                        <div className="space-y-2 w-full">
                             <Label htmlFor="type">Property Type</Label>
                             <Controller
                                 name="type"
                                 control={control}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger>
+                                        <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select property type" />
                                         </SelectTrigger>
                                         <SelectContent>

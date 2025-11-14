@@ -43,6 +43,7 @@ export default function CreatePropertyPage() {
             price: 1,
             currency: "NGN",
             status: "available",
+            completion_status: "completed",
             // displayImage: undefined, // This is required now, will cause validation error until uploaded
             model3dImages: [],
             floorPlanImages: [],

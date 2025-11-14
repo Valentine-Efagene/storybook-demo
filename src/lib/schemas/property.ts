@@ -13,6 +13,7 @@ export const propertyDetailsFormSchema = z.object({
     price: z.number().min(0.01, "Price must be greater than 0"),
     currency: z.enum(["NGN", "USD"]),
     status: z.enum(["available", "pending", "sold", "rented"]),
+    completion_status: z.enum(["under_construction", "completed", "off_plan"]).optional(),
 })
 
 export const propertyDetailsSchema = z.object({
@@ -28,6 +29,7 @@ export const propertyDetailsSchema = z.object({
     price: z.number().min(0, "Price must be 0 or greater"),
     currency: z.enum(["NGN", "USD"]),
     finishing_status: z.enum(["semi_finished", "finished"]).optional(),
+    completion_status: z.enum(["under_construction", "completed", "off_plan"]).optional(),
     status: z.enum(["available", "pending", "sold", "rented"]),
 })
 
