@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { CustomFilePickerProps, FileItem } from './types'
 import { validateFile, formatFileSize, generateFileId, createFilePreview } from './utils'
+import { watch } from 'fs'
 
 export function CustomFilePicker({
     files = [],
@@ -90,7 +91,6 @@ export function CustomFilePicker({
         const convertFilesToItems = async () => {
             const newItems = await getUpdatedItems(files)
             setFileItems(newItems)
-            console.log(newItems.map(o => o.file.name).join(', '))
 
             // Generate previews for new items after setting them
             generatePreviewsForNewItems(newItems)

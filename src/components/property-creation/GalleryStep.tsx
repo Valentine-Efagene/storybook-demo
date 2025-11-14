@@ -3,6 +3,7 @@ import { Control, FieldErrors, UseFormWatch, Controller } from "react-hook-form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CompletePropertyFormData } from "@/lib/schemas/property"
 import { CustomFilePicker } from "@/components/form/CustomFilePicker"
+import { SingleFilePicker } from "../form/CustomFilePicker/SingleFilePicker"
 
 interface GalleryStepProps {
     control: Control<CompletePropertyFormData>
@@ -44,14 +45,11 @@ export function GalleryStep({
                     <Controller
                         name="displayImage"
                         control={control}
-                        render={({ field }) => (
-                            <CustomFilePicker
-                                files={field.value ? [field.value] : []}
-                                onFilesChange={(files) => {
-                                    field.onChange(files[0] || undefined)
-                                }}
-                                allowMultiple={false}
-                                maxFiles={1}
+                        render={({ field }) => {
+                            return <SingleFilePicker
+                                onChange={field.onChange}
+                                control={control}
+                                name="displayImage"
                                 maxFileSize={10}
                                 allowedTypes={['image/*']}
                                 label="Upload display image"
@@ -61,7 +59,7 @@ export function GalleryStep({
                                 accept="image/*"
                                 onError={(error) => handleFileError('displayImage', error)}
                             />
-                        )}
+                        }}
                     />
                     {(errors.displayImage || fileErrors.displayImage) && (
                         <p className="text-sm text-red-600">
