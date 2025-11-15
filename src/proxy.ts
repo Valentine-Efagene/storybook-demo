@@ -1,12 +1,12 @@
-import { updateSession } from "@/lib/server";
+import { getSession, updateSession } from "@/lib/server";
 import { NextRequest, NextResponse } from "next/server";
 
-const PUBLIC_ROUTES = [
+const AUTH_ROUTES = [
     '/signin',
 ]
 
-function isPublicRoute(pathname: string): boolean {
-    return PUBLIC_ROUTES.some((route) => {
+function isAuthRoute(pathname: string): boolean {
+    return AUTH_ROUTES.some((route) => {
         // Exact match for root
         if (route === "/") return pathname === "/";
         // Exact match or starts with route path + slash
@@ -15,12 +15,19 @@ function isPublicRoute(pathname: string): boolean {
 }
 
 // Named function export is recommended for clarity
-export function proxy(req: NextRequest) {
+export async function proxy(req: NextRequest) {
     const pathname = req.nextUrl.pathname;
 
-    // Skip proxy for public/auth routes
-    if (isPublicRoute(pathname)) {
-        return NextResponse.next();
+    // Watch closely for stability: This handles only auth routes
+    // Revert if problematic, to just return NextResponse.next()
+    if (isAuthRoute(pathname)) {
+        const session = await getSession(req);
+
+        if (session) {
+            return NextResponse.redirect(new URL('/', req.url));
+        } else {
+            return NextResponse.next();
+        }
     }
 
     // For protected routes, handle authentication and session management

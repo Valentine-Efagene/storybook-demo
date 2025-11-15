@@ -7,7 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { CompletePropertyFormData } from "@/lib/schemas/property"
-import AmountInput from "../form/AmountInput"
 import NumberInput from "../form/NumberInput"
 import { BlockRadio, BlockRadioOption } from "@/components/form/BlockRadio"
 

@@ -11,7 +11,7 @@ import { QueryHelper } from "./helpers/QueryHelper"
 import { PaginatedUserResponseBody, TokenMetadata, User } from "@/types/user"
 import EnvironmentHelper from "./helpers/EnvironmentHelper"
 import * as jose from "jose";
-import { PaginatedPropertyResponseBody } from "@/types/property"
+import { PaginatedPropertyResponseBody, Property } from "@/types/property"
 
 async function getServerToken(): Promise<string | null> {
     const cookieStore = await cookies()
@@ -43,6 +43,7 @@ export async function authenticatedFetch<T>(
     })
 
     console.log({ url })
+
     const response = await fetch(`${EnvironmentHelper.API_BASE_URL}${url}`, {
         ...options,
         headers: {
@@ -130,6 +131,20 @@ export async function fetchUsers(params: any = {}) {
         {},
         {
             revalidate: 180 // Cache for 3 minutes since user data changes moderately
+        }
+    )
+    return data
+}
+
+export async function fetchPropertyById(id: string) {
+    const baseUrl = '/propy/get-property'
+    const params = { id }
+    const data = await authenticatedFetch<{ property: Property }>(
+        baseUrl,
+        params,
+        {},
+        {
+            revalidate: 300 // Cache for 5 minutes since properties change less frequently
         }
     )
     return data

@@ -278,3 +278,38 @@ async function invalidateRefreshToken(refreshToken: string) {
         console.error("Error invalidating refresh token:", err);
     }
 }
+
+
+export async function getSession(req: NextRequest): Promise<{ isValid: boolean; user?: any; metadata?: SessionMetadata } | null> {
+    // Get cookies from the request
+    const accessToken = req.cookies.get("accessToken")?.value ?? "";
+    const sessionMetadataStr = req.cookies.get("sessionMetadata")?.value ?? "";
+
+    if (!accessToken) return null;
+
+    try {
+        // Decode JWT
+        const parsed = jose.decodeJwt(accessToken);
+
+        // Optionally check session metadata for expiry
+        let metadata: SessionMetadata | null = null;
+        if (sessionMetadataStr) {
+            metadata = JSON.parse(sessionMetadataStr);
+
+            if (metadata && isSessionExpired(metadata).expired) return null;
+        }
+
+        if (!metadata) {
+            return null
+        }
+
+        // You can add more checks here (roles, etc.)
+        return {
+            isValid: true,
+            user: parsed,
+            metadata,
+        };
+    } catch {
+        return null;
+    }
+}

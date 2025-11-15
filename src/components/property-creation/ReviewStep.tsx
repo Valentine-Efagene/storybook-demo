@@ -120,7 +120,7 @@ export function ReviewStep({ formData }: ReviewStepProps) {
         }
     }, [formData.displayImage, formData.floorPlanImages, formData.model3dImages, formData.aerialImages])
 
-    const FinishingIconComponent = finishingIcon[formData.finishing_status ?? 'semi_finished']
+    const FinishingIconComponent = finishingIcon[formData.finished_status ?? 'semi_finished']
 
     return (
         <div className="max-w-4xl mx-auto space-y-6 flex flex-col">
@@ -199,7 +199,7 @@ export function ReviewStep({ formData }: ReviewStepProps) {
                                         <div className="flex items-center gap-2">
                                             <FinishingIconComponent className="w-6 h-6 text-brand-border" />
                                         </div>
-                                        <div className="text-sm text-primary-text font-medium">{formData.finishing_status}</div>
+                                        <div className="text-sm text-primary-text font-medium">{formData.finished_status}</div>
                                     </div>
                                 )}
 

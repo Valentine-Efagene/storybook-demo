@@ -2,9 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query"
 import { ApiResponse } from "@/types/common"
-import { fetchProperties } from "@/lib/api"
+import { fetchProperties, fetchPropertyById } from "@/lib/api"
 import { getPropertiesQueryKey } from "@/lib/query-keys"
-import { PaginatedPropertyResponseBody, PropertyQueryParams } from "@/types/property"
+import { PaginatedPropertyResponseBody, Property, PropertyQueryParams } from "@/types/property"
 
 /**
  * Custom hook for fetching properties with pagination and filtering
@@ -28,5 +28,17 @@ export function useProperties(currentParams: PropertyQueryParams) {
         }),
         staleTime: 5 * 60 * 1000, // 5 minutes - longer staleTime for better navigation experience
         gcTime: 10 * 60 * 1000,  // 10 minutes garbage collection - keep data longer in memory
+    })
+}
+
+export function useProperty(id: number) {
+    // Use the passed currentParams directly instead of extracting from URL again
+    const queryKey = [id]
+
+    return useQuery<ApiResponse<{ property: Property }>>({
+        queryKey,
+        queryFn: () => fetchPropertyById(`${id}`),
+        staleTime: 5 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
     })
 }

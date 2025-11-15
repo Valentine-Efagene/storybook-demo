@@ -1,5 +1,3 @@
-import { ArrowUpRightIcon, LucideProps, SearchSlash } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import {
     Empty,
