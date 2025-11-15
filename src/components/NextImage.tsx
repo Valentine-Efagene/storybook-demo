@@ -1,6 +1,7 @@
 // https://github.com/vercel/next.js/blob/canary/examples/image-component/app/shimmer/page.tsx
 import Image, { ImageProps } from 'next/image'
-import type { ImagePlaceholder } from "@/types/common"
+import placeholders from "@/data/placeholders.json"
+import type { ImagePlaceholder } from "@/types/placeholder"
 
 const shimmer = (w: number, h: number, isDark = false) => {
     const colors = isDark
@@ -53,8 +54,18 @@ export default function NextImage({ alt, src, useShimmerFallback = false, useDar
     let finalPlaceholder = props.placeholder
 
     if (!hasCustomPlaceholder && typeof src === 'string') {
-        finalBlurDataURL = `data:image/svg+xml;base64,${toBase64(shimmer(width, height, useDarkShimmer))}`
-        finalPlaceholder = 'blur'
+        const typedPlaceholders = placeholders as ImagePlaceholder[]
+        const foundPlaceholder = typedPlaceholders.find(p => p.src === src)
+
+        if (foundPlaceholder) {
+            // Use pre-generated blur placeholder
+            finalBlurDataURL = foundPlaceholder.blurDataURL
+            finalPlaceholder = 'blur'
+        } else if (useShimmerFallback) {
+            // Fallback to shimmer placeholder only if enabled
+            finalBlurDataURL = `data:image/svg+xml;base64,${toBase64(shimmer(width, height, useDarkShimmer))}`
+            finalPlaceholder = 'blur'
+        }
     }
 
     return (

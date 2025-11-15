@@ -6,10 +6,11 @@ import { useMemo, useCallback } from "react"
 import { Pagination } from "@/components/ui/pagination"
 import { UsersTableSkeleton } from "@/components/skeletons/UsersPageSkeleton"
 import { EmptyProperty } from "./EmptyProperty"
-import { SearchXIcon } from "lucide-react"
+import { Link, SearchXIcon } from "lucide-react"
 import { PropertyQueryParams, PropertyStatus } from "@/types/property"
 import PropertyCard from "./PropertyCard"
 import { useProperties } from "./useProperties"
+import { Button } from "@/components/ui/button"
 
 interface Props {
     initialQparams: PropertyQueryParams
@@ -67,9 +68,7 @@ export function PropertiesGrid({ initialQparams }: Props) {
         if (!paginatedData || paginatedData.body.properties.length === 0) {
             return <EmptyProperty
                 message="No Property found"
-                description="Couldn&apos;t find any property(s) matching
-your search."
-                icon={SearchXIcon}
+                description="Add a property to Contribuild for people to find and purchase."
             />
         }
 

@@ -48,7 +48,7 @@ export function ResponsiveDialog({ open, setOpen, noTrigger, triggerButton, dial
                     </DialogTrigger>
                     {info ? <Info>{info}</Info> : null}
                 </div>}
-                <DialogContent className={`${dialogContentClassName}`}>
+                <DialogContent className={`${dialogContentClassName} pt-0`}>
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
                         <DialogDescription>

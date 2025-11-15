@@ -13,6 +13,11 @@ export const singleImageSchema = z
         message: 'Only JPG, PNG, or WEBP files allowed',
     })
 
+export const userSuspensionSchema = z.object({
+    user_id: z.number(),
+    reason: z.string().min(10, 'Reason must be at least 10 characters long'),
+})
+
 export const singleCsvSchema = z
     .instanceof(File)
     .refine(file => file.size > 0, { message: 'File is required' })

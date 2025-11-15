@@ -1,6 +1,5 @@
 "use client"
 
-import { ConfirmationDialog } from "@/components/ConfirmationDialog"
 import DetailCard from "@/components/DetailCard"
 import StatusTag from "@/components/StatusTag"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -16,6 +15,7 @@ import UserHelper from "@/lib/helpers/UserHelper"
 import { User } from "@/types/user"
 import { Edit2, Play, X } from "lucide-react"
 import { useMemo, useState } from "react"
+import UserSuspensionModal from "./UserSuspensionModal"
 
 interface Props {
     open: boolean
@@ -25,13 +25,8 @@ interface Props {
 
 export function UserSheet({ open, setOpen, user }: Props) {
     const [openSuspensionDialog, setOpenSuspensionDialog] = useState(false)
-    const isSuspending = false // Replace with actual suspension state
     const initials = useMemo(() => UserHelper.getInitials(user), [user])
     const fullName = useMemo(() => UserHelper.getFullName(user) || "User", [user])
-
-    const handleSuspendUser = () => {
-        // Implement user suspension logic here
-    }
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
@@ -49,31 +44,11 @@ export function UserSheet({ open, setOpen, user }: Props) {
                     </Button>
                 </SheetTitle>
                 <div className="flex flex-col gap-8 px-6">
-                    <ConfirmationDialog
+                    <UserSuspensionModal
                         open={openSuspensionDialog}
                         setOpen={setOpenSuspensionDialog}
-                        title="Confirm Suspension"
-                        rightButton={
-                            <Button
-                                onClick={handleSuspendUser}
-                                disabled={isSuspending}
-                                loading={isSuspending}
-                            >
-                                {isSuspending ? 'Suspending...' : 'Suspend User'}
-                            </Button>
-                        }
-                        leftButton={
-                            <Button
-                                variant="subtle"
-                                onClick={() => setOpenSuspensionDialog(false)}
-                                disabled={isSuspending}
-                            >
-                                Cancel
-                            </Button>
-                        }
-                    >
-                        Are you sure you want to suspend this user?
-                    </ConfirmationDialog>
+                        user={user}
+                    />
                     <div className="flex justify-between items-center">
                         <div className="flex items-center gap-4">
                             <Avatar className="h-[50px] w-[50px]">
