@@ -58,9 +58,9 @@ export function PillCheckbox({
                 variant === 'default' && !checked && !disabled,
 
             // Outline variant styles
-            'text-primary-text border-primary-border hover:bg-tertiary-bg':
+            'text-primary-text border-primary-text hover:bg-tertiary-bg':
                 variant === 'outline' && checked && !disabled,
-            'bg-white text-primary-text border-primary-text hover:bg-gray-50':
+            'bg-white text-primary-text border-primary-border hover:bg-gray-50':
                 variant === 'outline' && !checked && !disabled,
 
             // Disabled styles
