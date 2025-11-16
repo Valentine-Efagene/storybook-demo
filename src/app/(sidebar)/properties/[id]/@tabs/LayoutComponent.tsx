@@ -20,7 +20,7 @@ export default function PropertyTabsLayout({
 
     return (
         <div className="flex flex-col">
-            <div className="flex space-x-4 border-b mb-4 pt-4 px-4 sm:pl-[70px]">
+            <div className="flex space-x-4 border-b pt-4 px-4 sm:pl-8">
                 {tabs.map((tab) => {
                     const active =
                         pathname == tab.href
@@ -40,7 +40,9 @@ export default function PropertyTabsLayout({
                 })}
             </div>
 
-            <div className="px-[70px] py-6">{children}</div>
+            <div className="p-8">
+                {children}
+            </div>
         </div>
     );
 }
