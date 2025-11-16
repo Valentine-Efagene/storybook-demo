@@ -38,35 +38,20 @@ const items: { title: string; items: { title: string; url: Route; icon: ForwardR
                 icon: Building2,
             },
             {
-                title: "Saved",
-                url: "/saved",
-                icon: Heart,
-            },
-        ]
-    },
-    {
-        title: "Financial",
-        items: [
-            {
-                title: "Contribution",
-                url: "/contribution",
+                title: "Contributions",
+                url: "/contributions",
                 icon: Banknote,
-            },
-            {
-                title: "Mortgage",
-                url: "/mortgage",
-                icon: HandCoins,
             },
         ]
     },
     {
         title: "Account",
         items: [
-            {
-                title: "Wallet",
-                url: "/wallet",
-                icon: Wallet,
-            },
+            // {
+            //     title: "Wallet",
+            //     url: "/wallet",
+            //     icon: Wallet,
+            // },
             {
                 title: "Settings",
                 url: "/settings",
@@ -116,7 +101,7 @@ export function AppSidebar() {
                                         </SidebarMenuItem>
                                     ))}
                                     {sectionIndex < items.length - 1 && (
-                                        <div className="my-2">
+                                        <div className="my-4">
                                             <div className="h-px bg-border" />
                                         </div>
                                     )}
