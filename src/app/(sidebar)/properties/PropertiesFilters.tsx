@@ -127,7 +127,7 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
                                     onSubmit={handleSubmit(onSubmit)}
                                     className="flex flex-col gap-4"
                                 >
-                                    <div className="grid gap-4 sm:gap-2 sm:grid-cols-2">
+                                    <div className="grid gap-4 sm:gap-2 sm:grid-cols-1">
                                         {/* Date From */}
                                         <FormGroup>
                                             <FormLabel>Start Date</FormLabel>

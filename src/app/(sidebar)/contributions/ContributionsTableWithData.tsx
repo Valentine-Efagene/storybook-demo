@@ -8,12 +8,9 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { UserQueryParams } from "@/types/user"
-import UserRow from "./ContributionsRow"
 import useToastRawError from "@/hooks/useToastRawError"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useMemo, useCallback } from "react"
-import TableWrapper from "@/components/TableWrapper"
-import CenteredLoader from "@/components/CenteredLoader"
 import { Pagination } from "@/components/ui/pagination"
 import { useUsers } from "@/hooks/useUsers"
 import { UsersTableSkeleton } from "@/components/skeletons/UsersPageSkeleton"

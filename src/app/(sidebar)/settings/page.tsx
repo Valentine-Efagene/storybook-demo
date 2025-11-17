@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export default function page() {
     const currencies: {
@@ -64,14 +64,13 @@ export default function page() {
                             <div className="text-8xl rounded-full w-10 h-10 flex items-center justify-center overflow-hidden">
                                 {currencyFlags[currency.from]}
                             </div>
-                            <Button variant='subtle' size='sm'>Edit</Button>
+                            {/* <Button variant='subtle' size='sm'>Edit</Button> */}
                         </div>
-                        <h2 className="text-lg font-medium mb-2">
-                            {currency.from} to {currency.to}
+                        <h2 className="text-sm text-secondary-text font-medium mb-2 flex items-center gap-1">
+                            {currency.from} <ArrowRight className="w-4 h-4" /> {currency.to}
                         </h2>
-                        <p className="text-gray-600 mb-1">
-                            Exchange Rate: {currency.from_symbol}
-                            {currency.rate} {currency.to_symbol}
+                        <p className="text-primary-text mb-1 text-lg font-semibold">
+                            {currency.from_symbol}1 = {currency.to_symbol}{currency.rate}
                         </p>
                         <p className="text-gray-500 text-sm">
                             Last Updated: {currency.last_updated}
