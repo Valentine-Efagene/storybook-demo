@@ -17,6 +17,7 @@ interface IProps {
     maxDate?: Date
     className?: string
     availableDates?: Date[]
+    iconPosition?: "left" | "right"
 }
 
 export function DatePicker({
@@ -26,7 +27,8 @@ export function DatePicker({
     minDate,
     maxDate,
     className,
-    availableDates
+    availableDates,
+    iconPosition = "left",
 }: IProps) {
     const [open, setOpen] = React.useState(false)
 
@@ -55,8 +57,9 @@ export function DatePicker({
                         !date && "text-muted-foreground",
                         className,
                     )}
+                    icon={<CalendarIcon className="mr-2 h-4 w-4" />}
+                    iconPosition={iconPosition}
                 >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
                     {date ? format(date, "PPP") : <span>{placeholder ?? "Pick a date"}</span>}
                 </Button>
             </PopoverTrigger>

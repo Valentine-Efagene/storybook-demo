@@ -33,6 +33,11 @@ export const propertyDetailsSchema = z.object({
     status: z.enum(["available", "pending", "sold", "rented"]),
 })
 
+export const milestoneUpdateSchema = z.object({
+    completion_date: z.string().min(1, "Completion date is required"),
+    proof: z.array(z.instanceof(File)),
+})
+
 export const gallerySchema = z.object({
     displayImage: z.instanceof(File, { message: "Display image is required" }),
     model3dImages: z.array(z.instanceof(File)).optional(),

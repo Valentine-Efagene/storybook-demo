@@ -9,12 +9,13 @@ import ImageHelper from '@/lib/helpers/ImageHelper'
 import FormatHelper from '@/lib/helpers/FormatHelper'
 import PropertyHelper from '@/lib/helpers/PropertyHelper'
 import IconChip from '@/components/IconChip'
-import { Bath, Bed, Building, CheckCircle, HammerIcon, House, LucideProps, RefreshCcw } from 'lucide-react'
+import { Bath, Bed, Building, CheckCircle, CircleFadingArrowUp, HammerIcon, House, LucideProps, RefreshCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import StyledIconChip from '@/components/StyledIconChip'
 import { PropertyFinishStatus } from '@/types/property'
-import { ForwardRefExoticComponent, RefAttributes } from 'react'
+import { ForwardRefExoticComponent, RefAttributes, useState } from 'react'
 import CenteredLoader from '@/components/CenteredLoader'
+import { MilestoneSheet } from './MilestoneSheet'
 
 interface Props {
     id: number
@@ -22,6 +23,7 @@ interface Props {
 
 export function Property({ id }: Props) {
     const { data, isFetching, isError, error } = useProperty(id)
+    const [openMilestoneSheet, setOpenMilestoneSheet] = useState(false)
 
     useToastRawError({ isError, error })
 
@@ -44,11 +46,17 @@ export function Property({ id }: Props) {
 
     return (
         <div className='flex flex-col gap-4 p-8'>
+            <MilestoneSheet
+                open={openMilestoneSheet}
+                setOpen={() => setOpenMilestoneSheet(false)}
+                property={property}
+            />
             <div className='flex justify-between items-center'>
                 <h1 className='font-medium text-xl text-primary-text'>{property?.title}</h1>
                 <div className='flex gap-4'>
                     <Button variant='subtle' icon={<RefreshCcw />} iconPosition='left'>Update Completion Status</Button>
                     <Button variant='subtle' icon={<RefreshCcw />} iconPosition='left'>Update Availability</Button>
+                    <Button variant='subtle' icon={<CircleFadingArrowUp />} iconPosition='left' onClick={() => setOpenMilestoneSheet(true)}>Update Milestone</Button>
                 </div>
             </div>
             <div className='flex gap-4 w-full'>
