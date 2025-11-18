@@ -154,3 +154,5 @@ export interface PaginatedPropertyResponseBody {
     total_count: number,
     total_pages: number
 }
+
+export type AvailabilityStatus = 'available' | 'provisionally_available' | 'sold_out'

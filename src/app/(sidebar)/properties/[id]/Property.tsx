@@ -16,6 +16,7 @@ import { PropertyFinishStatus } from '@/types/property'
 import { ForwardRefExoticComponent, RefAttributes, useState } from 'react'
 import CenteredLoader from '@/components/CenteredLoader'
 import { MilestoneSheet } from './MilestoneSheet'
+import { AvailabilityModal } from './AvailabilityModal'
 
 interface Props {
     id: number
@@ -24,6 +25,7 @@ interface Props {
 export function Property({ id }: Props) {
     const { data, isFetching, isError, error } = useProperty(id)
     const [openMilestoneSheet, setOpenMilestoneSheet] = useState(false)
+    const [openAvailabilityModal, setOpenAvailabilityModal] = useState(false)
 
     useToastRawError({ isError, error })
 
@@ -55,10 +57,15 @@ export function Property({ id }: Props) {
                 <h1 className='font-medium text-xl text-primary-text'>{property?.title}</h1>
                 <div className='flex gap-4'>
                     <Button variant='subtle' icon={<RefreshCcw />} iconPosition='left'>Update Completion Status</Button>
-                    <Button variant='subtle' icon={<RefreshCcw />} iconPosition='left'>Update Availability</Button>
+                    <Button variant='subtle' icon={<RefreshCcw />} iconPosition='left' onClick={() => setOpenAvailabilityModal(true)}>Update Availability</Button>
                     <Button variant='subtle' icon={<CircleFadingArrowUp />} iconPosition='left' onClick={() => setOpenMilestoneSheet(true)}>Update Milestone</Button>
                 </div>
             </div>
+            <AvailabilityModal
+                open={openAvailabilityModal}
+                setOpen={() => setOpenAvailabilityModal(false)}
+                property={property}
+            />
             <div className='flex gap-4 w-full'>
                 <div className='rounded-lg border border-primary-border'>
                     <NextImage

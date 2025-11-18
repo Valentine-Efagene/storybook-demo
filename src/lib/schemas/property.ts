@@ -38,6 +38,10 @@ export const milestoneUpdateSchema = z.object({
     proof: z.array(z.instanceof(File)),
 })
 
+export const propertyAvailabilityStatusSchema = z.object({
+    availability_status: z.enum(["available", "unavailable", "pending"]).optional(),
+})
+
 export const gallerySchema = z.object({
     displayImage: z.instanceof(File, { message: "Display image is required" }),
     model3dImages: z.array(z.instanceof(File)).optional(),

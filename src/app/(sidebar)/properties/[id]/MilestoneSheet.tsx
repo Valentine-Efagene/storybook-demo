@@ -101,6 +101,7 @@ export function MilestoneSheet({ open, setOpen, property }: Props) {
                                 />
                                 <FormError formError={errors.proof?.message} />
                             </FormGroup>
+                            <FormError formError={errors.root?.message} />
                         </form>
                     </div>
                     <div className="grid gap-2">
