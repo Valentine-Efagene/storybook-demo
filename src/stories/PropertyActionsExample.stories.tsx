@@ -50,75 +50,59 @@ const StoryWrapper = ({ user, children }: { user: any; children: React.ReactNode
 }
 
 export const AdminUser: Story = {
-    args: {
-        property: sampleProperty,
-    },
-    render: ({ property }) => (
-        <StoryWrapper user={{ id: 999, roles: ['admin'] }}>
-            <PropertyActionsExample property={property || sampleProperty} />
+    render: () => (
+        <StoryWrapper user={{ id: 1, roles: ['admin'] }}>
+            <PropertyActionsExample property={sampleProperty} />
         </StoryWrapper>
     ),
-    parameters: {
-        docs: {
-            description: {
-                story: 'Admin user can see all actions (edit and delete) for any property.',
-            },
-        },
-    },
 }
 
-export const PropertyOwner: Story = {
-    args: {
-        property: sampleProperty,
-    },
-    render: ({ property }) => (
-        <StoryWrapper user={{ id: 123, roles: ['user'] }}>
-            <PropertyActionsExample property={property || sampleProperty} />
+export const SalesUser: Story = {
+    render: () => (
+        <StoryWrapper user={{ id: 2, roles: ['sales'] }}>
+            <PropertyActionsExample property={sampleProperty} />
         </StoryWrapper>
     ),
-    parameters: {
-        docs: {
-            description: {
-                story: 'Property owner (poster_id matches user id) can edit their own property.',
-            },
-        },
-    },
 }
 
-export const RegularUser: Story = {
-    args: {
-        property: sampleProperty,
-    },
-    render: ({ property }) => (
-        <StoryWrapper user={{ id: 789, roles: ['user'] }}>
-            <PropertyActionsExample property={property || sampleProperty} />
+export const SupportUser: Story = {
+    render: () => (
+        <StoryWrapper user={{ id: 3, roles: ['support'] }}>
+            <PropertyActionsExample property={sampleProperty} />
         </StoryWrapper>
     ),
-    parameters: {
-        docs: {
-            description: {
-                story: 'Regular user can only view properties they don\'t own.',
-            },
-        },
-    },
 }
 
-export const GuestUser: Story = {
-    args: {
-        property: sampleProperty,
-    },
-    render: ({ property }) => (
+export const FinanceUser: Story = {
+    render: () => (
+        <StoryWrapper user={{ id: 4, roles: ['finance'] }}>
+            <PropertyActionsExample property={sampleProperty} />
+        </StoryWrapper>
+    ),
+}
+
+export const MortgageOperator: Story = {
+    render: () => (
+        <StoryWrapper user={{ id: 5, roles: ['mortgage_operator'] }}>
+            <PropertyActionsExample property={sampleProperty} />
+        </StoryWrapper>
+    ),
+}
+
+export const DisplayUser: Story = {
+    render: () => (
+        <StoryWrapper user={{ id: 6, roles: ['user'] }}>
+            <PropertyActionsExample property={sampleProperty} />
+        </StoryWrapper>
+    ),
+}
+
+export const GuestUserNoAccess: Story = {
+    render: () => (
         <StoryWrapper user={{ id: 0, roles: [] }}>
-            <PropertyActionsExample property={property || sampleProperty} />
+            <PropertyActionsExample property={sampleProperty} />
         </StoryWrapper>
     ),
-    parameters: {
-        docs: {
-            description: {
-                story: 'Guest user (no roles) can only view properties.',
-            },
-        },
-    },
 }
 
 export const AllocatedPropertyAdmin: Story = {

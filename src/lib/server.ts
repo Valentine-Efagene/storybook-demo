@@ -13,6 +13,7 @@ export async function getServerToken(): Promise<string | null> {
 }
 
 import { User, TokenMetadata } from "@/types/user";
+import { TokenPayloadSchema } from "./ability/token-validation";
 
 /**
  * Read the server-side access token and decode the JWT to extract minimal user info.
@@ -23,10 +24,17 @@ export async function getServerUser(): Promise<Pick<User, 'id' | 'roles'> | null
     if (!token) return null
 
     try {
-        const parsed = jose.decodeJwt(token) as unknown as Partial<TokenMetadata>
+        const parsed = jose.decodeJwt(token) as unknown
 
-        const userId = parsed.user_id
-        const roles = Array.isArray(parsed.roles) ? parsed.roles : (parsed.roles ? [parsed.roles as Role] : [])
+        // Validate the decoded token structure
+        const validationResult = TokenPayloadSchema.safeParse(parsed)
+        if (!validationResult.success) {
+            console.error('Invalid JWT structure:', validationResult.error.message)
+            return null
+        }
+
+        const userId = validationResult.data.user_id
+        const roles = validationResult.data.roles
 
         if (!userId) return null
         return { id: Number(userId), roles }

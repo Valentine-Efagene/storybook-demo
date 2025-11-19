@@ -16,6 +16,8 @@ bun dev
 
 ```bash
 npx tsx scripts/generate-placeholders.ts
+
+npx tsx src/lib/ability/__tests__/test-runner.ts
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
