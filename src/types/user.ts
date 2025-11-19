@@ -4,24 +4,17 @@ import { ApiResponse, QueryParams } from "./common"
 export type Role =
     | "user"
     | "admin"
-    | "project_manager"
     | "sales"
     | "support"
     | "finance"
-    | "legal"
-    | "pmb"
-    | "mofi_admin"
-    | "agent"
-    | "developer"
     | "mortgage_operator"
-    | "fhf_admin"
-    | "home_owner"
 
 
 
 export type IEmploymentStatus = 'employed' | 'self_employed'
 
 export interface User {
+    __type: 'User';
     id: number,
     first_name: string | null,
     last_name: string | null,

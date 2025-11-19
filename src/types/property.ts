@@ -95,6 +95,7 @@ export interface Milestone {
 }
 
 export interface Property {
+    __type: 'Property';
     id: number
     poster_id: number | null
     amenities: string | null,
