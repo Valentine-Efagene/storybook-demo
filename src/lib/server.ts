@@ -1,7 +1,7 @@
 "use server";
 
 import { ApiResponse } from "@/types/common";
-import { IAuthData } from "@/types/user";
+import { IAuthData, Role } from "@/types/user";
 import * as jose from "jose";
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_CONFIG, SessionMetadata, isSessionExpired, updateLastActivity, createSessionMetadata } from "./session-config";
@@ -10,6 +10,30 @@ import { cookies } from "next/headers";
 export async function getServerToken(): Promise<string | null> {
     const cookieStore = await cookies()
     return cookieStore.get('accessToken')?.value ?? null
+}
+
+import { User, TokenMetadata } from "@/types/user";
+
+/**
+ * Read the server-side access token and decode the JWT to extract minimal user info.
+ * Returns `null` when no valid token or parsing fails.
+ */
+export async function getServerUser(): Promise<Pick<User, 'id' | 'roles'> | null> {
+    const token = await getServerToken()
+    if (!token) return null
+
+    try {
+        const parsed = jose.decodeJwt(token) as unknown as Partial<TokenMetadata>
+
+        const userId = parsed.user_id
+        const roles = Array.isArray(parsed.roles) ? parsed.roles : (parsed.roles ? [parsed.roles as Role] : [])
+
+        if (!userId) return null
+        return { id: Number(userId), roles }
+    } catch (err) {
+        console.error('Failed to decode server token:', err)
+        return null
+    }
 }
 
 // Cache for JWT parsing to avoid repeated parsing
