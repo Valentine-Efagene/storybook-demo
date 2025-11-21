@@ -17,14 +17,13 @@ export async function signIn(formData: unknown) {
     const { email, password } = parsed.data
 
     try {
-        console.log(`${EnvironmentHelper.API_BASE_URL}/onboarding/login`)
-        const res = await fetch(`${EnvironmentHelper.API_BASE_URL}/onboarding/login`, {
+        const res = await fetch(`${EnvironmentHelper.API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                identifier: email,
+                email,
                 password,
             }),
             cache: 'no-store',
@@ -40,8 +39,8 @@ export async function signIn(formData: unknown) {
             }
         }
         const { token } = data.body
-        const accessToken = token.authToken
-        const refreshToken = token.authToken // Assuming refresh token is also returned here
+        const accessToken = token
+        const refreshToken = token // Assuming refresh token is also returned here
 
         // Decode access token to get expiry
         const parsed = jose.decodeJwt(accessToken);

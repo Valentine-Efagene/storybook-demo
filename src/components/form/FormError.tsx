@@ -10,7 +10,7 @@ function FormErrorBase(
     { className, children, ...rest }: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 ) {
     return (
-        <Alert {...rest} className={`${className} bg-accent-red-light-bg`} variant={"destructive"}>
+        <Alert {...rest} className={`${className} border-destructive bg-accent-red-light-bg`} variant={"destructive"}>
             <AlertCircleIcon />
             <AlertDescription>
                 {children}

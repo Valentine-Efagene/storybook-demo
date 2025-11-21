@@ -73,9 +73,7 @@ export interface User {
 export type AuthResponse = ApiResponse<IAuthData>
 
 export interface IAuthData {
-    token: {
-        authToken: string;
-    };
+    token: string;
     user: User;
 }
 

@@ -42,8 +42,6 @@ export async function authenticatedFetch<T>(
         ...params,
     })
 
-    console.log({ url })
-
     const response = await fetch(`${EnvironmentHelper.API_BASE_URL}${url}`, {
         ...options,
         headers: {
@@ -137,7 +135,7 @@ export async function fetchUsers(params: any = {}) {
 }
 
 export async function fetchPropertyById(id: string) {
-    const baseUrl = '/propy/get-property'
+    const baseUrl = '/property/get-property'
     const params = { id }
     const data = await authenticatedFetch<{ property: Property }>(
         baseUrl,
@@ -151,7 +149,7 @@ export async function fetchPropertyById(id: string) {
 }
 
 export async function fetchProperties(params: any = {}) {
-    const baseUrl = '/propy/filter-properties'
+    const baseUrl = '/property'
     const data = await authenticatedFetch<PaginatedPropertyResponseBody>(
         baseUrl,
         params,
