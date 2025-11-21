@@ -25,6 +25,7 @@ export async function getServerUser(): Promise<Pick<User, 'id' | 'roles'> | null
 
     try {
         const parsed = jose.decodeJwt(token) as unknown
+        console.log({ parsed })
 
         // Validate the decoded token structure
         const validationResult = TokenPayloadSchema.safeParse(parsed)
@@ -255,8 +256,8 @@ async function tokens(refreshToken: string) {
 
         const data: ApiResponse<IAuthData> = await resp.json();
         return {
-            accessToken: data.body.token.authToken,
-            refreshToken: data.body.token.authToken,
+            accessToken: data.body.token,
+            refreshToken: data.body.token,
         };
     } catch (err) {
         console.error("Error refreshing tokens:", err);

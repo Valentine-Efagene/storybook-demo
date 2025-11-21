@@ -73,7 +73,7 @@ export function SignInForm() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <form id="signin" onSubmit={form.handleSubmit(onSubmit)}>
+                <form id="signin" onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
                     <FieldGroup>
                         <Controller
                             name="email"
@@ -115,6 +115,12 @@ export function SignInForm() {
                     {signInMutation.isError && (
                         <FormError formError={signInMutation.error?.message} />
                     )}
+                    <a
+                        href="#"
+                        className="font-medium text-primary hover:underline ml-auto text-sm"
+                    >
+                        Forgot password
+                    </a>
                 </form>
             </CardContent>
             <CardFooter>
