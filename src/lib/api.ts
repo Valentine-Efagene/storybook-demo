@@ -167,3 +167,10 @@ export async function fetchUserById(userId: number) {
         revalidate: 600 // Cache individual user data for 10 minutes (changes rarely)
     })
 }
+
+export async function fetchCurrentUser() {
+    const baseUrl = '/auth/me'
+    return authenticatedFetch<{ user: User }>(baseUrl, {}, {}, {
+        revalidate: 600 // Cache individual user data for 10 minutes (changes rarely)
+    })
+}

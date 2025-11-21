@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Call the backend refresh endpoint
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/onboarding/refresh`
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`
         const resp = await fetch(apiUrl, {
             method: "POST",
             headers: {

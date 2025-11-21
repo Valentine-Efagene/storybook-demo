@@ -19,7 +19,10 @@ export default async function Users() {
         limit: EnvironmentHelper.PAGINATION_LIMIT.toString(),
         from: null,
         to: null,
-        status: null
+        status: null,
+        completion_status: null,
+        type: null,
+        order: null,
     }
 
     // Prefetch with the EXACT same query key as Properties uses

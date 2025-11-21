@@ -4,12 +4,15 @@ export type PropertyStatus = 'allocated' | 'unallocated';
 
 export interface PropertyQueryParams extends QueryParams {
     status?: PropertyStatus | null
+    type?: PropertyType | null
+    completion_status?: PropertyCompletionStatus | null
+    order?: 'asc' | 'desc' | null
 }
 
 export type PropertyType = "condominium" | "fully_detached_duplex" | "semi_detached_duplex" | "detached_bungalows" | "apartments" | "flats" | "terraces" | "maisonette" | "penthouse" | "terrace_bungalows"
     | "semi_detached_bungalow" | "terrace_duplex" | "fully_detached_duplex"
 
-export type PropertyFinishStatus = 'finished' | 'semi_finished'
+export type PropertyCompletionStatus = 'under_construction' | 'completed'
 
 export interface Apartment {
     id: number
@@ -57,7 +60,7 @@ export interface PropertyUpdateDto {
     state: string | undefined
     city: string | undefined
     property_type: PropertyType | undefined
-    finished_status: PropertyFinishStatus,
+    completion_status: PropertyCompletionStatus | undefined
     model_3d_image: string[] | null,
     floor_plan_image: string[] | null,
     aerial_image: string[] | null,
@@ -110,7 +113,7 @@ export interface Property {
     is_vacant: boolean
     time_to_be_vacant: string | null
     approval_number: string | null
-    finished_status: PropertyFinishStatus
+    completion_status: PropertyCompletionStatus | undefined
     youtube_url: string | null
     display_image: string | null
     model_3d_image: string | null

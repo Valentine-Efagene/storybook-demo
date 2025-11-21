@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
-import { fetchUserById } from '@/lib/api'
+import { fetchCurrentUser, fetchUserById } from '@/lib/api'
 import { User } from '@/types/user'
 
 // Server action to get current user from session
@@ -43,7 +43,7 @@ export async function getCurrentUserFromSession(): Promise<{
         }
 
         // Fetch user by ID using the existing API function
-        const response = await fetchUserById(userIdNumber)
+        const response = await fetchCurrentUser()
 
         if (response.status !== 200 || !response.body) {
             console.error('Failed to fetch user by ID:', response.statusCode)

@@ -14,6 +14,8 @@ export interface ApiPaginationMeta {
     sortBy: string[][]
 }
 
+export type Order = 'asc' | 'desc'
+
 export interface SVGProps extends React.SVGAttributes<SVGElement> { }
 
 export interface ImagePlaceholder {

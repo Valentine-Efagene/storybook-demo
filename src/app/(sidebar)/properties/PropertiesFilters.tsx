@@ -4,29 +4,62 @@ import { useSearchParams } from "next/navigation"
 import { useMemo, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Calendar } from "lucide-react"
+import { Filter } from "lucide-react"
 import { FormSearchInput } from "@/components/form/FormSearchInput"
 import { Controller, SubmitHandler, useForm, useWatch } from "react-hook-form"
 import { FormLabel } from "@/components/form/FormLabel"
 import { DatePicker } from "@/components/form/DatePicker"
 import { format } from "date-fns"
 import { FormGroup } from "@/components/form/FormGroup"
-import { PropertyQueryParams, PropertyStatus } from "@/types/property"
+import { PropertyQueryParams, PropertyStatus, PropertyType } from "@/types/property"
 import Tab from "@/components/Tab"
 import Link from "next/link"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Order } from "@/types/common"
 
 interface Props {
     initialQparams: PropertyQueryParams
     onUpdateParams: (newParams: Record<string, string>) => void
 }
 
+const COMPLETION_STATUS_OPTIONS = [
+    { value: 'under_construction', label: 'Under Construction' },
+    { value: 'completed', label: 'Completed' },
+];
+
+const ORDER_OPTIONS = [
+    { value: 'asc', label: 'Ascending' },
+    { value: 'desc', label: 'Descending' },
+];
+
+const TYPE_OPTIONS: {
+    value: PropertyType | '';
+    label: string;
+}[] = [
+        { value: 'condominium', label: 'Condominium' },
+        { value: 'fully_detached_duplex', label: 'Fully Detached Duplex' },
+        { value: 'semi_detached_duplex', label: 'Semi Detached Duplex' },
+        { value: 'detached_bungalows', label: 'Detached Bungalows' },
+        { value: 'apartments', label: 'Apartments' },
+        { value: 'flats', label: 'Flats' },
+        { value: 'terraces', label: 'Terraces' },
+        { value: 'maisonette', label: 'Maisonette' },
+        { value: 'penthouse', label: 'Penthouse' },
+        { value: 'terrace_bungalows', label: 'Terrace Bungalows' },
+        { value: 'semi_detached_bungalow', label: 'Semi Detached Bungalow' },
+        { value: 'terrace_duplex', label: 'Terrace Duplex' },
+    ];
+
 export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
     const searchParams = useSearchParams()
 
-    const search = searchParams.get("search") ?? initialQparams.search ?? null
-    const from = searchParams.get("from") ?? initialQparams.from ?? null
-    const to = searchParams.get("to") ?? initialQparams.to ?? null
-    const status = searchParams.get("status") ?? initialQparams.status ?? null
+    const search = searchParams.get("search") ?? initialQparams.search ?? undefined
+    const from = searchParams.get("from") ?? initialQparams.from ?? undefined
+    const to = searchParams.get("to") ?? initialQparams.to ?? undefined
+    const status = searchParams.get("status") ?? initialQparams.status ?? undefined
+    const completion_status = searchParams.get("completion_status") ?? initialQparams.completion_status ?? undefined
+    const type = (searchParams.get("type") ?? initialQparams.type ?? undefined) as PropertyType | undefined
+    const order = (searchParams.get("order") ?? initialQparams.order ?? undefined) as Order | undefined
 
     // Use a consistent date for server/client to avoid hydration mismatches
     const today = useMemo(() => new Date(), [])
@@ -51,10 +84,16 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
     } = useForm<{
         date_from: string;
         date_to: string;
+        order: 'asc' | 'desc' | undefined;
+        completion_status: string | undefined;
+        type: string | undefined;
     }>({
         defaultValues: {
             date_from: from ?? "",
             date_to: to ?? "",
+            order: order ?? undefined,
+            completion_status: completion_status ?? undefined,
+            type: type ?? undefined,
         }
     });
 
@@ -63,6 +102,9 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
     const onSubmit: SubmitHandler<{
         date_from: string;
         date_to: string;
+        order: 'asc' | 'desc' | undefined;
+        completion_status: string | undefined;
+        type: string | undefined;
     }> = (data) => {
         if (data.date_from && data.date_to) {
             const fromDate = new Date(data.date_from);
@@ -82,6 +124,9 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
             offset: "0",
             from: data.date_from ?? "",
             to: data.date_to ?? "",
+            order: data.order ?? "",
+            completion_status: data.completion_status ?? "",
+            type: data.type ?? "",
         });
     }
 
@@ -116,8 +161,8 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="subtle">
-                                <Calendar className="h-4 w-4" />
-                                <span>Date</span>
+                                <Filter className="h-4 w-4" />
+                                <span>Filter</span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="p-4 space-y-4 w-[300px]" align="end">
@@ -128,6 +173,69 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
                                     className="flex flex-col gap-4"
                                 >
                                     <div className="grid gap-4 sm:gap-2 sm:grid-cols-1">
+                                        <FormGroup>
+                                            <FormLabel>Completion Status</FormLabel>
+                                            <Controller
+                                                name="completion_status"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <Select onValueChange={field.onChange} value={field.value}>
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="Select property type" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            {COMPLETION_STATUS_OPTIONS.map(option => (
+                                                                <SelectItem key={option.value} value={option.value}>
+                                                                    {option.label}
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
+                                                )}
+                                            />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <FormLabel>Type</FormLabel>
+                                            <Controller
+                                                name="type"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <Select onValueChange={field.onChange} value={field.value}>
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="Select property type" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            {TYPE_OPTIONS.map(option => (
+                                                                <SelectItem key={option.value} value={option.value}>
+                                                                    {option.label}
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
+                                                )}
+                                            />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <FormLabel>Order</FormLabel>
+                                            <Controller
+                                                name="order"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <Select onValueChange={field.onChange} value={field.value}>
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="Select order" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            {ORDER_OPTIONS.map(option => (
+                                                                <SelectItem key={option.value} value={option.value}>
+                                                                    {option.label}
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
+                                                )}
+                                            />
+                                        </FormGroup>
                                         {/* Date From */}
                                         <FormGroup>
                                             <FormLabel>Start Date</FormLabel>
