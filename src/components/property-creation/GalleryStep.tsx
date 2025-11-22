@@ -3,7 +3,6 @@ import { Control, FieldErrors, UseFormWatch, Controller } from "react-hook-form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CompletePropertyFormData } from "@/lib/schemas/property"
 import { CustomFilePicker } from "@/components/form/CustomFilePicker"
-import { SingleFilePicker } from "../form/CustomFilePicker/SingleFilePicker"
 
 interface GalleryStepProps {
     control: Control<CompletePropertyFormData>
@@ -43,27 +42,28 @@ export function GalleryStep({
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <Controller
-                        name="displayImage"
+                        name="media"
                         control={control}
                         render={({ field }) => {
-                            return <SingleFilePicker
-                                onChange={field.onChange}
-                                control={control}
-                                name="displayImage"
+                            return <CustomFilePicker
+                                files={field.value || []}
+                                onFilesChange={field.onChange}
+                                allowMultiple={true}
+                                maxFiles={10}
                                 maxFileSize={10}
                                 allowedTypes={['image/*']}
-                                label="Upload display image"
-                                description="This will be the main image shown for your property"
+                                label="Upload 3D model images"
+                                description="Upload multiple images showing different angles and details"
                                 showPreview={true}
                                 showFileSize={true}
                                 accept="image/*"
-                                onError={(error) => handleFileError('displayImage', error)}
+                                onError={(error) => handleFileError('media', error)}
                             />
                         }}
                     />
-                    {(errors.displayImage || fileErrors.displayImage) && (
+                    {(errors.media || fileErrors.media) && (
                         <p className="text-sm text-red-600">
-                            {errors.displayImage?.message || fileErrors.displayImage}
+                            {errors.media?.message || fileErrors.media}
                         </p>
                     )}
                 </CardContent>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useForm, Controller } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, ArrowRight, Save, X, Check } from "lucide-react"
@@ -36,15 +36,14 @@ export default function CreatePropertyPage() {
             description: "",
             bedrooms: 1,
             bathrooms: 1,
-            squareFeet: 1,
-            address: "",
+            location: "",
             city: "",
             state: "",
             price: 1,
             currency: "NGN",
             status: "available",
             completion_status: "completed",
-            // displayImage: undefined, // This is required now, will cause validation error until uploaded
+            media: [],
             model3dImages: [],
             floorPlanImages: [],
             aerialImages: [],

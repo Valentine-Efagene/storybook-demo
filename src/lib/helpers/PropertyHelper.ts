@@ -138,11 +138,11 @@ export default class PropertyHelper {
   }
 
   // New method for form data with File objects
-  public static getImagesFromFormData: (formData: { displayImage?: File; model3dImages?: File[]; floorPlanImages?: File[]; aerialImages?: File[] }) => File[] = (formData) => {
+  public static getImagesFromFormData: (formData: { media?: File[]; model3dImages?: File[]; floorPlanImages?: File[]; aerialImages?: File[] }) => File[] = (formData) => {
     const images: File[] = []
 
-    if (formData.displayImage) {
-      images.push(formData.displayImage)
+    if (formData.media) {
+      images.push(...formData.media)
     }
 
     if (formData.floorPlanImages) {

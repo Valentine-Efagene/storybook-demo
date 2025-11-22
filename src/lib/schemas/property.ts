@@ -6,8 +6,7 @@ export const propertyDetailsFormSchema = z.object({
     description: z.string().optional(),
     bedrooms: z.number().min(0, "Bedrooms must be 0 or greater").optional(),
     bathrooms: z.number().min(0, "Bathrooms must be 0 or greater").optional(),
-    squareFeet: z.number().min(0, "Square feet must be 0 or greater").optional(),
-    address: z.string().min(1, "Address is required"),
+    location: z.string().min(1, "Address is required"),
     city: z.string().min(1, "City is required"),
     state: z.string().min(1, "State is required"),
     price: z.number().min(0.01, "Price must be greater than 0"),
@@ -22,13 +21,11 @@ export const propertyDetailsSchema = z.object({
     description: z.string().optional(), //.min(1, "Description is required"),
     bedrooms: z.number().min(0, "Bedrooms must be 0 or greater").optional(),
     bathrooms: z.number().min(0, "Bathrooms must be 0 or greater").optional(),
-    squareFeet: z.number().min(0, "Square feet must be 0 or greater").optional(),
-    address: z.string().min(1, "Address is required"),
+    location: z.string().min(1, "Address is required"),
     city: z.string().min(1, "City is required"),
     state: z.string().min(1, "State is required"),
     price: z.number().min(0, "Price must be 0 or greater"),
     currency: z.enum(["NGN", "USD"]),
-    finished_status: z.enum(["semi_finished", "finished"]).optional(),
     completion_status: z.enum(["under_construction", "completed", "off_plan"]).optional(),
     status: z.enum(["available", "pending", "sold", "rented"]),
 })
@@ -43,7 +40,7 @@ export const propertyAvailabilityStatusSchema = z.object({
 })
 
 export const gallerySchema = z.object({
-    displayImage: z.instanceof(File, { message: "Display image is required" }),
+    media: z.array(z.instanceof(File)).min(1, { message: "Display image is required" }),
     model3dImages: z.array(z.instanceof(File)).optional(),
     floorPlanImages: z.array(z.instanceof(File)).optional(),
     aerialImages: z.array(z.instanceof(File)).optional(),

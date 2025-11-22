@@ -1,29 +1,24 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import type { CompletePropertyFormData } from "@/lib/schemas/property"
 import HtmlContent from "../HtmlContent"
 import PropertyHelper from "@/lib/helpers/PropertyHelper"
-import ImageHelper from "@/lib/helpers/ImageHelper"
 import ImageCarousel from "@/components/ImageCarousel"
-import { useEffect, useState, useMemo, JSX } from "react"
+import { useEffect, useState } from "react"
 import FormatHelper from "@/lib/helpers/FormatHelper"
 import {
     Bath,
     Bed,
     Check,
-    Hammer,
     HammerIcon,
     House,
     LucideProps,
     MapPin,
-    Square,
     Tag,
     FileImage,
-    Calendar
 } from "lucide-react"
-import { PropertyFinishStatus } from "@/types/property"
+import { PropertyCompletionStatus } from "@/types/property"
 import { ForwardRefExoticComponent, RefAttributes } from "react"
 import { createFilePreview } from "../form/CustomFilePicker/utils"
 
@@ -40,9 +35,9 @@ export function ReviewStep({ formData }: ReviewStepProps) {
         }
     }
 
-    const finishingIcon: Record<PropertyFinishStatus, ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>> = {
-        semi_finished: HammerIcon,
-        finished: House
+    const finishingIcon: Record<PropertyCompletionStatus, ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>> = {
+        completed: House,
+        under_construction: HammerIcon,
     }
 
     const formatPropertyType = (type: string) => {
@@ -118,9 +113,9 @@ export function ReviewStep({ formData }: ReviewStepProps) {
                 return []
             })
         }
-    }, [formData.displayImage, formData.floorPlanImages, formData.model3dImages, formData.aerialImages])
+    }, [formData.media, formData.floorPlanImages, formData.model3dImages, formData.aerialImages])
 
-    const FinishingIconComponent = finishingIcon[formData.finished_status ?? 'semi_finished']
+    const FinishingIconComponent = finishingIcon[formData.completion_status as PropertyCompletionStatus]
 
     return (
         <div className="max-w-4xl mx-auto space-y-6 flex flex-col">
@@ -167,7 +162,7 @@ export function ReviewStep({ formData }: ReviewStepProps) {
                                 <div className="flex items-start gap-2 text-secondary-text">
                                     <MapPin className="w-5 h-5 mt-0.5" />
                                     <address className="not-italic text-sm font-normal">
-                                        {formData.address}<br />
+                                        {formData.location}<br />
                                         {formData.city}, {formData.state}
                                     </address>
                                 </div>
@@ -199,7 +194,7 @@ export function ReviewStep({ formData }: ReviewStepProps) {
                                         <div className="flex items-center gap-2">
                                             <FinishingIconComponent className="w-6 h-6 text-brand-border" />
                                         </div>
-                                        <div className="text-sm text-primary-text font-medium">{formData.finished_status}</div>
+                                        <div className="text-sm text-primary-text font-medium">{formData.completion_status}</div>
                                     </div>
                                 )}
 
@@ -209,15 +204,6 @@ export function ReviewStep({ formData }: ReviewStepProps) {
                                             <Bath className="w-6 h-6 text-brand-border" />
                                         </div>
                                         <div className="text-sm text-primary-text font-medium">{formData.bathrooms} Baths</div>
-                                    </div>
-                                )}
-
-                                {formData.squareFeet !== undefined && (
-                                    <div className="border border-primary-border shadow-[0px_1px_2px_rgba(230,230,217,0.5)] rounded-md flex flex-col gap-4 p-4 items-start">
-                                        <div className="flex items-center gap-2">
-                                            <Bed className="w-6 h-6 text-brand-border" />
-                                        </div>
-                                        <div className="text-sm text-primary-text font-medium">{formData.bedrooms} Beds</div>
                                     </div>
                                 )}
                             </div>

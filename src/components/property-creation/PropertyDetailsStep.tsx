@@ -187,27 +187,6 @@ export function PropertyDetailsStep({
                                 <p className="text-sm text-red-600">{errors.bathrooms.message}</p>
                             )}
                         </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="squareFeet">Number of Units</Label>
-                            <Controller
-                                name="squareFeet"
-                                control={control}
-                                render={({ field }) => (
-                                    <Input
-                                        id="squareFeet"
-                                        type="number"
-                                        min="0"
-                                        placeholder="Total number of units"
-                                        {...field}
-                                        onChange={(e) => field.onChange(Number(e.target.value))}
-                                    />
-                                )}
-                            />
-                            {errors.squareFeet && (
-                                <p className="text-sm text-red-600">{errors.squareFeet.message}</p>
-                            )}
-                        </div>
                     </div>
                 </CardContent>
             </Card>
@@ -220,20 +199,20 @@ export function PropertyDetailsStep({
                 <CardContent className="space-y-6">
                     <div className="grid grid-cols-1 gap-6">
                         <div className="space-y-2">
-                            <Label htmlFor="address">Street Address</Label>
+                            <Label htmlFor="location">Location</Label>
                             <Controller
-                                name="address"
+                                name="location"
                                 control={control}
                                 render={({ field }) => (
                                     <Input
-                                        id="address"
-                                        placeholder="Enter street address"
+                                        id="location"
+                                        placeholder="Enter location"
                                         {...field}
                                     />
                                 )}
                             />
-                            {errors.address && (
-                                <p className="text-sm text-red-600">{errors.address.message}</p>
+                            {errors.location && (
+                                <p className="text-sm text-red-600">{errors.location.message}</p>
                             )}
                         </div>
 
