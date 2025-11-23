@@ -11,7 +11,7 @@ import { QueryHelper } from "./helpers/QueryHelper"
 import { PaginatedUserResponseBody, TokenMetadata, User } from "@/types/user"
 import EnvironmentHelper from "./helpers/EnvironmentHelper"
 import * as jose from "jose";
-import { PaginatedPropertyResponseBody, Property } from "@/types/property"
+import { PaginatedPropertyResponseBody, Plan, Property } from "@/types/property"
 
 async function getServerToken(): Promise<string | null> {
     const cookieStore = await cookies()
@@ -100,9 +100,9 @@ export async function updateUserProfile(data: FormData) {
     return authenticatedUpload('/auth/profile', data)
 }
 
-export async function fetchUserTickets(page: number = 1) {
-    return authenticatedFetch<any>(`/tickets?page=${page}`, {}, {}, {
-        revalidate: 120 // Cache user tickets for 2 minutes
+export async function fetchPlans() {
+    return authenticatedFetch<{ plans: Plan[] }>(`/property/plans`, {}, {}, {
+        revalidate: 120 // Cache user plans for 2 minutes
     })
 }
 

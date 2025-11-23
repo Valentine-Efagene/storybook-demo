@@ -52,7 +52,7 @@ export function GalleryStep({
                                 maxFiles={10}
                                 maxFileSize={10}
                                 allowedTypes={['image/*']}
-                                label="Upload 3D model images"
+                                label="Upload property media"
                                 description="Upload multiple images showing different angles and details"
                                 showPreview={true}
                                 showFileSize={true}

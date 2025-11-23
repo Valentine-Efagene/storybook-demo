@@ -9,7 +9,7 @@ import FormatHelper from '@/lib/helpers/FormatHelper'
 import { Bath, CheckCircle, CircleFadingArrowUp, HammerIcon, House, LucideProps, RefreshCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import StyledIconChip from '@/components/StyledIconChip'
-import { PropertyFinishStatus } from '@/types/property'
+import { PropertyCompletionStatus } from '@/types/property'
 import { ForwardRefExoticComponent, RefAttributes, useState } from 'react'
 import CenteredLoader from '@/components/CenteredLoader'
 import { MilestoneSheet } from './MilestoneSheet'
@@ -36,12 +36,12 @@ export function Property({ id }: Props) {
         return <EmptyProperty />
     }
 
-    const finishingIcon: Record<PropertyFinishStatus, ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>> = {
-        semi_finished: HammerIcon,
-        finished: House
+    const finishingIcon: Record<PropertyCompletionStatus, ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>> = {
+        completed: HammerIcon,
+        under_construction: House
     }
 
-    const FinishingIconComponent = finishingIcon[property.finished_status ?? 'semi_finished']
+    const FinishingIconComponent = finishingIcon[property.completion_status as PropertyCompletionStatus] || HammerIcon
 
     return (
         <div className='flex flex-col gap-4 p-8'>
@@ -93,7 +93,7 @@ export function Property({ id }: Props) {
                                     <div className="flex items-center gap-2">
                                         <FinishingIconComponent className="w-6 h-6 text-brand-border" />
                                     </div>
-                                    <div className="text-sm text-primary-text font-medium">{property.finished_status}</div>
+                                    <div className="text-sm text-primary-text font-medium">{property.completion_status}</div>
                                 </div>
 
                                 {property.buildings?.[0]?.bathroom_count !== undefined && (

@@ -14,6 +14,17 @@ export type PropertyType = "condominium" | "fully_detached_duplex" | "semi_detac
 
 export type PropertyCompletionStatus = 'under_construction' | 'completed'
 
+export interface Plan {
+    "id": number,
+    "name": string | null,
+    "downpayment_percent": number,
+    "allow_downpayment": boolean,
+    "allow_mortgage": boolean,
+    "created_at": string | null,
+    "updated_at": string | null,
+    "deleted_at": string | null
+}
+
 export interface Apartment {
     id: number
     building_id: number

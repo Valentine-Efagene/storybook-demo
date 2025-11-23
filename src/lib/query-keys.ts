@@ -82,3 +82,11 @@ export function createPropertiesQueryKey({
         status,
     ]
 }
+
+/**
+ * Generate query key for plans
+ * Plans are static data that rarely changes
+ */
+export function getPlansQueryKey() {
+    return [QUERY_KEYS.PLANS] as const
+}

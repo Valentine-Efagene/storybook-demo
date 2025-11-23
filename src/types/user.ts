@@ -107,6 +107,7 @@ export const QUERY_KEYS = {
     USER: 'user',
     PROFILE: 'profile',
     PROPERTIES: 'properties',
+    PLANS: 'plans',
     EVENT_MEDIA: 'event-media',
     TICKET_CATEGORIES: 'ticket-categories',
     EVENT_TICKET_TYPES: 'event-ticket-types',

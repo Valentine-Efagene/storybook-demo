@@ -1,4 +1,3 @@
-import ImageHelper from "./ImageHelper"
 import EnvironmentHelper from "./EnvironmentHelper"
 import { Apartment, Building, Property, PropertyDocument } from "@/types/property"
 
