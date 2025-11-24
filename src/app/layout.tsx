@@ -6,6 +6,7 @@ import { QueryProvider } from "@/providers/query-provider";
 import ProvidersClientWrapper from "@/components/providers/ProvidersClientWrapper";
 import { getServerUser } from "@/lib/server";
 import { Toaster } from "sonner";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -38,6 +39,12 @@ export default async function RootLayout({
             <body
                 className={`${inter.variable} ${geistMono.variable} antialiased font-inter`}
             >
+                <NextTopLoader
+                    color="#026993"
+                    height={3}
+                    showSpinner={false}
+                    shadow="0 0 10px #026993,0 0 5px #026993"
+                />
                 <QueryProvider>
                     <ProvidersClientWrapper user={serverUser}>
                         {children}

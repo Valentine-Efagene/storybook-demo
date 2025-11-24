@@ -73,7 +73,7 @@ export async function getPresignedPost(key: string) {
 
     const response = await fetch(endpoint, {
         method: 'POST',
-        body: JSON.stringify({ url: key }),
+        body: JSON.stringify({ key }),
         headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
@@ -92,7 +92,6 @@ export async function uploadToS3(
     file: Blob,
     presignedPost: PresignedPost
 ) {
-    const accessToken = await getServerToken()
     const formData = new FormData()
 
     // Append all presigned fields
@@ -106,16 +105,13 @@ export async function uploadToS3(
     const response = await fetch(presignedPost.url, {
         method: 'POST',
         body: formData,
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-        }
     })
 
     if (!response.ok) {
         throw new Error(`Upload Error: ${response.status}`)
     }
 
-    return response.url + presignedPost.fields.key
+    return presignedPost.url + presignedPost.fields.key
 }
 
 // Server action for file uploads

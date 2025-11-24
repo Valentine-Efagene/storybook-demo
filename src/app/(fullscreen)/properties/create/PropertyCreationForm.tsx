@@ -217,8 +217,9 @@ export function PropertyCreationForm() {
                             {currentStep === STEPS.length ? (
                                 <Button
                                     onClick={handleSubmit(handleFinalSubmit)}
-                                    disabled={!stepValidation[4]}
+                                    disabled={!stepValidation[4] || propertyCreationMutation.isLoading}
                                     className="w-full"
+                                    loading={propertyCreationMutation.isLoading}
                                 >
                                     <Save className="h-4 w-4 mr-2" />
                                     Create Property

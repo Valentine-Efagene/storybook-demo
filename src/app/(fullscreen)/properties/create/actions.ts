@@ -52,9 +52,11 @@ export async function createProperty(formData: unknown) {
         floorPlanImages: uploadedUrls.slice(model3dEndIndex),
     }
 
+    console.log({ propertyData })
+
     try {
         const accessToken = await getServerToken()
-        const res = await fetch(`${EnvironmentHelper.API_BASE_URL}/property`, {
+        const res = await fetch(`${EnvironmentHelper.API_BASE_URL}/property/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

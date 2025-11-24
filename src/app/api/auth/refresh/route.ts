@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { SESSION_CONFIG, createSessionMetadata } from "@/lib/session-config"
 import * as jose from "jose"
+import EnvironmentHelper from "@/lib/helpers/EnvironmentHelper"
 
 export async function POST(req: NextRequest) {
     try {
@@ -34,7 +35,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Call the backend refresh endpoint
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`
+        const apiUrl = `${EnvironmentHelper.API_BASE_URL}/auth/refresh`
         const resp = await fetch(apiUrl, {
             method: "POST",
             headers: {
@@ -42,7 +43,7 @@ export async function POST(req: NextRequest) {
                 "Authorization": `Bearer ${accessToken}`,
                 "user_id": userId.toString()
             },
-            body: JSON.stringify({ refreshToken }),
+            // body: JSON.stringify({ refreshToken }),
         })
 
         if (!resp.ok) {
