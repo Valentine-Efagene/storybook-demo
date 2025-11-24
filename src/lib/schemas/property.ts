@@ -2,7 +2,7 @@ import { PropertyCompletionStatus, PropertyType } from "@/types/property"
 import { z } from "zod"
 
 export const propertyDetailsFormSchema = z.object({
-    title: z.string().min(1, "Property title is required"),
+    // title: z.string().min(1, "Property title is required"),
     type: z.enum(["apartment", "house", "condo", "townhouse"]),
     description: z.string().optional(),
     bedrooms: z.number().min(0, "Bedrooms must be 0 or greater").optional(),
@@ -17,7 +17,7 @@ export const propertyDetailsFormSchema = z.object({
 })
 
 export const propertyDetailsSchema = z.object({
-    title: z.string().min(1, "Property title is required"),
+    // title: z.string().min(1, "Property title is required"),
     type: z.enum([
         "bungalow",
         "apartments",
@@ -35,8 +35,6 @@ export const propertyDetailsSchema = z.object({
     bedrooms: z.number().min(0, "Bedrooms must be 0 or greater").optional(),
     bathrooms: z.number().min(0, "Bathrooms must be 0 or greater").optional(),
     location: z.string().min(1, "Address is required"),
-    city: z.string().min(1, "City is required"),
-    state: z.string().min(1, "State is required"),
     price: z.number().min(0, "Price must be 0 or greater"),
     completion_status: z.enum(["under_construction", "move_in_ready"]).optional(),
     no_of_units_available: z.number().min(1, "Number of units available must be at least 1").optional(),
@@ -62,7 +60,7 @@ export const amenitiesSchema = z.object({
 })
 
 export const plansSchema = z.object({
-    plans: z.array(z.string()).min(1, "Please select at least one plan"),
+    plans: z.array(z.number()).min(1, "Please select at least one plan"),
 })
 
 export const completePropertySchema = propertyDetailsSchema

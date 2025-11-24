@@ -119,11 +119,11 @@ export default class PropertyHelper {
     return list
   }
 
-  public static getImages: (property: Pick<Property, 'aerial_image' | 'model_3d_image' | 'floor_plan_image' | 'display_image'>) => (string)[] = (property) => {
-    const aerialImages: string[] = property.aerial_image ? JSON.parse(property.aerial_image) : []
-    const model3dImages: string[] = property.model_3d_image ? JSON.parse(property.model_3d_image) : []
-    const floorPlanImages: string[] = property.floor_plan_image ? JSON.parse(property.floor_plan_image) : []
-    const images = [property.display_image, ...floorPlanImages, ...aerialImages, ...model3dImages].filter(image => image != null)
+  public static getImages: (property: Pick<Property, 'three_d_walkthroughs' | 'floor_plans' | 'media'>) => (string)[] = (property) => {
+    const model3dImages: string[] = property.three_d_walkthroughs ? JSON.parse(property.three_d_walkthroughs) : []
+    const floorPlanImages: string[] = property.floor_plans ? JSON.parse(property.floor_plans) : []
+    const mediaImages: string[] = property.media ? JSON.parse(property.media) : []
+    const images = [...mediaImages, ...floorPlanImages, ...model3dImages].filter(image => image != null)
 
     const cleaned: string[] = []
 
@@ -137,36 +137,31 @@ export default class PropertyHelper {
   }
 
   // New method for form data with File objects
-  public static getImagesFromFormData: (formData: { media?: File[]; model3dImages?: File[]; floorPlanImages?: File[]; aerialImages?: File[] }) => File[] = (formData) => {
+  public static getImagesFromFormData: (formData: { media?: File[]; three_d_walkthroughs?: File[]; floor_plans?: File[]; }) => File[] = (formData) => {
     const images: File[] = []
 
     if (formData.media) {
       images.push(...formData.media)
     }
 
-    if (formData.floorPlanImages) {
-      images.push(...formData.floorPlanImages)
+    if (formData.floor_plans) {
+      images.push(...formData.floor_plans)
     }
 
-    if (formData.model3dImages) {
-      images.push(...formData.model3dImages)
-    }
-
-    if (formData.aerialImages) {
-      images.push(...formData.aerialImages)
+    if (formData.three_d_walkthroughs) {
+      images.push(...formData.three_d_walkthroughs)
     }
 
     return images
   }
 
-  public static getImagesWithTitles: (property: Property) => Record<'aerial' | 'display' | 'floorPlan' | 'model3d', (string | null)[]> = (property) => {
-    const aerialImages: string[] = property.aerial_image ? JSON.parse(property.aerial_image) : []
-    const model3dImages: string[] = property.model_3d_image ? JSON.parse(property.model_3d_image) : []
-    const floorPlanImages: string[] = property.floor_plan_image ? JSON.parse(property.floor_plan_image) : []
+  public static getImagesWithTitles: (property: Property) => Record<'media' | 'floorPlan' | 'model3d', (string | null)[]> = (property) => {
+    const model3dImages: string[] = property.three_d_walkthroughs ? JSON.parse(property.three_d_walkthroughs) : []
+    const floorPlanImages: string[] = property.floor_plans ? JSON.parse(property.floor_plans) : []
+    const mediaImages: string[] = property.media ? JSON.parse(property.media) : []
 
     return {
-      aerial: aerialImages.filter(url => url),
-      display: [property.display_image].filter(url => url),
+      media: mediaImages.filter(url => url),
       floorPlan: floorPlanImages.filter(url => url),
       model3d: model3dImages.filter(url => url)
     }

@@ -51,7 +51,7 @@ export function CardCheckbox({
                 "focus:outline-none focus:ring-2 focus:ring-primary-border focus:ring-offset-2",
                 "hover:shadow-md",
                 {
-                    'border-[var(--primary-text)] border-2': checked && !disabled,
+                    'border-brand-border border-2': checked && !disabled,
                     'border-gray-200 bg-white': !checked && !disabled,
                     'opacity-50 cursor-not-allowed': disabled,
                 },

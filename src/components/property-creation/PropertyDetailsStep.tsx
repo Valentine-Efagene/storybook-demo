@@ -24,7 +24,7 @@ const completionStatusOptions: BlockRadioOption[] = [
         label: 'Under Construction',
     },
     {
-        value: 'completed',
+        value: 'move_in_ready',
         label: 'Move-in Ready',
     },
 ]
@@ -85,7 +85,7 @@ export function PropertyDetailsStep({
                         )}
                     </div>
                     <div className="grid grid-cols-1 gap-6 w-full">
-                        <div className="md:col-span-2 space-y-2">
+                        {/* <div className="md:col-span-2 space-y-2">
                             <Label htmlFor="title">Property Title</Label>
                             <Controller
                                 name="title"
@@ -101,7 +101,7 @@ export function PropertyDetailsStep({
                             {errors.title && (
                                 <p className="text-sm text-red-600">{errors.title.message}</p>
                             )}
-                        </div>
+                        </div> */}
 
                         <div className="space-y-2 w-full">
                             <Label htmlFor="type">Property Type</Label>
@@ -214,8 +214,8 @@ export function PropertyDetailsStep({
                                         min={1}
                                         unitRight={"Units"}
                                         placeholder="xx"
-                                        {...field}
-                                        onChange={(value) => field.onChange(Number(value))}
+                                        value={field.value}
+                                        onChange={field.onChange}
                                     />
                                 )}
                             />
@@ -251,44 +251,6 @@ export function PropertyDetailsStep({
                                 <p className="text-sm text-red-600">{errors.location.message}</p>
                             )}
                         </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <Label htmlFor="city">City</Label>
-                                <Controller
-                                    name="city"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Input
-                                            id="city"
-                                            placeholder="Enter city"
-                                            {...field}
-                                        />
-                                    )}
-                                />
-                                {errors.city && (
-                                    <p className="text-sm text-red-600">{errors.city.message}</p>
-                                )}
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="state">State</Label>
-                                <Controller
-                                    name="state"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Input
-                                            id="state"
-                                            placeholder="Enter state"
-                                            {...field}
-                                        />
-                                    )}
-                                />
-                                {errors.state && (
-                                    <p className="text-sm text-red-600">{errors.state.message}</p>
-                                )}
-                            </div>
-                        </div>
                     </div>
                 </CardContent>
             </Card>
@@ -312,8 +274,8 @@ export function PropertyDetailsStep({
                                         unitLeft={"₦"}
                                         unitRight={"NGN"}
                                         placeholder="Enter price"
-                                        {...field}
-                                        onChange={(value) => field.onChange(Number(value))}
+                                        value={field.value}
+                                        onChange={field.onChange}
                                     />
                                 )}
                             />

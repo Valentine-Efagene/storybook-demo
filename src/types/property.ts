@@ -126,10 +126,9 @@ export interface Property {
     approval_number: string | null
     completion_status: PropertyCompletionStatus | undefined
     youtube_url: string | null
-    display_image: string | null
-    model_3d_image: string | null
-    floor_plan_image: string | null
-    aerial_image: string | null
+    media: string | null
+    three_d_walkthroughs: string | null
+    floor_plans: string | null
     administrative_fee: number | null
     //property_documents: string | null
     title: string | null

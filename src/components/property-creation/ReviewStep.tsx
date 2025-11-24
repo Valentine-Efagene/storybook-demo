@@ -124,7 +124,7 @@ export function ReviewStep({ formData }: ReviewStepProps) {
                     <div className="p-6 border p-6 rounded-lg shadow-2xs text-sm">
                         <div className="space-y-4">
                             {/* Title and Address */}
-                            <div>
+                            {/* <div>
                                 <h2 className="text-sm font-normal text-primary-text mb-2">
                                     {formData.title}
                                 </h2>
@@ -135,7 +135,7 @@ export function ReviewStep({ formData }: ReviewStepProps) {
                                         {formData.city}, {formData.state}
                                     </address>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="flex items-center gap-2">
                                 <span className="text-xl font-semibold text-primary-text">

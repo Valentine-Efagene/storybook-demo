@@ -31,29 +31,33 @@ export async function authenticatedFetch<T>(
         throw new Error('No authentication token available')
     }
 
-    const parsed: TokenMetadata = jose.decodeJwt(accessToken);
+    // const parsed: TokenMetadata = jose.decodeJwt(accessToken);
 
     if (!accessToken) {
         throw new Error('No authentication token available')
     }
 
     const url = QueryHelper.buildQueryUrl(endpoint, {
-        user_id: parsed.user_id?.toString() ?? '',
+        // user_id: parsed.user_id?.toString() ?? '',
         ...params,
     })
 
-    const response = await fetch(`${EnvironmentHelper.API_BASE_URL}${url}`, {
+    const finalUrl = `${EnvironmentHelper.API_BASE_URL}${url}`
+
+    const response = await fetch(finalUrl, {
         ...options,
         headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
             ...options.headers,
-            'user_id': parsed.user_id?.toString() ?? '',
+            // 'user_id': parsed.user_id?.toString() ?? '',
         },
         next: {
             revalidate: cacheOptions?.revalidate ?? 60 // Default 60 seconds cache
         }
     })
+
+    console.log({ finalUrl, response })
 
     if (!response.ok) {
         throw new Error(`API Error: ${response.status}`)
@@ -227,7 +231,7 @@ export async function fetchPropertyById(id: string) {
 }
 
 export async function fetchProperties(params: any = {}) {
-    const baseUrl = '/property'
+    const baseUrl = '/property/'
     const data = await authenticatedFetch<PaginatedPropertyResponseBody>(
         baseUrl,
         params,

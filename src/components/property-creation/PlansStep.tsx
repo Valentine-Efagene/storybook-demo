@@ -86,8 +86,8 @@ export function PlansStep({
                                     <CardCheckboxGroup
                                         orientation="vertical"
                                         options={plans}
-                                        value={field.value || []}
-                                        onChange={(value) => field.onChange(Number(value))}
+                                        value={(field.value || []).map(String)}
+                                        onChange={(value) => field.onChange(value.map(Number))}
                                         allowMultiple={true}
                                     />
                                 </div>

@@ -23,12 +23,31 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         },
         ref
     ) => {
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const inputValue = e.target.value;
+            const numericValue = inputValue === '' ? null : Number(inputValue);
+
+            if (onChange) {
+                onChange(numericValue);
+            }
+            if (onValueChange) {
+                onValueChange(inputValue, numericValue);
+            }
+        };
+
         return (
             <InputGroup className={`${className ?? ''}`}>
                 {unitLeft ? <InputGroupAddon>
                     <InputGroupText>{unitLeft}</InputGroupText>
                 </InputGroupAddon> : null}
-                <InputGroupInput {...props} type='number' min={min} ref={ref} />
+                <InputGroupInput
+                    {...props}
+                    type='number'
+                    min={min}
+                    ref={ref}
+                    value={value ?? ''}
+                    onChange={handleChange}
+                />
                 {unitRight ? <InputGroupAddon align="inline-end">
                     <InputGroupText>{unitRight}</InputGroupText>
                 </InputGroupAddon> : null}

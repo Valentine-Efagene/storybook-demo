@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, ArrowRight, Save, X, Check } from "lucide-react"
+import { ArrowLeft, ArrowRight, Save } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { PropertyDetailsStep } from "@/components/property-creation/PropertyDetailsStep"
@@ -19,7 +19,21 @@ import { createProperty } from "./actions"
 import { QUERY_KEYS } from "@/types/user"
 
 const STEPS: Step[] = [
-    { id: 1, name: 'Property Details', description: 'Basic information and location', fields: ['title', 'type', 'description', 'bedrooms', 'bathrooms', 'squareFeet', 'address', 'city', 'state', 'price', 'currency', 'status'] },
+    {
+        id: 1, name: 'Property Details', description: 'Basic information and location',
+        fields: [
+            'title',
+            'type',
+            'description',
+            'bedrooms',
+            'bathrooms',
+            'location',
+            'city',
+            'state',
+            'price',
+            'no_of_units_available',
+            'completion_status']
+    },
     { id: 2, name: 'Gallery', description: 'Upload display image (required)', fields: ['displayImage', 'model3dImages', 'floorPlanImages', 'aerialImages'] },
     { id: 3, name: 'Amenities', description: 'Select at least one amenity', fields: ['amenities'] },
     { id: 4, name: 'Plans', description: 'Choose your listing plan', fields: ['plans'] },
@@ -34,16 +48,14 @@ export function PropertyCreationForm() {
         resolver: zodResolver(completePropertySchema),
         mode: "onChange",
         defaultValues: {
-            title: "",
             type: "bungalow",
             description: "",
             bedrooms: 1,
             bathrooms: 1,
             location: "",
-            city: "",
-            state: "",
             price: 1,
             completion_status: "move_in_ready",
+            no_of_units_available: 1,
             media: [],
             three_d_walkthroughs: [],
             floor_plans: [],
