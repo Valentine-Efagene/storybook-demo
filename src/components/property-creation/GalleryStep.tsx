@@ -76,7 +76,7 @@ export function GalleryStep({
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <Controller
-                        name="model3dImages"
+                        name="three_d_walkthroughs"
                         control={control}
                         render={({ field }) => (
                             <CustomFilePicker
@@ -95,9 +95,9 @@ export function GalleryStep({
                             />
                         )}
                     />
-                    {(errors.model3dImages || fileErrors.model3dImages) && (
+                    {(errors.three_d_walkthroughs || fileErrors.three_d_walkthroughs) && (
                         <p className="text-sm text-red-600">
-                            {errors.model3dImages?.message || fileErrors.model3dImages}
+                            {errors.three_d_walkthroughs?.message || fileErrors.three_d_walkthroughs}
                         </p>
                     )}
                 </CardContent>
@@ -110,7 +110,7 @@ export function GalleryStep({
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <Controller
-                        name="floorPlanImages"
+                        name="floor_plans"
                         control={control}
                         render={({ field }) => (
                             <CustomFilePicker
@@ -129,43 +129,9 @@ export function GalleryStep({
                             />
                         )}
                     />
-                    {(errors.floorPlanImages || fileErrors.floorPlanImages) && (
+                    {(errors.floor_plans || fileErrors.floor_plans) && (
                         <p className="text-sm text-red-600">
-                            {errors.floorPlanImages?.message || fileErrors.floorPlanImages}
-                        </p>
-                    )}
-                </CardContent>
-            </Card>
-
-            {/* Aerial Images */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Aerial Images</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    <Controller
-                        name="aerialImages"
-                        control={control}
-                        render={({ field }) => (
-                            <CustomFilePicker
-                                files={field.value || []}
-                                onFilesChange={field.onChange}
-                                allowMultiple={true}
-                                maxFiles={8}
-                                maxFileSize={10}
-                                allowedTypes={['image/*']}
-                                label="Upload aerial images"
-                                description="Upload aerial views and exterior shots"
-                                showPreview={true}
-                                showFileSize={true}
-                                accept="image/*"
-                                onError={(error) => handleFileError('aerialImages', error)}
-                            />
-                        )}
-                    />
-                    {(errors.aerialImages || fileErrors.aerialImages) && (
-                        <p className="text-sm text-red-600">
-                            {errors.aerialImages?.message || fileErrors.aerialImages}
+                            {errors.floor_plans?.message || fileErrors.floor_plans}
                         </p>
                     )}
                 </CardContent>

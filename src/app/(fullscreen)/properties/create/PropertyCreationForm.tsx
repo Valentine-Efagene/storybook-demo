@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft, ArrowRight, Save, X, Check } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { cn } from "@/lib/utils"
 import { PropertyDetailsStep } from "@/components/property-creation/PropertyDetailsStep"
 import { GalleryStep } from "@/components/property-creation/GalleryStep"
 import { AmenitiesStep } from "@/components/property-creation/AmenitiesStep"
@@ -36,7 +35,7 @@ export function PropertyCreationForm() {
         mode: "onChange",
         defaultValues: {
             title: "",
-            type: "house",
+            type: "bungalow",
             description: "",
             bedrooms: 1,
             bathrooms: 1,
@@ -44,13 +43,10 @@ export function PropertyCreationForm() {
             city: "",
             state: "",
             price: 1,
-            currency: "NGN",
-            status: "available",
-            completion_status: "completed",
+            completion_status: "move_in_ready",
             media: [],
-            model3dImages: [],
-            floorPlanImages: [],
-            aerialImages: [],
+            three_d_walkthroughs: [],
+            floor_plans: [],
             amenities: [],
             plans: [],
         }

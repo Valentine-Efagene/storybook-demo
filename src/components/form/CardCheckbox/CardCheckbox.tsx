@@ -48,7 +48,7 @@ export function CardCheckbox({
             tabIndex={disabled ? -1 : 0}
             className={cn(
                 "relative cursor-pointer rounded-lg border p-6 transition-all duration-200",
-                "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+                "focus:outline-none focus:ring-2 focus:ring-primary-border focus:ring-offset-2",
                 "hover:shadow-md",
                 {
                     'border-[var(--primary-text)] border-2': checked && !disabled,

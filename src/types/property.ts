@@ -9,10 +9,10 @@ export interface PropertyQueryParams extends QueryParams {
     order?: 'asc' | 'desc' | null
 }
 
-export type PropertyType = "condominium" | "fully_detached_duplex" | "semi_detached_duplex" | "detached_bungalows" | "apartments" | "flats" | "terraces" | "maisonette" | "penthouse" | "terrace_bungalows"
+export type PropertyType = "bungalow" | "condominium" | "fully_detached_duplex" | "semi_detached_duplex" | "detached_bungalows" | "apartments" | "flats" | "terraces" | "maisonette" | "penthouse" | "terrace_bungalows"
     | "semi_detached_bungalow" | "terrace_duplex" | "fully_detached_duplex"
 
-export type PropertyCompletionStatus = 'under_construction' | 'completed'
+export type PropertyCompletionStatus = 'under_construction' | 'move_in_ready'
 
 export interface Plan {
     "id": number,

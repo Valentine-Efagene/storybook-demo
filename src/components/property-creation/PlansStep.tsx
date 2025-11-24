@@ -31,8 +31,6 @@ export function PlansStep({
         gcTime: 10 * 60 * 1000, // 10 minutes
     })
 
-    console.log({ plansResponse })
-
     // Convert API plans to Option format for CardCheckboxGroup
     const plans: Option[] = React.useMemo(() => {
         const plansData = plansResponse?.body?.plans
@@ -89,7 +87,7 @@ export function PlansStep({
                                         orientation="vertical"
                                         options={plans}
                                         value={field.value || []}
-                                        onChange={field.onChange}
+                                        onChange={(value) => field.onChange(Number(value))}
                                         allowMultiple={true}
                                     />
                                 </div>

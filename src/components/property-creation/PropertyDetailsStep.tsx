@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { CompletePropertyFormData } from "@/lib/schemas/property"
 import NumberInput from "../form/NumberInput"
 import { BlockRadio, BlockRadioOption } from "@/components/form/BlockRadio"
+import { PropertyType } from "@/types/property"
 
 interface PropertyDetailsStepProps {
     control: Control<CompletePropertyFormData>
@@ -28,12 +29,26 @@ const completionStatusOptions: BlockRadioOption[] = [
     },
 ]
 
+const PROPERTY_TYPE_OPTIONS: { label: string, value: PropertyType | '' }[] = [
+    {
+        value: 'bungalow',
+        label: 'Bungalow',
+    },
+    {
+        value: 'apartments',
+        label: 'Apartments',
+    },
+    {
+        value: 'condominium',
+        label: 'Condominium',
+    },
+]
+
 export function PropertyDetailsStep({
     control,
     errors,
     watch
 }: PropertyDetailsStepProps) {
-    const currency = watch("currency");
 
     return (
         <form className="space-y-8 max-w-4xl mx-auto">
@@ -99,10 +114,11 @@ export function PropertyDetailsStep({
                                             <SelectValue placeholder="Select property type" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="house">House</SelectItem>
-                                            <SelectItem value="apartment">Apartment</SelectItem>
-                                            <SelectItem value="condo">Condo</SelectItem>
-                                            <SelectItem value="townhouse">Townhouse</SelectItem>
+                                            {PROPERTY_TYPE_OPTIONS.map((option) => (
+                                                <SelectItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
                                 )}
@@ -184,6 +200,27 @@ export function PropertyDetailsStep({
                             />
                             {errors.bathrooms && (
                                 <p className="text-sm text-red-600">{errors.bathrooms.message}</p>
+                            )}
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="no_of_units_available">Available Units</Label>
+                            <Controller
+                                name="no_of_units_available"
+                                control={control}
+                                render={({ field }) => (
+                                    <NumberInput
+                                        id="no_of_units_available"
+                                        min={1}
+                                        unitRight={"Units"}
+                                        placeholder="xx"
+                                        {...field}
+                                        onChange={(value) => field.onChange(Number(value))}
+                                    />
+                                )}
+                            />
+                            {errors.no_of_units_available && (
+                                <p className="text-sm text-red-600">{errors.no_of_units_available.message}</p>
                             )}
                         </div>
                     </div>
@@ -272,8 +309,8 @@ export function PropertyDetailsStep({
                                     <NumberInput
                                         id="price"
                                         min={0}
-                                        unitLeft={currency == "NGN" ? "₦" : currency == "USD" ? "$" : undefined}
-                                        unitRight={currency}
+                                        unitLeft={"₦"}
+                                        unitRight={"NGN"}
                                         placeholder="Enter price"
                                         {...field}
                                         onChange={(value) => field.onChange(Number(value))}
@@ -282,52 +319,6 @@ export function PropertyDetailsStep({
                             />
                             {errors.price && (
                                 <p className="text-sm text-red-600">{errors.price.message}</p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="currency">Currency</Label>
-                            <Controller
-                                name="currency"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select currency" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="NGN">Nigerian Naira (₦)</SelectItem>
-                                            <SelectItem value="USD">US Dollar ($)</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
-                            {errors.currency && (
-                                <p className="text-sm text-red-600">{errors.currency.message}</p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="status">Status</Label>
-                            <Controller
-                                name="status"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select status" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="available">Available</SelectItem>
-                                            <SelectItem value="pending">Pending</SelectItem>
-                                            <SelectItem value="sold">Sold</SelectItem>
-                                            <SelectItem value="rented">Rented</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
-                            {errors.status && (
-                                <p className="text-sm text-red-600">{errors.status.message}</p>
                             )}
                         </div>
                     </div>

@@ -94,12 +94,33 @@ export async function uploadToS3(
 ) {
     const formData = new FormData()
 
-    // Append all presigned fields
+    // S3 requires fields in specific order - add them in the order AWS expects
+    // Policy and signature-related fields should come before the file
+    const orderedFields: (keyof PresignedPost['fields'])[] = [
+        'X-Amz-Algorithm',
+        'X-Amz-Credential',
+        'X-Amz-Date',
+        'Policy',
+        'X-Amz-Signature',
+        'key',
+        'Content-Type'
+    ]
+
+    // Append fields in correct order
+    orderedFields.forEach(fieldName => {
+        if (presignedPost.fields[fieldName]) {
+            formData.append(fieldName, presignedPost.fields[fieldName])
+        }
+    })
+
+    // Append any remaining fields not in the ordered list
     for (const [key, value] of Object.entries(presignedPost.fields)) {
-        formData.append(key, value)
+        if (!orderedFields.includes(key as keyof PresignedPost['fields'])) {
+            formData.append(key, value)
+        }
     }
 
-    // Append the file last
+    // Append the file LAST - this is critical for S3
     formData.append('file', file)
 
     const response = await fetch(presignedPost.url, {
@@ -108,10 +129,16 @@ export async function uploadToS3(
     })
 
     if (!response.ok) {
-        throw new Error(`Upload Error: ${response.status}`)
+        const errorText = await response.text()
+        throw new Error(`Upload Error ${response.status}: ${errorText}`)
     }
 
-    return presignedPost.url + presignedPost.fields.key
+    // Construct the full S3 URL correctly
+    const uploadedUrl = presignedPost.url.endsWith('/')
+        ? presignedPost.url + presignedPost.fields.key
+        : presignedPost.url + '/' + presignedPost.fields.key
+
+    return uploadedUrl
 }
 
 // Server action for file uploads

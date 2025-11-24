@@ -1,3 +1,4 @@
+import { PropertyCompletionStatus, PropertyType } from "@/types/property"
 import { z } from "zod"
 
 export const propertyDetailsFormSchema = z.object({
@@ -12,12 +13,24 @@ export const propertyDetailsFormSchema = z.object({
     price: z.number().min(0.01, "Price must be greater than 0"),
     currency: z.enum(["NGN", "USD"]),
     status: z.enum(["available", "pending", "sold", "rented"]),
-    completion_status: z.enum(["under_construction", "completed", "off_plan"]).optional(),
+    completion_status: z.enum(["under_construction", "move_in_ready"]).optional(),
 })
 
 export const propertyDetailsSchema = z.object({
     title: z.string().min(1, "Property title is required"),
-    type: z.enum(["apartment", "house", "condo", "townhouse"]),
+    type: z.enum([
+        "bungalow",
+        "apartments",
+        'terrace_bungalows',
+        "condominium",
+        "flats",
+        "fully_detached_duplex",
+        "semi_detached_duplex",
+        "detached_bungalows",
+        "maisonette",
+        "penthouse",
+        "terraces",
+    ] as PropertyType[]),
     description: z.string().optional(), //.min(1, "Description is required"),
     bedrooms: z.number().min(0, "Bedrooms must be 0 or greater").optional(),
     bathrooms: z.number().min(0, "Bathrooms must be 0 or greater").optional(),
@@ -25,9 +38,8 @@ export const propertyDetailsSchema = z.object({
     city: z.string().min(1, "City is required"),
     state: z.string().min(1, "State is required"),
     price: z.number().min(0, "Price must be 0 or greater"),
-    currency: z.enum(["NGN", "USD"]),
-    completion_status: z.enum(["under_construction", "completed", "off_plan"]).optional(),
-    status: z.enum(["available", "pending", "sold", "rented"]),
+    completion_status: z.enum(["under_construction", "move_in_ready"]).optional(),
+    no_of_units_available: z.number().min(1, "Number of units available must be at least 1").optional(),
 })
 
 export const milestoneUpdateSchema = z.object({
@@ -41,9 +53,8 @@ export const propertyAvailabilityStatusSchema = z.object({
 
 export const gallerySchema = z.object({
     media: z.array(z.instanceof(File)).min(1, { message: "Display image is required" }),
-    model3dImages: z.array(z.instanceof(File)).optional(),
-    floorPlanImages: z.array(z.instanceof(File)).optional(),
-    aerialImages: z.array(z.instanceof(File)).optional(),
+    three_d_walkthroughs: z.array(z.instanceof(File)).min(1, { message: "Floor plan is required" }),
+    floor_plans: z.array(z.instanceof(File)).optional(),
 })
 
 export const amenitiesSchema = z.object({

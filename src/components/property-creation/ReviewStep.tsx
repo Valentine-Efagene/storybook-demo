@@ -21,6 +21,7 @@ import {
 import { PropertyCompletionStatus } from "@/types/property"
 import { ForwardRefExoticComponent, RefAttributes } from "react"
 import { createFilePreview } from "../form/CustomFilePicker/utils"
+import StringHelper from "@/lib/helpers/StringHelper"
 
 interface ReviewStepProps {
     formData: CompletePropertyFormData
@@ -28,46 +29,12 @@ interface ReviewStepProps {
 
 export function ReviewStep({ formData }: ReviewStepProps) {
     const formatPrice = (price: number) => {
-        if (formData.currency === 'USD') {
-            return FormatHelper.dollarFormatter.format(price)
-        } else {
-            return FormatHelper.nairaFormatter.format(price)
-        }
+        return FormatHelper.nairaFormatter.format(price)
     }
 
     const finishingIcon: Record<PropertyCompletionStatus, ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>> = {
-        completed: House,
+        move_in_ready: House,
         under_construction: HammerIcon,
-    }
-
-    const formatPropertyType = (type: string) => {
-        switch (type) {
-            case 'apartment':
-                return 'Apartment'
-            case 'house':
-                return 'House'
-            case 'condo':
-                return 'Condominium'
-            case 'townhouse':
-                return 'Townhouse'
-            default:
-                return type
-        }
-    }
-
-    const formatStatus = (status: string) => {
-        switch (status) {
-            case 'available':
-                return 'Available'
-            case 'pending':
-                return 'Pending'
-            case 'sold':
-                return 'Sold'
-            case 'rented':
-                return 'Rented'
-            default:
-                return status
-        }
     }
 
     // Create stable preview URLs for File objects using useState and useEffect
@@ -113,9 +80,11 @@ export function ReviewStep({ formData }: ReviewStepProps) {
                 return []
             })
         }
-    }, [formData.media, formData.floorPlanImages, formData.model3dImages, formData.aerialImages])
+    }, [formData.media, formData.floor_plans, formData.three_d_walkthroughs])
 
-    const FinishingIconComponent = finishingIcon[formData.completion_status as PropertyCompletionStatus]
+    const FinishingIconComponent = formData.completion_status
+        ? finishingIcon[formData.completion_status] || House
+        : House
 
     return (
         <div className="max-w-4xl mx-auto space-y-6 flex flex-col">
@@ -177,16 +146,19 @@ export function ReviewStep({ formData }: ReviewStepProps) {
                             {/* Property Type and Status */}
                             <div className="flex items-center gap-3">
                                 <Badge variant="secondary" className="px-3 py-1">
-                                    {formatPropertyType(formData.type)}
+                                    {StringHelper.stripUnderscores(formData.type)}
                                 </Badge>
-                                <Badge
-                                    variant={formData.status === 'available' ? 'default' : 'outline'}
-                                    className="px-3 py-1"
-                                >
-                                    {formatStatus(formData.status)}
-                                </Badge>
+                                {formData.completion_status && (
+                                    <Badge
+                                        variant={formData.completion_status === 'move_in_ready' ? 'default' : 'outline'}
+                                        className="px-3 py-1"
+                                    >
+                                        {formData.completion_status === 'under_construction'
+                                            ? 'Under Construction'
+                                            : 'Move-in Ready'}
+                                    </Badge>
+                                )}
                             </div>
-
                             {/* Property Stats */}
                             <div className="grid grid-cols-3 gap-4 mt-6">
                                 {formData.bedrooms !== undefined && (

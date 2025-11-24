@@ -14,22 +14,20 @@ export async function createProperty(formData: unknown) {
         return { error: parsed.error.flatten().fieldErrors }
     }
 
-    const { media = [], aerialImages = [], model3dImages = [], floorPlanImages = [] } = parsed.data
+    const { media = [], three_d_walkthroughs = [], floor_plans = [] } = parsed.data
 
     // Get presigned URLs for all files
     const presignedMediaPromises = media.map((file) => getPresignedPost(`property_media/${file.name}`))
-    const presignedAerialPromises = aerialImages.map((file) => getPresignedPost(`property_media/${file.name}`))
-    const presigned3dModelPromises = model3dImages.map((file) => getPresignedPost(`property_media/${file.name}`))
-    const presignedFloorPlanPromises = floorPlanImages.map((file) => getPresignedPost(`property_media/${file.name}`))
+    const presigned3dModelPromises = three_d_walkthroughs.map((file) => getPresignedPost(`property_media/${file.name}`))
+    const presignedFloorPlanPromises = floor_plans.map((file) => getPresignedPost(`property_media/${file.name}`))
 
     const presignedPostsResponses = await Promise.all([
         ...presignedMediaPromises,
-        ...presignedAerialPromises,
         ...presigned3dModelPromises,
         ...presignedFloorPlanPromises,
     ])
 
-    const allFiles = [...media, ...aerialImages, ...model3dImages, ...floorPlanImages]
+    const allFiles = [...media, ...three_d_walkthroughs, ...floor_plans]
 
     // Upload all files to S3 using presigned URLs
     const uploadUrlPromises = presignedPostsResponses.map(async (presignedPostResponse, index) => {
@@ -41,15 +39,13 @@ export async function createProperty(formData: unknown) {
     // Now, construct the final property data with uploaded URLs
     // Calculate slice indices correctly
     const mediaEndIndex = media.length
-    const aerialEndIndex = mediaEndIndex + aerialImages.length
-    const model3dEndIndex = aerialEndIndex + model3dImages.length
+    const model3dEndIndex = mediaEndIndex + three_d_walkthroughs.length
 
     const propertyData = {
         ...parsed.data,
         media: uploadedUrls.slice(0, mediaEndIndex),
-        aerialImages: uploadedUrls.slice(mediaEndIndex, aerialEndIndex),
-        model3dImages: uploadedUrls.slice(aerialEndIndex, model3dEndIndex),
-        floorPlanImages: uploadedUrls.slice(model3dEndIndex),
+        three_d_walkthroughs: uploadedUrls.slice(mediaEndIndex, model3dEndIndex),
+        floor_plans: uploadedUrls.slice(model3dEndIndex),
     }
 
     console.log({ propertyData })
