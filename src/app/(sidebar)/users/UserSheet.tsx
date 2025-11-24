@@ -16,6 +16,8 @@ import { User } from "@/types/user"
 import { Edit2, Play, X } from "lucide-react"
 import { useMemo, useState } from "react"
 import UserSuspensionModal from "./UserSuspensionModal"
+import FormError, { FormErrorBase } from "@/components/form/FormError"
+import { format } from "date-fns"
 
 interface Props {
     open: boolean
@@ -70,6 +72,14 @@ export function UserSheet({ open, setOpen, user }: Props) {
                             Suspend User
                         </Button>
                     </div>
+                    {user.is_suspended && <FormErrorBase>
+                        <div className="font-medium text-sm">
+                            User suspended on {format(new Date(user.suspended_at || ""), "MMM d, yyyy")}
+                        </div>
+                        <div className="text-sm">
+                            <span className="font-medium">Reason: </span>{user.suspend_reason}
+                        </div>
+                    </FormErrorBase>}
                 </div>
                 <Separator />
                 <div className="flex flex-col gap-[3rem]">

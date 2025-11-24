@@ -107,7 +107,7 @@ function Button({
         <>
           <Spinner className={cn("", {
             "text-white": variant === "default",
-            "text-destructive": variant === "destructive",
+            "text-white ": variant === "destructive",
             "text-[#026993]": variant === "outline",
             "text-gray-700": variant === "subtle",
           })} />

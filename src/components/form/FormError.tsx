@@ -6,7 +6,7 @@ interface IProps {
     formError: string[] | null | undefined | string
 }
 
-function FormErrorBase(
+export function FormErrorBase(
     { className, children, ...rest }: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 ) {
     return (

@@ -4,10 +4,14 @@ import { ResponsiveDialog } from '@/components/ResponsiveDialog'
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { useServerMutation } from '@/hooks/useServerMutation';
 import { userSuspensionSchema } from '@/lib/validation/user-schema';
 import { User } from '@/types/user';
 import { Controller, useForm } from 'react-hook-form';
 import z from 'zod';
+import { suspend } from './actions';
+import { useQueryClient } from '@tanstack/react-query';
+import FormError from '@/components/form/FormError';
 
 interface Props {
     open: boolean;
@@ -23,15 +27,32 @@ const REASON_OPTIONS = [
 ];
 
 export default function UserSuspensionModal({ open, setOpen, user }: Props) {
-    const { control, handleSubmit } = useForm<z.infer<typeof userSuspensionSchema>>({
+    const queryClient = useQueryClient()
+    const { control, handleSubmit, setError, reset, formState: { errors } } = useForm<z.infer<typeof userSuspensionSchema>>({
         defaultValues: {
-            user_id: user.id,
-            reason: '',
+            suspend_reason: '',
+            userId: user.id,
         }
     })
 
+    const suspensionMutation = useServerMutation(suspend, {
+        setError: setError,
+        mutationKey: ['users'],
+        invalidateQueries: [
+            ['user'],
+        ],
+        onSuccess: (data) => {
+            // Update user data in cache immediately
+            queryClient.setQueryData(['users'], data)
+            reset()
+            setOpen(false)
+        },
+        showSuccessToast: true,
+    })
+
     const onSubmit = (data: z.infer<typeof userSuspensionSchema>) => {
-        console.log(data);
+        // Use mutate instead of mutateAsync to avoid promise handling
+        suspensionMutation.mutate(data)
     }
 
     return (
@@ -48,12 +69,12 @@ export default function UserSuspensionModal({ open, setOpen, user }: Props) {
                     <FormGroup>
                         <FormLabel>Reason</FormLabel>
                         <Controller
-                            name="reason"
+                            name="suspend_reason"
                             control={control}
                             render={({ field }) => (
                                 <Select onValueChange={field.onChange} value={field.value}>
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select property type" />
+                                        <SelectValue placeholder="Select reason" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {REASON_OPTIONS.map(option => (
@@ -65,16 +86,24 @@ export default function UserSuspensionModal({ open, setOpen, user }: Props) {
                                 </Select>
                             )}
                         />
+                        {errors.suspend_reason && (
+                            <FormError formError={errors.suspend_reason.message}></FormError>
+                        )}
                     </FormGroup>
+                    {suspensionMutation.isError && (
+                        <FormError formError={suspensionMutation.error?.message} />
+                    )}
                 </div>
-
                 <Separator />
 
                 <div className="flex justify-end gap-2 px-6">
                     <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                         Cancel
                     </Button>
-                    <Button type="submit">
+                    <Button type="submit"
+                        loading={suspensionMutation.isLoading} variant="destructive"
+                        disabled={suspensionMutation.isLoading}
+                    >
                         Suspend Account
                     </Button>
                 </div>

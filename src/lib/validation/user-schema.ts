@@ -14,8 +14,8 @@ export const singleImageSchema = z
     })
 
 export const userSuspensionSchema = z.object({
-    user_id: z.number(),
-    reason: z.string().min(10, 'Reason must be at least 10 characters long'),
+    userId: z.number(),
+    suspend_reason: z.string().min(10, 'Reason must be at least 10 characters long'),
 })
 
 export const singleCsvSchema = z

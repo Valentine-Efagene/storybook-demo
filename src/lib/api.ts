@@ -202,7 +202,7 @@ export async function fetchUserOrders(params: any = {}) {
 
 // Admin Dashboard Server Actions
 export async function fetchUsers(params: any = {}) {
-    const baseUrl = '/onboarding/filter-users'
+    const baseUrl = '/auth/users'
     const data = await authenticatedFetch<PaginatedUserResponseBody>(
         baseUrl,
         params,
@@ -242,8 +242,8 @@ export async function fetchProperties(params: any = {}) {
 }
 
 export async function fetchUserById(userId: number) {
-    const baseUrl = '/onboarding/get-user'
-    return authenticatedFetch<{ user: User }>(baseUrl, { id: userId.toString() }, {}, {
+    const baseUrl = `/auth/users/${userId}`
+    return authenticatedFetch<{ user: User }>(baseUrl, {}, {}, {
         revalidate: 600 // Cache individual user data for 10 minutes (changes rarely)
     })
 }
