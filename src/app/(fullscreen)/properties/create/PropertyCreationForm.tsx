@@ -14,8 +14,9 @@ import { AmenitiesStep } from "@/components/property-creation/AmenitiesStep"
 import { PlansStep } from "@/components/property-creation/PlansStep"
 import { ReviewStep } from "@/components/property-creation/ReviewStep"
 import { completePropertySchema, type CompletePropertyFormData } from "@/lib/schemas/property"
+import { StepsSidebar, type Step } from "@/components/form/StepsSidebar"
 
-const STEPS = [
+const STEPS: Step[] = [
     { id: 1, name: 'Property Details', description: 'Basic information and location', fields: ['title', 'type', 'description', 'bedrooms', 'bathrooms', 'squareFeet', 'address', 'city', 'state', 'price', 'currency', 'status'] },
     { id: 2, name: 'Gallery', description: 'Upload display image (required)', fields: ['displayImage', 'model3dImages', 'floorPlanImages', 'aerialImages'] },
     { id: 3, name: 'Amenities', description: 'Select at least one amenity', fields: ['amenities'] },
@@ -70,22 +71,6 @@ export function PropertyCreationForm() {
         if (step === 4) return stepValidation[1] && stepValidation[2] && stepValidation[3]
         if (step === 5) return stepValidation[1] && stepValidation[2] && stepValidation[3] && stepValidation[4]
         return false
-    }
-
-    const getStepStatus = (step: number) => {
-        if (currentStep === step) return 'current'
-        if (stepValidation[step as keyof typeof stepValidation]) return 'completed'
-        if (canNavigateToStep(step)) return 'accessible'
-        return 'disabled'
-    }
-
-    const hasStepErrors = (step: number) => {
-        const stepData = STEPS.find(s => s.id === step)
-        if (!stepData) return false
-
-        return stepData.fields.some(field => {
-            return errors[field as keyof typeof errors]
-        })
     }
 
     const validateCurrentStep = async () => {
@@ -158,79 +143,14 @@ export function PropertyCreationForm() {
             </div>
             <div className="flex flex-row flex-1">
                 {/* Left Sidebar Navigation */}
-                <div className="hidden sm:flex w-80 bg-white border-r border-gray-200 flex-col sticky top-0 h-screen">
-                    {/* Steps Navigation */}
-                    <div className="flex-1 p-6 overflow-y-auto">
-                        <nav className="space-y-2">
-                            {STEPS.map((step) => {
-                                const status = getStepStatus(step.id)
-                                const isClickable = canNavigateToStep(step.id)
-                                const hasErrors = hasStepErrors(step.id)
-
-                                return (
-                                    <div
-                                        key={step.id}
-                                        className={cn(
-                                            "flex items-start gap-3 p-3 rounded-lg transition-colors",
-                                            isClickable ? "cursor-pointer" : "cursor-not-allowed",
-                                            status === 'current'
-                                                ? hasErrors
-                                                    ? "bg-red-50 border border-red-200"
-                                                    : "bg-blue-50 border border-blue-200"
-                                                : status === 'completed'
-                                                    ? "bg-green-50 border border-green-200 hover:bg-green-100"
-                                                    : status === 'accessible'
-                                                        ? "hover:bg-gray-50"
-                                                        : "opacity-50"
-                                        )}
-                                        onClick={() => isClickable && goToStep(step.id)}
-                                    >
-                                        <div className={cn(
-                                            "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium",
-                                            status === 'current'
-                                                ? hasErrors
-                                                    ? "bg-red-600 text-white"
-                                                    : "bg-blue-600 text-white"
-                                                : status === 'completed'
-                                                    ? "bg-green-600 text-white"
-                                                    : status === 'accessible'
-                                                        ? "bg-gray-300 text-gray-600"
-                                                        : "bg-gray-200 text-gray-400"
-                                        )}>
-                                            {status === 'completed' ? (
-                                                <Check className="w-3 h-3" />
-                                            ) : (
-                                                step.id
-                                            )}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className={cn(
-                                                "text-sm font-medium",
-                                                status === 'current'
-                                                    ? hasErrors
-                                                        ? "text-red-900"
-                                                        : "text-blue-900"
-                                                    : status === 'completed'
-                                                        ? "text-green-900"
-                                                        : status === 'accessible'
-                                                            ? "text-gray-900"
-                                                            : "text-gray-400"
-                                            )}>
-                                                {step.name}
-                                            </p>
-                                            <p className={cn(
-                                                "text-xs",
-                                                status === 'disabled' ? "text-gray-400" : "text-gray-600"
-                                            )}>
-                                                {step.description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                        </nav>
-                    </div>
-                </div>
+                <StepsSidebar
+                    steps={STEPS}
+                    currentStep={currentStep}
+                    stepValidation={stepValidation}
+                    errors={errors}
+                    onStepClick={goToStep}
+                    canNavigateToStep={canNavigateToStep}
+                />
 
                 {/* Main Content */}
                 <div className="flex-1 flex flex-col sm:mt-8 mb-20">
