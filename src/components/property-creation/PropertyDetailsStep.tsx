@@ -62,7 +62,6 @@ export function PropertyDetailsStep({
                                     onChange={field.onChange}
                                     name="completion_status"
                                     orientation="horizontal"
-                                    size="md"
                                 />
                             )}
                         />

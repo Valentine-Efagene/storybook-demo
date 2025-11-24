@@ -151,6 +151,7 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
             <div className="flex items-center justify-between flex-wrap gap-4">
                 <div className="w-lg">
                     <FormSearchInput
+                        className=""
                         placeholder="Filter emails..."
                         defaultValue={search ? search : undefined}
                         onDebouncedChange={onSearchChange}

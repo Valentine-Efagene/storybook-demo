@@ -43,7 +43,7 @@ export function BlockRadio({
     name,
     disabled = false,
     className,
-    size = 'md',
+    size = 'sm',
     orientation = 'vertical',
     ...props
 }: BlockRadioProps) {
@@ -120,11 +120,11 @@ export function BlockRadio({
                                 )} />
                             )}
                         </div>
-
                         {/* Content */}
                         <div className="flex-1 min-w-0">
                             <div className={cn(
                                 "font-medium leading-none",
+                                size === 'sm' ? 'text-sm' : size === 'md' ? 'text-base' : 'text-lg',
                                 isSelected ? "text-primary" : "text-foreground"
                             )}>
                                 {option.label}

@@ -195,7 +195,7 @@ const FormSearchInput = React.forwardRef<
         )}
       </InputGroup>
 
-      <FieldContent>
+      {error ? <FieldContent>
         {/* Error message */}
         {error && (
           <ValidationMessage id={`${searchId}-error`} type="error">
@@ -209,7 +209,7 @@ const FormSearchInput = React.forwardRef<
             {helperText}
           </HelperText>
         )}
-      </FieldContent>
+      </FieldContent> : null}
     </Field>
   );
 });
