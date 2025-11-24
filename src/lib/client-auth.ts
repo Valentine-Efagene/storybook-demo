@@ -1,7 +1,5 @@
 "use client"
 
-import { ApiResponse } from "@/types/common"
-import { IAuthData } from "@/types/user"
 import { toast } from "sonner"
 
 interface TokenRefreshResponse {
@@ -140,9 +138,10 @@ class ClientTokenManager {
 
     private async getTokenInfoFromServer(): Promise<TokenInfo> {
         try {
+            // Call Next.js API route which has access to HttpOnly cookies
             const response = await fetch('/api/auth/status', {
                 method: 'GET',
-                credentials: 'include',
+                credentials: 'include', // Send HttpOnly cookies to our own API route
             })
 
             if (!response.ok) {
@@ -173,12 +172,10 @@ class ClientTokenManager {
 
     private async performTokenRefresh(): Promise<TokenRefreshResponse> {
         try {
+            // Call Next.js API route which handles token refresh server-side
             const response = await fetch('/api/auth/refresh', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include', // Include cookies
+                credentials: 'include', // Send HttpOnly cookies to our own API route
             })
 
             if (!response.ok) {
@@ -308,10 +305,10 @@ export async function logoutUser() {
             tokenManager.stopTokenManagement()
         }
 
-        // Call logout API
+        // Call logout API route
         await fetch('/api/auth/logout', {
             method: 'POST',
-            credentials: 'include'
+            credentials: 'include', // Send HttpOnly cookies to our own API route
         })
 
         // Clean up token manager

@@ -43,7 +43,6 @@ export async function POST(req: NextRequest) {
                 "Authorization": `Bearer ${accessToken}`,
                 "user_id": userId.toString()
             },
-            // body: JSON.stringify({ refreshToken }),
         })
 
         if (!resp.ok) {
