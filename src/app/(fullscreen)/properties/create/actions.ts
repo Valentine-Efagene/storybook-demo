@@ -15,20 +15,23 @@ export async function createProperty(formData: unknown) {
     }
 
     const { media = [], aerialImages = [], model3dImages = [], floorPlanImages = [] } = parsed.data
-    const presignedMediaPromises = [...media.map((file) => getPresignedPost(`property_media/${file.name}`))]
-    const presignedAerialPromises = aerialImages?.length > 0 ? [...aerialImages.map((file) => getPresignedPost(`property_media/${file.name}`))] : []
-    const presigned3dModelPromises = model3dImages?.length > 0 ? [...model3dImages.map((file) => getPresignedPost(`property_media/${file.name}`))] : []
-    const presignedFloorPlanPromises = floorPlanImages?.length > 0 ? [...floorPlanImages.map((file) => getPresignedPost(`property_media/${file.name}`))] : []
+
+    // Get presigned URLs for all files
+    const presignedMediaPromises = media.map((file) => getPresignedPost(`property_media/${file.name}`))
+    const presignedAerialPromises = aerialImages.map((file) => getPresignedPost(`property_media/${file.name}`))
+    const presigned3dModelPromises = model3dImages.map((file) => getPresignedPost(`property_media/${file.name}`))
+    const presignedFloorPlanPromises = floorPlanImages.map((file) => getPresignedPost(`property_media/${file.name}`))
+
     const presignedPostsResponses = await Promise.all([
         ...presignedMediaPromises,
         ...presignedAerialPromises,
         ...presigned3dModelPromises,
         ...presignedFloorPlanPromises,
     ])
+
     const allFiles = [...media, ...aerialImages, ...model3dImages, ...floorPlanImages]
 
-    // Here you would typically upload the files to the presigned URLs
-    // and then collect the URLs to send in the final property creation request.
+    // Upload all files to S3 using presigned URLs
     const uploadUrlPromises = presignedPostsResponses.map(async (presignedPostResponse, index) => {
         return uploadToS3(allFiles[index], presignedPostResponse.body)
     })
@@ -36,12 +39,17 @@ export async function createProperty(formData: unknown) {
     const uploadedUrls = await Promise.all(uploadUrlPromises)
 
     // Now, construct the final property data with uploaded URLs
+    // Calculate slice indices correctly
+    const mediaEndIndex = media.length
+    const aerialEndIndex = mediaEndIndex + aerialImages.length
+    const model3dEndIndex = aerialEndIndex + model3dImages.length
+
     const propertyData = {
         ...parsed.data,
-        media: uploadedUrls.slice(0, media.length),
-        aerialImages: uploadedUrls.slice(media.length, media.length + aerialImages.length),
-        model3dImages: uploadedUrls.slice(media.length + aerialImages.length, media.length + aerialImages.length + model3dImages.length),
-        floorPlanImages: uploadedUrls.slice(media.length + aerialImages.length + model3dImages.length),
+        media: uploadedUrls.slice(0, mediaEndIndex),
+        aerialImages: uploadedUrls.slice(mediaEndIndex, aerialEndIndex),
+        model3dImages: uploadedUrls.slice(aerialEndIndex, model3dEndIndex),
+        floorPlanImages: uploadedUrls.slice(model3dEndIndex),
     }
 
     try {
@@ -61,7 +69,7 @@ export async function createProperty(formData: unknown) {
         if (!res.ok) {
             return {
                 error: {
-                    form: [data?.message || 'Sign in failed.'],
+                    form: [data?.message || 'Failed to create property. Please try again.'],
                 },
             }
         }

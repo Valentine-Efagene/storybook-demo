@@ -67,7 +67,7 @@ export interface PropertyUpdateDto {
     property_id: number,
     title: string
     ready_for_purchase: boolean
-    address: string | undefined
+    location: string | undefined
     state: string | undefined
     city: string | undefined
     property_type: PropertyType | undefined
