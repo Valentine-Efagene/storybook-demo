@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { SESSION_CONFIG, createSessionMetadata } from "@/lib/session-config"
 import * as jose from "jose"
 import EnvironmentHelper from "@/lib/helpers/EnvironmentHelper"
+import { ApiResponse } from "@/types/common"
 
 export async function POST(req: NextRequest) {
     try {
@@ -52,9 +53,9 @@ export async function POST(req: NextRequest) {
             )
         }
 
-        const data = await resp.json()
-        const newAccessToken = data.body.token.authToken
-        const newRefreshToken = data.body.token.authToken
+        const data: ApiResponse<{ token: string }> = await resp.json()
+        const newAccessToken = data.body.token
+        const newRefreshToken = data.body.token
 
         // Parse new token to get expiry
         const parsed = jose.decodeJwt(newAccessToken)

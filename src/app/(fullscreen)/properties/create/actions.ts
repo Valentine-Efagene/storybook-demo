@@ -48,7 +48,6 @@ export async function createProperty(formData: unknown) {
         floor_plans: uploadedUrls.slice(model3dEndIndex),
     }
 
-    console.log({ propertyData })
 
     try {
         const accessToken = await getServerToken()
@@ -63,6 +62,8 @@ export async function createProperty(formData: unknown) {
         })
 
         const data: ApiResponse<Property> = await res.json()
+
+        console.log('Property:', data.body)
 
         if (!res.ok) {
             return {

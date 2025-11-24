@@ -1,5 +1,6 @@
 "use client"
 
+import { ApiResponse } from "@/types/common"
 import { toast } from "sonner"
 
 interface TokenRefreshResponse {
@@ -187,7 +188,7 @@ class ClientTokenManager {
                 throw new Error('Token refresh failed')
             }
 
-            const data = await response.json()
+            const data: ApiResponse<{ token: string }> = await response.json()
 
             console.log('Token refreshed successfully')
 
@@ -196,8 +197,8 @@ class ClientTokenManager {
 
             return {
                 success: true,
-                accessToken: data.accessToken,
-                refreshToken: data.refreshToken
+                accessToken: data.body.token,
+                refreshToken: data.body.token
             }
         } catch (error) {
             console.error('Token refresh error:', error)

@@ -57,8 +57,6 @@ export async function authenticatedFetch<T>(
         }
     })
 
-    console.log({ finalUrl, response })
-
     if (!response.ok) {
         throw new Error(`API Error: ${response.status}`)
     }
