@@ -37,7 +37,7 @@ export function Property({ id }: Props) {
     }
 
     const finishingIcon: Record<PropertyCompletionStatus, ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>> = {
-        completed: HammerIcon,
+        move_in_ready: HammerIcon,
         under_construction: House
     }
 
@@ -66,7 +66,7 @@ export function Property({ id }: Props) {
             <div className='flex gap-4 w-full'>
                 <div className='rounded-lg border border-primary-border'>
                     <NextImage
-                        src={ImageHelper.getCdnLink(property.display_image, 'property') || ''}
+                        src={ImageHelper.getCdnLink(property.media?.[0], 'property') || ''}
                         alt={property.title ?? ''}
                         width={180}
                         height={172}

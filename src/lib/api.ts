@@ -215,7 +215,7 @@ export async function fetchUsers(params: any = {}) {
 }
 
 export async function fetchPropertyById(id: string) {
-    const baseUrl = '/property/get-property'
+    const baseUrl = `/property/${id}`
     const params = { id }
     const data = await authenticatedFetch<{ property: Property }>(
         baseUrl,
