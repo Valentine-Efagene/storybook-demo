@@ -14,6 +14,19 @@ export interface ApiPaginationMeta {
     sortBy: string[][]
 }
 
+export interface PresignedPost {
+    url: string,
+    fields: {
+        "X-Amz-Algorithm": string,
+        "X-Amz-Credential": string,
+        "Content-Type": string,
+        "X-Amz-Date": string,
+        "key": string,
+        "Policy": string,
+        "X-Amz-Signature": string
+    }
+}
+
 export type Order = 'asc' | 'desc'
 
 export interface SVGProps extends React.SVGAttributes<SVGElement> { }

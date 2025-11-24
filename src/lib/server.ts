@@ -1,7 +1,7 @@
 "use server";
 
 import { ApiResponse } from "@/types/common";
-import { IAuthData, Role } from "@/types/user";
+import { IAuthData } from "@/types/user";
 import * as jose from "jose";
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_CONFIG, SessionMetadata, isSessionExpired, updateLastActivity, createSessionMetadata } from "./session-config";

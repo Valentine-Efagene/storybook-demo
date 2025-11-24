@@ -5,7 +5,7 @@
  * All API calls go through server actions, tokens never touch client
  */
 
-import { ApiResponse } from "@/types/common"
+import { ApiResponse, PresignedPost } from "@/types/common"
 import { cookies } from "next/headers"
 import { QueryHelper } from "./helpers/QueryHelper"
 import { PaginatedUserResponseBody, TokenMetadata, User } from "@/types/user"
@@ -61,6 +61,61 @@ export async function authenticatedFetch<T>(
 
     const data: ApiResponse<T> = await response.json()
     return data
+}
+
+export async function getPresignedPost(key: string) {
+    const endpoint = `${EnvironmentHelper.API_BASE_URL}/uploader/document/create-presigned-post`
+    const accessToken = await getServerToken()
+
+    if (!accessToken) {
+        throw new Error('No authentication token available')
+    }
+
+    const response = await fetch(endpoint, {
+        method: 'POST',
+        body: JSON.stringify({ url: key }),
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+        },
+    })
+
+    if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`)
+    }
+
+    const data: ApiResponse<PresignedPost> = await response.json()
+    return data
+}
+
+export async function uploadToS3(
+    file: Blob,
+    presignedPost: PresignedPost
+) {
+    const accessToken = await getServerToken()
+    const formData = new FormData()
+
+    // Append all presigned fields
+    for (const [key, value] of Object.entries(presignedPost.fields)) {
+        formData.append(key, value)
+    }
+
+    // Append the file last
+    formData.append('file', file)
+
+    const response = await fetch(presignedPost.url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+        }
+    })
+
+    if (!response.ok) {
+        throw new Error(`Upload Error: ${response.status}`)
+    }
+
+    return response.url + presignedPost.fields.key
 }
 
 // Server action for file uploads

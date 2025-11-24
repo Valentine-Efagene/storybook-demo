@@ -15,6 +15,9 @@ import { PlansStep } from "@/components/property-creation/PlansStep"
 import { ReviewStep } from "@/components/property-creation/ReviewStep"
 import { completePropertySchema, type CompletePropertyFormData } from "@/lib/schemas/property"
 import { StepsSidebar, type Step } from "@/components/form/StepsSidebar"
+import { useServerMutation } from "@/hooks/useServerMutation"
+import { createProperty } from "./actions"
+import { QUERY_KEYS } from "@/types/user"
 
 const STEPS: Step[] = [
     { id: 1, name: 'Property Details', description: 'Basic information and location', fields: ['title', 'type', 'description', 'bedrooms', 'bathrooms', 'squareFeet', 'address', 'city', 'state', 'price', 'currency', 'status'] },
@@ -112,9 +115,21 @@ export function PropertyCreationForm() {
         }
     }
 
+    const propertyCreationMutation = useServerMutation(createProperty, {
+        setError: form.setError,
+        mutationKey: [QUERY_KEYS.PROPERTIES],
+        invalidateQueries: [
+            [QUERY_KEYS.PROPERTIES],
+        ],
+        onSuccess: (data) => {
+            form.reset()
+        },
+        redirectTo: "/properties",
+        showSuccessToast: true,
+    })
+
     const handleFinalSubmit = async (data: CompletePropertyFormData) => {
-        console.log('Complete form data:', data)
-        router.push('/properties')
+        propertyCreationMutation.mutate(data)
     }
 
     return (
