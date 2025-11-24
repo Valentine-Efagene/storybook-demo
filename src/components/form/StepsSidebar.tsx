@@ -45,7 +45,7 @@ export function StepsSidebar({
     return (
         <div className="hidden sm:flex w-80 bg-white border-r border-gray-200 flex-col sticky top-0 h-screen">
             <div className="flex-1 p-6 overflow-y-auto">
-                <nav className="space-y-2">
+                <nav className="">
                     {steps.map((step) => {
                         const status = getStepStatus(step.id)
                         const isClickable = canNavigateToStep(step.id)
@@ -55,31 +55,27 @@ export function StepsSidebar({
                             <div
                                 key={step.id}
                                 className={cn(
-                                    "flex items-start gap-3 p-3 rounded-lg transition-colors",
-                                    isClickable ? "cursor-pointer" : "cursor-not-allowed",
-                                    status === 'current'
-                                        ? hasErrors
-                                            ? "bg-red-50 border border-red-200"
-                                            : "bg-primary-border border border-primary-border"
-                                        : status === 'completed'
-                                            ? "bg-green-50 border border-green-200 hover:bg-green-100"
-                                            : status === 'accessible'
-                                                ? "hover:bg-gray-50"
-                                                : "opacity-50"
+                                    "flex items-start gap-3 p-3 transition-colors border-l border-primary-border border-l-2 ",
+                                    {
+                                        "cursor-pointer": isClickable,
+                                        "cursor-not-allowed": !isClickable,
+                                        "border-brand-border": status === 'current' || status === 'completed',
+                                        "hover:bg-green-100": status === 'completed',
+                                        "hover:bg-gray-50": status === 'accessible',
+                                        "opacity-50": status === 'disabled',
+                                    }
                                 )}
                                 onClick={() => isClickable && onStepClick(step.id)}
                             >
                                 <div className={cn(
                                     "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium",
-                                    status === 'current'
-                                        ? hasErrors
-                                            ? "bg-red-600 text-white"
-                                            : "bg-primary-text text-white"
-                                        : status === 'completed'
-                                            ? "bg-green-600 text-white"
-                                            : status === 'accessible'
-                                                ? "bg-gray-300 text-gray-600"
-                                                : "bg-gray-200 text-gray-400"
+                                    {
+                                        "bg-red-600 text-white": status === 'current' && hasErrors,
+                                        "bg-primary-text text-white": status === 'current' && !hasErrors,
+                                        "bg-green-600 text-white": status === 'completed',
+                                        "bg-gray-300 text-gray-600": status === 'accessible',
+                                        "bg-gray-200 text-gray-400": status === 'disabled',
+                                    }
                                 )}>
                                     {status === 'completed' ? (
                                         <Check className="w-3 h-3" />
@@ -90,21 +86,22 @@ export function StepsSidebar({
                                 <div className="flex-1 min-w-0">
                                     <p className={cn(
                                         "text-sm font-medium",
-                                        status === 'current'
-                                            ? hasErrors
-                                                ? "text-red-900"
-                                                : "text-primary-text"
-                                            : status === 'completed'
-                                                ? "text-green-900"
-                                                : status === 'accessible'
-                                                    ? "text-gray-900"
-                                                    : "text-gray-400"
+                                        {
+                                            "text-red-900": status === 'current' && hasErrors,
+                                            "text-primary-text": status === 'current' && !hasErrors,
+                                            "text-green-900": status === 'completed',
+                                            "text-gray-900": status === 'accessible',
+                                            "text-gray-400": status === 'disabled',
+                                        }
                                     )}>
                                         {step.name}
                                     </p>
                                     <p className={cn(
                                         "text-xs",
-                                        status === 'disabled' ? "text-gray-400" : "text-gray-600"
+                                        {
+                                            "text-gray-400": status === 'disabled',
+                                            "text-gray-600": status !== 'disabled',
+                                        }
                                     )}>
                                         {step.description}
                                     </p>

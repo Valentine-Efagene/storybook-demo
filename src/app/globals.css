@@ -16,6 +16,7 @@
   --color-brand-border: var(--brand-border);
   --color-warning: var(--warning);
   --color-success: var(--success);
+  --color-brand: var(--brand);
 
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
@@ -64,6 +65,7 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.205 0 0);
 
+  --brand: #026993;
   --primary-text: #033950;
   --secondary-text: #799EAC;
   --tertiary-bg: #EDF3F3;
