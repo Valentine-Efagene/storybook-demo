@@ -95,7 +95,6 @@ export function UserSheet({ open, setOpen, user }: Props) {
                             <DetailCard label="Last Name" value={user.last_name} />
                             <DetailCard label="Email" type="email" nChars={20} value={user.email} />
                             <DetailCard label="Phone Number" value={user.phone} />
-                            <DetailCard label="BVN" value={user.bvn} />
                             <DetailCard label="Government Issues ID" nChars={20} value={user.identity_document} />
                             <DetailCard label="Country of Residence" value={user.country} />
                             <DetailCard label="City" value={user.address} />
