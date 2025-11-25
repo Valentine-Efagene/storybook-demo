@@ -32,7 +32,7 @@ export function Properties({ initialQparams }: Props) {
     }, [searchParams, limit, router])
 
     return (
-        <div className="flex flex-1 flex-col gap-4 pt-4 pb-12 px-12">
+        <div className="flex flex-1 flex-col gap-4 pt-4 pb-12 sm:px-12 px-4">
             <PropertiesFilters
                 initialQparams={initialQparams}
                 onUpdateParams={updateParams}

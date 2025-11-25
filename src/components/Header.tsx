@@ -25,15 +25,17 @@ export async function Header() {
     const dehydratedState = dehydrate(queryClient)
 
     return (
-        <header className="flex items-center justify-between px-4 py-4 border-b">
-            <div className="flex items-center gap-4">
+        <header className="flex flex-col-reverse sm:flex-row items-center justify-between px-4 py-4 border-b">
+            <div className="flex items-center gap-4 mr-auto">
                 <SidebarTrigger />
                 <Breadcrumbs />
             </div>
             {/* <TokenStatus /> */}
-            <HydrationBoundary state={dehydratedState}>
-                <ProfileDropdown />
-            </HydrationBoundary>
+            <div className="ml-auto">
+                <HydrationBoundary state={dehydratedState}>
+                    <ProfileDropdown />
+                </HydrationBoundary>
+            </div>
         </header>
     )
 }

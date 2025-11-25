@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export function DashboardSkeleton() {
     return (
-        <div className="min-h-screen bg-background p-12 flex flex-col gap-8">
+        <div className="min-h-screen bg-background py-12 sm:px-12 px-4 flex flex-col gap-8">
             {/* Welcome Message Skeleton */}
             <div className="space-y-4">
                 <div className="flex items-center gap-3">

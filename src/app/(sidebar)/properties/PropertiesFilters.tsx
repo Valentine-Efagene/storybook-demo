@@ -134,7 +134,7 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
         <div className="flex flex-col gap-4">
             <div className="border-b flex items-center justify-between">
                 <Tab
-                    className="mb-[-10px]"
+                    className="mb-[-1px] sm:mb-[-10px]"
                     items={[
                         { value: "", label: "All Properties" },
                         { value: "allocated", label: "Allocated" },
@@ -143,7 +143,7 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
                     value={status || ""}
                     onValueChange={(value) => onStatusChange(value as PropertyStatus)}
                 />
-                <Button asChild className="self-end mb-2">
+                <Button asChild className="self-end mb-2 hidden sm:flex">
                     <Link href="/properties/create">Add Property</Link>
                 </Button>
             </div>
@@ -159,6 +159,9 @@ export function PropertiesFilters({ initialQparams, onUpdateParams }: Props) {
                 </div>
                 <div className="flex gap-4 items-center">
                     {/* Filter dropdown */}
+                    <Button asChild className="self-end sm:mb-2 sm:hidden flex">
+                        <Link href="/properties/create">Add Property</Link>
+                    </Button>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="subtle">

@@ -50,7 +50,7 @@ export function UsersTableSkeleton() {
 
 export function UsersPageSkeleton() {
     return (
-        <div className="flex flex-1 flex-col gap-4 py-12 px-12">
+        <div className="flex flex-1 flex-col gap-4 py-12 sm:px-12 px-4">
             {/* Header with Search and Filters - Skeleton placeholders */}
             <div className="flex items-center justify-between flex-wrap gap-4">
                 <div className="w-lg">
