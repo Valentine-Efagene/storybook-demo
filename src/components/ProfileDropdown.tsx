@@ -79,7 +79,7 @@ export function ProfileDropdown() {
                                     {initials}
                                 </AvatarFallback>
                             </Avatar>
-                            <span>{displayName}</span>
+                            <span className="hidden sm:flex">{displayName}</span>
                             <ChevronDown />
                         </Button>
                     </DropdownMenuTrigger>

@@ -51,7 +51,7 @@ export function UserSheet({ open, setOpen, user }: Props) {
                         setOpen={setOpenSuspensionDialog}
                         user={user}
                     />
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center flex-wrap gap-4">
                         <div className="flex items-center gap-4">
                             <Avatar className="h-[50px] w-[50px]">
                                 <AvatarImage src={ImageHelper.getCdnLink(user?.avatar, 'avatar') ?? ''} alt={initials} />
